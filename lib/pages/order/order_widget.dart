@@ -43,7 +43,7 @@ class _OrderWidgetState extends State<OrderWidget> {
     _model.emailTextFieldTextController ??= TextEditingController();
     _model.emailTextFieldFocusNode ??= FocusNode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -61,15 +61,16 @@ class _OrderWidgetState extends State<OrderWidget> {
         title: 'Order',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -92,9 +93,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Dashboard',
                                 pageIsInSubMenu: false,
                               ),
@@ -105,9 +106,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -125,7 +126,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                         children: [
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Wrap(
                                               spacing: 20.0,
@@ -163,7 +164,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                           Expanded(
                                                             child: Padding(
                                                               padding:
-                                                                  const EdgeInsetsDirectional
+                                                                  EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           20.0,
                                                                           0.0,
@@ -173,11 +174,11 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                   wrapWithModel(
                                                                 model: _model
                                                                     .subHeaderModel,
-                                                                updateCallback:
-                                                                    () => setState(
+                                                                updateCallback: () =>
+                                                                    safeSetState(
                                                                         () {}),
                                                                 child:
-                                                                    const SubHeaderWidget(
+                                                                    SubHeaderWidget(
                                                                   title:
                                                                       'Order',
                                                                   showBackBtn:
@@ -190,7 +191,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
+                                                            EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     20.0,
                                                                     0.0,
@@ -267,7 +268,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                         onChange:
                                                                             (DateTimeRange?
                                                                                 newSelectedDate) {
-                                                                          setState(() =>
+                                                                          safeSetState(() =>
                                                                               _model.calendarSelectedDay = newSelectedDate);
                                                                         },
                                                                         titleStyle: FlutterFlowTheme.of(context)
@@ -303,7 +304,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                               letterSpacing: 0.0,
                                                                             ),
                                                                       ),
-                                                                    ].divide(const SizedBox(
+                                                                    ].divide(SizedBox(
                                                                         height:
                                                                             16.0)),
                                                                   ),
@@ -372,13 +373,13 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                 ),
                                                                                 FlutterFlowDropDown<String>(
                                                                                   controller: _model.titleDropDownValueController ??= FormFieldController<String>(null),
-                                                                                  options: const [
+                                                                                  options: [
                                                                                     'Sir',
                                                                                     'Madam',
                                                                                     'Mr',
                                                                                     'Mrs'
                                                                                   ],
-                                                                                  onChanged: (val) => setState(() => _model.titleDropDownValue = val),
+                                                                                  onChanged: (val) => safeSetState(() => _model.titleDropDownValue = val),
                                                                                   width: 170.0,
                                                                                   height: 45.0,
                                                                                   textStyle: FlutterFlowTheme.of(context).labelMedium.override(
@@ -397,12 +398,12 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                   borderColor: FlutterFlowTheme.of(context).neutral100,
                                                                                   borderWidth: 1.0,
                                                                                   borderRadius: 4.0,
-                                                                                  margin: const EdgeInsetsDirectional.fromSTEB(14.0, 4.0, 10.0, 4.0),
+                                                                                  margin: EdgeInsetsDirectional.fromSTEB(14.0, 4.0, 10.0, 4.0),
                                                                                   hidesUnderline: true,
                                                                                   isSearchable: false,
                                                                                   isMultiSelect: false,
                                                                                 ),
-                                                                              ].divide(const SizedBox(height: 10.0)),
+                                                                              ].divide(SizedBox(height: 10.0)),
                                                                             ),
                                                                           ),
                                                                           Container(
@@ -429,15 +430,15 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                     ),
                                                                                   ],
                                                                                 ),
-                                                                                SizedBox(
+                                                                                Container(
                                                                                   width: double.infinity,
                                                                                   child: TextFormField(
                                                                                     controller: _model.nameTextFieldTextController,
                                                                                     focusNode: _model.nameTextFieldFocusNode,
                                                                                     onChanged: (_) => EasyDebounce.debounce(
                                                                                       '_model.nameTextFieldTextController',
-                                                                                      const Duration(milliseconds: 500),
-                                                                                      () => setState(() {}),
+                                                                                      Duration(milliseconds: 500),
+                                                                                      () => safeSetState(() {}),
                                                                                     ),
                                                                                     autofocus: false,
                                                                                     obscureText: false,
@@ -480,7 +481,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                         ),
                                                                                         borderRadius: BorderRadius.circular(4.0),
                                                                                       ),
-                                                                                      contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
+                                                                                      contentPadding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
                                                                                     ),
                                                                                     style: FlutterFlowTheme.of(context).labelLarge.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
@@ -490,7 +491,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                     validator: _model.nameTextFieldTextControllerValidator.asValidator(context),
                                                                                   ),
                                                                                 ),
-                                                                              ].divide(const SizedBox(height: 10.0)),
+                                                                              ].divide(SizedBox(height: 10.0)),
                                                                             ),
                                                                           ),
                                                                           Container(
@@ -519,12 +520,12 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                 ),
                                                                                 FlutterFlowDropDown<String>(
                                                                                   controller: _model.codeDropDownValueController ??= FormFieldController<String>(null),
-                                                                                  options: const [
+                                                                                  options: [
                                                                                     'IDN +62',
                                                                                     'USA +1',
                                                                                     'UK +40'
                                                                                   ],
-                                                                                  onChanged: (val) => setState(() => _model.codeDropDownValue = val),
+                                                                                  onChanged: (val) => safeSetState(() => _model.codeDropDownValue = val),
                                                                                   width: 170.0,
                                                                                   height: 45.0,
                                                                                   textStyle: FlutterFlowTheme.of(context).labelMedium.override(
@@ -543,12 +544,12 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                   borderColor: FlutterFlowTheme.of(context).neutral100,
                                                                                   borderWidth: 1.0,
                                                                                   borderRadius: 4.0,
-                                                                                  margin: const EdgeInsetsDirectional.fromSTEB(14.0, 4.0, 10.0, 4.0),
+                                                                                  margin: EdgeInsetsDirectional.fromSTEB(14.0, 4.0, 10.0, 4.0),
                                                                                   hidesUnderline: true,
                                                                                   isSearchable: false,
                                                                                   isMultiSelect: false,
                                                                                 ),
-                                                                              ].divide(const SizedBox(height: 10.0)),
+                                                                              ].divide(SizedBox(height: 10.0)),
                                                                             ),
                                                                           ),
                                                                           Container(
@@ -575,15 +576,15 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                     ),
                                                                                   ],
                                                                                 ),
-                                                                                SizedBox(
+                                                                                Container(
                                                                                   width: double.infinity,
                                                                                   child: TextFormField(
                                                                                     controller: _model.phoneTextFieldTextController,
                                                                                     focusNode: _model.phoneTextFieldFocusNode,
                                                                                     onChanged: (_) => EasyDebounce.debounce(
                                                                                       '_model.phoneTextFieldTextController',
-                                                                                      const Duration(milliseconds: 500),
-                                                                                      () => setState(() {}),
+                                                                                      Duration(milliseconds: 500),
+                                                                                      () => safeSetState(() {}),
                                                                                     ),
                                                                                     autofocus: false,
                                                                                     obscureText: false,
@@ -626,7 +627,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                         ),
                                                                                         borderRadius: BorderRadius.circular(4.0),
                                                                                       ),
-                                                                                      contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
+                                                                                      contentPadding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
                                                                                     ),
                                                                                     style: FlutterFlowTheme.of(context).labelLarge.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
@@ -637,14 +638,14 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                     validator: _model.phoneTextFieldTextControllerValidator.asValidator(context),
                                                                                   ),
                                                                                 ),
-                                                                              ].divide(const SizedBox(height: 10.0)),
+                                                                              ].divide(SizedBox(height: 10.0)),
                                                                             ),
                                                                           ),
                                                                           Container(
                                                                             width:
                                                                                 450.0,
                                                                             constraints:
-                                                                                const BoxConstraints(
+                                                                                BoxConstraints(
                                                                               minWidth: 250.0,
                                                                               maxWidth: double.infinity,
                                                                             ),
@@ -670,19 +671,19 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                   ],
                                                                                 ),
                                                                                 Container(
-                                                                                  constraints: const BoxConstraints(
+                                                                                  constraints: BoxConstraints(
                                                                                     maxWidth: 300.0,
                                                                                   ),
-                                                                                  decoration: const BoxDecoration(),
-                                                                                  child: SizedBox(
+                                                                                  decoration: BoxDecoration(),
+                                                                                  child: Container(
                                                                                     width: double.infinity,
                                                                                     child: TextFormField(
                                                                                       controller: _model.emailTextFieldTextController,
                                                                                       focusNode: _model.emailTextFieldFocusNode,
                                                                                       onChanged: (_) => EasyDebounce.debounce(
                                                                                         '_model.emailTextFieldTextController',
-                                                                                        const Duration(milliseconds: 500),
-                                                                                        () => setState(() {}),
+                                                                                        Duration(milliseconds: 500),
+                                                                                        () => safeSetState(() {}),
                                                                                       ),
                                                                                       autofocus: false,
                                                                                       obscureText: false,
@@ -725,7 +726,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                           ),
                                                                                           borderRadius: BorderRadius.circular(4.0),
                                                                                         ),
-                                                                                        contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
+                                                                                        contentPadding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
                                                                                       ),
                                                                                       style: FlutterFlowTheme.of(context).labelLarge.override(
                                                                                             fontFamily: 'Plus Jakarta Sans',
@@ -737,12 +738,12 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                                     ),
                                                                                   ),
                                                                                 ),
-                                                                              ].divide(const SizedBox(height: 10.0)),
+                                                                              ].divide(SizedBox(height: 10.0)),
                                                                             ),
                                                                           ),
                                                                         ],
                                                                       ),
-                                                                    ].divide(const SizedBox(
+                                                                    ].divide(SizedBox(
                                                                         height:
                                                                             16.0)),
                                                                   ),
@@ -768,7 +769,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                         ],
                                                                       ),
                                                                       FlutterFlowChoiceChips(
-                                                                        options: const [
+                                                                        options: [
                                                                           ChipData(
                                                                               'Transfer',
                                                                               Icons.radio_button_checked),
@@ -784,7 +785,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                         ],
                                                                         onChanged:
                                                                             (val) =>
-                                                                                setState(() => _model.choiceChipsValue = val?.firstOrNull),
+                                                                                safeSetState(() => _model.choiceChipsValue = val?.firstOrNull),
                                                                         selectedChipStyle:
                                                                             ChipStyle(
                                                                           backgroundColor:
@@ -799,7 +800,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                               FlutterFlowTheme.of(context).primary,
                                                                           iconSize:
                                                                               18.0,
-                                                                          labelPadding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          labelPadding: EdgeInsetsDirectional.fromSTEB(
                                                                               10.0,
                                                                               10.0,
                                                                               20.0,
@@ -829,7 +830,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                               FlutterFlowTheme.of(context).neutral100,
                                                                           iconSize:
                                                                               18.0,
-                                                                          labelPadding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          labelPadding: EdgeInsetsDirectional.fromSTEB(
                                                                               10.0,
                                                                               10.0,
                                                                               20.0,
@@ -857,11 +858,11 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                         wrapped:
                                                                             true,
                                                                       ),
-                                                                    ].divide(const SizedBox(
+                                                                    ].divide(SizedBox(
                                                                         height:
                                                                             16.0)),
                                                                   ),
-                                                                ].divide(const SizedBox(
+                                                                ].divide(SizedBox(
                                                                     height:
                                                                         24.0)),
                                                               ),
@@ -870,17 +871,17 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                         ),
                                                       ),
                                                     ]
-                                                        .divide(const SizedBox(
+                                                        .divide(SizedBox(
                                                             height: 24.0))
-                                                        .addToStart(const SizedBox(
+                                                        .addToStart(SizedBox(
                                                             height: 12.0))
-                                                        .addToEnd(const SizedBox(
+                                                        .addToEnd(SizedBox(
                                                             height: 24.0)),
                                                   ),
                                                 ),
                                                 Container(
                                                   width: 250.0,
-                                                  constraints: const BoxConstraints(
+                                                  constraints: BoxConstraints(
                                                     maxWidth: 500.0,
                                                   ),
                                                   decoration: BoxDecoration(
@@ -924,7 +925,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                             ),
                                                             child: Padding(
                                                               padding:
-                                                                  const EdgeInsetsDirectional
+                                                                  EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           16.0,
                                                                           20.0,
@@ -958,7 +959,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                     ],
                                                                   ),
                                                                   Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0.0,
                                                                             24.0,
@@ -970,9 +971,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                           .propertyCardModel,
                                                                       updateCallback:
                                                                           () =>
-                                                                              setState(() {}),
+                                                                              safeSetState(() {}),
                                                                       child:
-                                                                          const PropertyCardWidget(
+                                                                          PropertyCardWidget(
                                                                         image:
                                                                             'https://images.unsplash.com/photo-1620332372374-f108c53d2e03?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxMHx8aG9zdGVsfGVufDB8fHx8MTY5ODkxMzc1NXww&ixlib=rb-4.0.3&q=80&w=1080',
                                                                         title:
@@ -993,7 +994,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                     ),
                                                                   ),
                                                                   Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0.0,
                                                                             24.0,
@@ -1069,9 +1070,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                           model:
                                                                               _model.dividerModel,
                                                                           updateCallback: () =>
-                                                                              setState(() {}),
+                                                                              safeSetState(() {}),
                                                                           child:
-                                                                              const DividerWidget(
+                                                                              DividerWidget(
                                                                             titleInLeftSide:
                                                                                 false,
                                                                           ),
@@ -1103,7 +1104,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                             ),
                                                                           ],
                                                                         ),
-                                                                      ].divide(const SizedBox(
+                                                                      ].divide(SizedBox(
                                                                               height: 12.0)),
                                                                     ),
                                                                   ),
@@ -1113,7 +1114,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                           ),
                                                           Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         0.0,
                                                                         20.0,
@@ -1143,12 +1144,12 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                           .infinity,
                                                                       height:
                                                                           40.0,
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           16.0,
                                                                           9.0,
                                                                           16.0,
                                                                           9.0),
-                                                                      iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      iconPadding: EdgeInsetsDirectional.fromSTEB(
                                                                           0.0,
                                                                           0.0,
                                                                           0.0,
@@ -1170,7 +1171,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                       elevation:
                                                                           0.0,
                                                                       borderSide:
-                                                                          const BorderSide(
+                                                                          BorderSide(
                                                                         color: Colors
                                                                             .transparent,
                                                                         width:
@@ -1182,7 +1183,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ].divide(const SizedBox(
+                                                              ].divide(SizedBox(
                                                                   width: 16.0)),
                                                             ),
                                                           ),
@@ -1195,9 +1196,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                                             ),
                                           ),
                                         ]
-                                            .divide(const SizedBox(height: 20.0))
-                                            .addToStart(const SizedBox(height: 20.0))
-                                            .addToEnd(const SizedBox(height: 20.0)),
+                                            .divide(SizedBox(height: 20.0))
+                                            .addToStart(SizedBox(height: 20.0))
+                                            .addToEnd(SizedBox(height: 20.0)),
                                       ),
                                     ),
                                   ),
@@ -1213,11 +1214,11 @@ class _OrderWidgetState extends State<OrderWidget> {
                       phone: false,
                     ))
                       Align(
-                        alignment: const AlignmentDirectional(0.8, -0.97),
+                        alignment: AlignmentDirectional(0.8, -0.97),
                         child: wrapWithModel(
                           model: _model.navigatorModel,
-                          updateCallback: () => setState(() {}),
-                          child: const NavigatorWidget(
+                          updateCallback: () => safeSetState(() {}),
+                          child: NavigatorWidget(
                             expanded: true,
                           ),
                         ),

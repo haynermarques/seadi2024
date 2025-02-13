@@ -35,7 +35,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -53,15 +53,16 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
         title: 'VideoCall',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -84,9 +85,9 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Dashboard',
                                 pageIsInSubMenu: false,
                               ),
@@ -97,9 +98,9 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -117,7 +118,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                         Expanded(
                                           child: Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Container(
                                               width: double.infinity,
@@ -140,7 +141,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                       width: 347.0,
                                                       height: double.infinity,
                                                       decoration:
-                                                          const BoxDecoration(),
+                                                          BoxDecoration(),
                                                       child: Column(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -150,7 +151,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                         children: [
                                                           Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         20.0,
                                                                         0.0,
@@ -170,10 +171,10 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                     model: _model
                                                                         .subHeaderModel,
                                                                     updateCallback: () =>
-                                                                        setState(
+                                                                        safeSetState(
                                                                             () {}),
                                                                     child:
-                                                                        const SubHeaderWidget(
+                                                                        SubHeaderWidget(
                                                                       title:
                                                                           'Video Call',
                                                                       showBackBtn:
@@ -208,7 +209,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                           Expanded(
                                                             child: Padding(
                                                               padding:
-                                                                  const EdgeInsets
+                                                                  EdgeInsets
                                                                       .all(
                                                                           20.0),
                                                               child: Container(
@@ -232,9 +233,9 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                       child:
                                                                           CachedNetworkImage(
                                                                         fadeInDuration:
-                                                                            const Duration(milliseconds: 500),
+                                                                            Duration(milliseconds: 500),
                                                                         fadeOutDuration:
-                                                                            const Duration(milliseconds: 500),
+                                                                            Duration(milliseconds: 500),
                                                                         imageUrl:
                                                                             'https://images.unsplash.com/photo-1553484771-898ed465e931?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwyMHx8Y2FsbHxlbnwwfHx8fDE2OTkyNjE1MDB8MA&ixlib=rb-4.0.3&q=80&w=1080',
                                                                         width: double
@@ -247,7 +248,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                     ),
                                                                     Padding(
                                                                       padding:
-                                                                          const EdgeInsets.all(
+                                                                          EdgeInsets.all(
                                                                               40.0),
                                                                       child:
                                                                           Column(
@@ -283,7 +284,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                                         borderRadius: BorderRadius.circular(12.0),
                                                                                       ),
                                                                                       child: Padding(
-                                                                                        padding: const EdgeInsets.all(14.0),
+                                                                                        padding: EdgeInsets.all(14.0),
                                                                                         child: Row(
                                                                                           mainAxisSize: MainAxisSize.max,
                                                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -312,7 +313,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                                                     letterSpacing: 0.0,
                                                                                                   ),
                                                                                             ),
-                                                                                          ].divide(const SizedBox(width: 10.0)),
+                                                                                          ].divide(SizedBox(width: 10.0)),
                                                                                         ),
                                                                                       ),
                                                                                     ),
@@ -433,7 +434,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                                   ),
                                                                                 ),
                                                                               ),
-                                                                            ].divide(const SizedBox(width: 24.0)),
+                                                                            ].divide(SizedBox(width: 24.0)),
                                                                           ),
                                                                         ],
                                                                       ),
@@ -444,13 +445,13 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                             ),
                                                           ),
                                                         ]
-                                                            .divide(const SizedBox(
+                                                            .divide(SizedBox(
                                                                 height: 24.0))
                                                             .addToStart(
-                                                                const SizedBox(
+                                                                SizedBox(
                                                                     height:
                                                                         12.0))
-                                                            .addToEnd(const SizedBox(
+                                                            .addToEnd(SizedBox(
                                                                 height: 24.0)),
                                                       ),
                                                     ),
@@ -496,9 +497,9 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                     .infinity,
                                                                 height: 100.0,
                                                                 decoration:
-                                                                    const BoxDecoration(),
+                                                                    BoxDecoration(),
                                                                 child: Padding(
-                                                                  padding: const EdgeInsetsDirectional
+                                                                  padding: EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           0.0,
                                                                           20.0,
@@ -510,7 +511,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                             .max,
                                                                     children: [
                                                                       Padding(
-                                                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
                                                                             20.0,
                                                                             0.0,
                                                                             20.0,
@@ -534,15 +535,15 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                       ),
                                                                       Padding(
                                                                         padding:
-                                                                            const EdgeInsets.all(20.0),
+                                                                            EdgeInsets.all(20.0),
                                                                         child:
                                                                             wrapWithModel(
                                                                           model:
                                                                               _model.dividerModel1,
                                                                           updateCallback: () =>
-                                                                              setState(() {}),
+                                                                              safeSetState(() {}),
                                                                           child:
-                                                                              const DividerWidget(
+                                                                              DividerWidget(
                                                                             title:
                                                                                 'TODAY',
                                                                             titleInLeftSide:
@@ -560,7 +561,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                             children: [
                                                                               wrapWithModel(
                                                                                 model: _model.messageItemModel1,
-                                                                                updateCallback: () => setState(() {}),
+                                                                                updateCallback: () => safeSetState(() {}),
                                                                                 child: MessageItemWidget(
                                                                                   sender: true,
                                                                                   messasge: 'hi i am sender. sender checked hi i am sender. sender checked\n',
@@ -571,7 +572,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                               ),
                                                                               wrapWithModel(
                                                                                 model: _model.messageItemModel2,
-                                                                                updateCallback: () => setState(() {}),
+                                                                                updateCallback: () => safeSetState(() {}),
                                                                                 child: MessageItemWidget(
                                                                                   sender: false,
                                                                                   messasge: 'hi i am reciver. sender is not cheched hi i am sender. sender checked hi i am sender. sender checked',
@@ -582,7 +583,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                               ),
                                                                               wrapWithModel(
                                                                                 model: _model.messageItemModel3,
-                                                                                updateCallback: () => setState(() {}),
+                                                                                updateCallback: () => safeSetState(() {}),
                                                                                 child: MessageItemWidget(
                                                                                   sender: false,
                                                                                   messasge: 'hi i am reciver. sender is not cheched',
@@ -593,7 +594,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                               ),
                                                                               wrapWithModel(
                                                                                 model: _model.messageItemModel4,
-                                                                                updateCallback: () => setState(() {}),
+                                                                                updateCallback: () => safeSetState(() {}),
                                                                                 child: MessageItemWidget(
                                                                                   sender: true,
                                                                                   messasge: 'hi i am sender. sender checked hi i am sender. sender checked\n',
@@ -604,7 +605,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                               ),
                                                                               wrapWithModel(
                                                                                 model: _model.messageItemModel5,
-                                                                                updateCallback: () => setState(() {}),
+                                                                                updateCallback: () => safeSetState(() {}),
                                                                                 child: MessageItemWidget(
                                                                                   sender: false,
                                                                                   messasge: 'hi i am reciver. sender is not cheched hi i am sender. sender checked hi i am sender. sender checked',
@@ -628,7 +629,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                               tablet: false,
                                                             ))
                                                               Padding(
-                                                                padding: const EdgeInsetsDirectional
+                                                                padding: EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         20.0,
                                                                         0.0,
@@ -638,11 +639,11 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                     wrapWithModel(
                                                                   model: _model
                                                                       .dividerModel2,
-                                                                  updateCallback:
-                                                                      () => setState(
+                                                                  updateCallback: () =>
+                                                                      safeSetState(
                                                                           () {}),
                                                                   child:
-                                                                      const DividerWidget(
+                                                                      DividerWidget(
                                                                     titleInLeftSide:
                                                                         false,
                                                                   ),
@@ -653,10 +654,10 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                   .infinity,
                                                               height: 80.0,
                                                               decoration:
-                                                                  const BoxDecoration(),
+                                                                  BoxDecoration(),
                                                               child: Padding(
                                                                 padding:
-                                                                    const EdgeInsets
+                                                                    EdgeInsets
                                                                         .all(
                                                                             20.0),
                                                                 child: Row(
@@ -680,16 +681,16 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                         clipBehavior:
                                                                             Clip.antiAlias,
                                                                         decoration:
-                                                                            const BoxDecoration(
+                                                                            BoxDecoration(
                                                                           shape:
                                                                               BoxShape.circle,
                                                                         ),
                                                                         child:
                                                                             CachedNetworkImage(
                                                                           fadeInDuration:
-                                                                              const Duration(milliseconds: 500),
+                                                                              Duration(milliseconds: 500),
                                                                           fadeOutDuration:
-                                                                              const Duration(milliseconds: 500),
+                                                                              Duration(milliseconds: 500),
                                                                           imageUrl:
                                                                               'https://images.unsplash.com/photo-1633332755192-727a05c4013d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxfHx1c2VyfGVufDB8fHx8MTY5OTE4NDcxOXww&ixlib=rb-4.0.3&q=80&w=400',
                                                                           fit: BoxFit
@@ -718,15 +719,15 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                           children:
                                                                               [
                                                                             Expanded(
-                                                                              child: SizedBox(
+                                                                              child: Container(
                                                                                 width: 250.0,
                                                                                 child: TextFormField(
                                                                                   controller: _model.textController,
                                                                                   focusNode: _model.textFieldFocusNode,
                                                                                   onChanged: (_) => EasyDebounce.debounce(
                                                                                     '_model.textController',
-                                                                                    const Duration(milliseconds: 500),
-                                                                                    () => setState(() {}),
+                                                                                    Duration(milliseconds: 500),
+                                                                                    () => safeSetState(() {}),
                                                                                   ),
                                                                                   autofocus: false,
                                                                                   obscureText: false,
@@ -745,7 +746,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                                     focusedBorder: InputBorder.none,
                                                                                     errorBorder: InputBorder.none,
                                                                                     focusedErrorBorder: InputBorder.none,
-                                                                                    contentPadding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
+                                                                                    contentPadding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
                                                                                   ),
                                                                                   style: FlutterFlowTheme.of(context).labelLarge.override(
                                                                                         fontFamily: 'Plus Jakarta Sans',
@@ -770,7 +771,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                                 print('IconButton pressed ...');
                                                                               },
                                                                             ),
-                                                                          ].divide(const SizedBox(width: 16.0)),
+                                                                          ].divide(SizedBox(width: 16.0)),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -806,7 +807,7 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                                                               'IconButton pressed ...');
                                                                         },
                                                                       ),
-                                                                  ].divide(const SizedBox(
+                                                                  ].divide(SizedBox(
                                                                       width:
                                                                           16.0)),
                                                                 ),
@@ -822,9 +823,9 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                                           ),
                                         ),
                                       ]
-                                          .divide(const SizedBox(height: 20.0))
-                                          .addToStart(const SizedBox(height: 20.0))
-                                          .addToEnd(const SizedBox(height: 20.0)),
+                                          .divide(SizedBox(height: 20.0))
+                                          .addToStart(SizedBox(height: 20.0))
+                                          .addToEnd(SizedBox(height: 20.0)),
                                     ),
                                   ),
                                 ),
@@ -839,11 +840,11 @@ class _VideoCallWidgetState extends State<VideoCallWidget> {
                       phone: false,
                     ))
                       Align(
-                        alignment: const AlignmentDirectional(0.8, -0.97),
+                        alignment: AlignmentDirectional(0.8, -0.97),
                         child: wrapWithModel(
                           model: _model.navigatorModel,
-                          updateCallback: () => setState(() {}),
-                          child: const NavigatorWidget(
+                          updateCallback: () => safeSetState(() {}),
+                          child: NavigatorWidget(
                             expanded: true,
                           ),
                         ),

@@ -16,12 +16,12 @@ class MenuItemWidget extends StatefulWidget {
     Color? tagColor,
     bool? hasSubMenu,
     bool? subMenuExpanded,
-  })  : isActivePage = isActivePage ?? false,
-        hasNumberTag = hasNumberTag ?? false,
-        number = number ?? 0,
-        tagColor = tagColor ?? const Color(0xFF6C94E5),
-        hasSubMenu = hasSubMenu ?? false,
-        subMenuExpanded = subMenuExpanded ?? false;
+  })  : this.isActivePage = isActivePage ?? false,
+        this.hasNumberTag = hasNumberTag ?? false,
+        this.number = number ?? 0,
+        this.tagColor = tagColor ?? const Color(0xFF6C94E5),
+        this.hasSubMenu = hasSubMenu ?? false,
+        this.subMenuExpanded = subMenuExpanded ?? false;
 
   final bool isActivePage;
   final String? text;
@@ -50,7 +50,7 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
     super.initState();
     _model = createModel(context, () => MenuItemModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -67,12 +67,6 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
     return MouseRegion(
       opaque: false,
       cursor: MouseCursor.defer ?? MouseCursor.defer,
-      onEnter: ((event) async {
-        setState(() => _model.mouseRegionHovered = true);
-      }),
-      onExit: ((event) async {
-        setState(() => _model.mouseRegionHovered = false);
-      }),
       child: Container(
         height: 50.0,
         decoration: BoxDecoration(
@@ -83,10 +77,10 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
               } else if (!widget.isActivePage && _model.mouseRegionHovered) {
                 return FlutterFlowTheme.of(context).neutral100;
               } else {
-                return const Color(0x00FFFFFF);
+                return Color(0x00FFFFFF);
               }
             }(),
-            const Color(0x00FFFFFF),
+            Color(0x00FFFFFF),
           ),
           borderRadius: BorderRadius.circular(8.0),
         ),
@@ -96,7 +90,7 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
             Container(
               width: 50.0,
               height: 50.0,
-              decoration: const BoxDecoration(),
+              decoration: BoxDecoration(),
               child: widget.icon!,
             ),
             if (!FFAppState().hideMenu &&
@@ -109,7 +103,7 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
               Container(
                 width: 200.0,
                 height: 50.0,
-                decoration: const BoxDecoration(),
+                decoration: BoxDecoration(),
                 child: Visibility(
                   visible: responsiveVisibility(
                     context: context,
@@ -122,7 +116,7 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
+                          padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 0.0, 5.0, 0.0),
                           child: Text(
                             widget.text!,
@@ -145,11 +139,11 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
                         ),
                       ),
                       if (widget.hasSubMenu)
-                        SizedBox(
+                        Container(
                           width: 24.0,
                           height: 24.0,
                           child: Stack(
-                            alignment: const AlignmentDirectional(0.0, 0.0),
+                            alignment: AlignmentDirectional(0.0, 0.0),
                             children: [
                               if (widget.subMenuExpanded)
                                 Icon(
@@ -170,7 +164,7 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
                         ),
                       if (widget.hasNumberTag)
                         Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
+                          padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 0.0, 4.0, 0.0),
                           child: Container(
                             height: 17.0,
@@ -178,9 +172,9 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
                               color: widget.tagColor,
                               borderRadius: BorderRadius.circular(100.0),
                             ),
-                            alignment: const AlignmentDirectional(0.0, 0.0),
+                            alignment: AlignmentDirectional(0.0, 0.0),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
+                              padding: EdgeInsetsDirectional.fromSTEB(
                                   5.0, 0.0, 5.0, 0.0),
                               child: Text(
                                 valueOrDefault<String>(
@@ -208,6 +202,12 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
           ],
         ),
       ),
+      onEnter: ((event) async {
+        safeSetState(() => _model.mouseRegionHovered = true);
+      }),
+      onExit: ((event) async {
+        safeSetState(() => _model.mouseRegionHovered = false);
+      }),
     );
   }
 }

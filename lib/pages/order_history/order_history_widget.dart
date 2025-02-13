@@ -52,7 +52,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
       ),
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -70,15 +70,16 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
         title: 'OrderHistory',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -101,9 +102,9 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Dashboard',
                                 pageIsInSubMenu: false,
                               ),
@@ -114,9 +115,9 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -134,7 +135,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                         children: [
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Wrap(
                                               spacing: 20.0,
@@ -172,7 +173,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                           Expanded(
                                                             child: Padding(
                                                               padding:
-                                                                  const EdgeInsetsDirectional
+                                                                  EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           20.0,
                                                                           0.0,
@@ -182,11 +183,11 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                   wrapWithModel(
                                                                 model: _model
                                                                     .subHeaderModel,
-                                                                updateCallback:
-                                                                    () => setState(
+                                                                updateCallback: () =>
+                                                                    safeSetState(
                                                                         () {}),
                                                                 child:
-                                                                    const SubHeaderWidget(
+                                                                    SubHeaderWidget(
                                                                   title:
                                                                       'Order History',
                                                                   showBackBtn:
@@ -199,7 +200,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
+                                                            EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     20.0,
                                                                     0.0,
@@ -296,7 +297,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                         child:
                                                                             Padding(
                                                                           padding:
-                                                                              const EdgeInsets.all(20.0),
+                                                                              EdgeInsets.all(20.0),
                                                                           child:
                                                                               Row(
                                                                             mainAxisSize:
@@ -346,10 +347,10 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                                               ),
                                                                                             ],
                                                                                           ),
-                                                                                        ].divide(const SizedBox(height: 8.0)),
+                                                                                        ].divide(SizedBox(height: 8.0)),
                                                                                       ),
                                                                                     ),
-                                                                                  ].divide(const SizedBox(width: 16.0)),
+                                                                                  ].divide(SizedBox(width: 16.0)),
                                                                                 ),
                                                                               ),
                                                                               FlutterFlowIconButton(
@@ -384,7 +385,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                         ),
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               20.0,
                                                                               10.0,
                                                                               20.0,
@@ -408,38 +409,41 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                                   decoration: BoxDecoration(
                                                                                     color: FlutterFlowTheme.of(context).primaryBackground,
                                                                                   ),
-                                                                                  child: ListTile(
-                                                                                    title: Text(
-                                                                                      'Review this order',
-                                                                                      style: FlutterFlowTheme.of(context).titleLarge.override(
-                                                                                            fontFamily: 'Plus Jakarta Sans',
-                                                                                            letterSpacing: 0.0,
-                                                                                          ),
+                                                                                  child: Material(
+                                                                                    color: Colors.transparent,
+                                                                                    child: ListTile(
+                                                                                      title: Text(
+                                                                                        'Review this order',
+                                                                                        style: FlutterFlowTheme.of(context).titleLarge.override(
+                                                                                              fontFamily: 'Plus Jakarta Sans',
+                                                                                              letterSpacing: 0.0,
+                                                                                            ),
+                                                                                      ),
+                                                                                      subtitle: Text(
+                                                                                        'Share your story',
+                                                                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                              fontFamily: 'Plus Jakarta Sans',
+                                                                                              color: FlutterFlowTheme.of(context).neutral500,
+                                                                                              letterSpacing: 0.0,
+                                                                                            ),
+                                                                                      ),
+                                                                                      trailing: Icon(
+                                                                                        Icons.arrow_forward_ios,
+                                                                                        color: FlutterFlowTheme.of(context).primaryText,
+                                                                                        size: 24.0,
+                                                                                      ),
+                                                                                      tileColor: FlutterFlowTheme.of(context).primaryBackground,
+                                                                                      dense: false,
+                                                                                      contentPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 20.0, 0.0),
                                                                                     ),
-                                                                                    subtitle: Text(
-                                                                                      'Share your story',
-                                                                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                            fontFamily: 'Plus Jakarta Sans',
-                                                                                            color: FlutterFlowTheme.of(context).neutral500,
-                                                                                            letterSpacing: 0.0,
-                                                                                          ),
-                                                                                    ),
-                                                                                    trailing: Icon(
-                                                                                      Icons.arrow_forward_ios,
-                                                                                      color: FlutterFlowTheme.of(context).primaryText,
-                                                                                      size: 24.0,
-                                                                                    ),
-                                                                                    tileColor: FlutterFlowTheme.of(context).primaryBackground,
-                                                                                    dense: false,
-                                                                                    contentPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 20.0, 0.0),
                                                                                   ),
                                                                                 ),
                                                                               ),
-                                                                            ].divide(const SizedBox(width: 16.0)),
+                                                                            ].divide(SizedBox(width: 16.0)),
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                    ].divide(const SizedBox(
+                                                                    ].divide(SizedBox(
                                                                         height:
                                                                             16.0)),
                                                                   ),
@@ -576,14 +580,14 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                             .dividerModel1,
                                                                         updateCallback:
                                                                             () =>
-                                                                                setState(() {}),
+                                                                                safeSetState(() {}),
                                                                         child:
-                                                                            const DividerWidget(
+                                                                            DividerWidget(
                                                                           titleInLeftSide:
                                                                               false,
                                                                         ),
                                                                       ),
-                                                                    ].divide(const SizedBox(
+                                                                    ].divide(SizedBox(
                                                                         height:
                                                                             16.0)),
                                                                   ),
@@ -623,7 +627,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                         ),
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               20.0,
                                                                               12.0,
                                                                               20.0,
@@ -684,8 +688,8 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                               ),
                                                                               wrapWithModel(
                                                                                 model: _model.dividerModel2,
-                                                                                updateCallback: () => setState(() {}),
-                                                                                child: const DividerWidget(
+                                                                                updateCallback: () => safeSetState(() {}),
+                                                                                child: DividerWidget(
                                                                                   titleInLeftSide: false,
                                                                                 ),
                                                                               ),
@@ -712,15 +716,15 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                                   ),
                                                                                 ],
                                                                               ),
-                                                                            ].divide(const SizedBox(height: 10.0)),
+                                                                            ].divide(SizedBox(height: 10.0)),
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                    ].divide(const SizedBox(
+                                                                    ].divide(SizedBox(
                                                                         height:
                                                                             24.0)),
                                                                   ),
-                                                                ].divide(const SizedBox(
+                                                                ].divide(SizedBox(
                                                                     height:
                                                                         24.0)),
                                                               ),
@@ -729,17 +733,17 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                         ),
                                                       ),
                                                     ]
-                                                        .divide(const SizedBox(
+                                                        .divide(SizedBox(
                                                             height: 24.0))
-                                                        .addToStart(const SizedBox(
+                                                        .addToStart(SizedBox(
                                                             height: 12.0))
-                                                        .addToEnd(const SizedBox(
+                                                        .addToEnd(SizedBox(
                                                             height: 24.0)),
                                                   ),
                                                 ),
                                                 Container(
                                                   width: 550.0,
-                                                  constraints: const BoxConstraints(
+                                                  constraints: BoxConstraints(
                                                     maxWidth: 500.0,
                                                   ),
                                                   decoration: BoxDecoration(
@@ -771,7 +775,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                         ),
                                                         child: Padding(
                                                           padding:
-                                                              const EdgeInsets.all(
+                                                              EdgeInsets.all(
                                                                   20.0),
                                                           child: Wrap(
                                                             spacing: 20.0,
@@ -845,7 +849,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                  ].divide(const SizedBox(
+                                                                  ].divide(SizedBox(
                                                                       height:
                                                                           20.0)),
                                                                 ),
@@ -902,7 +906,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                  ].divide(const SizedBox(
+                                                                  ].divide(SizedBox(
                                                                       height:
                                                                           20.0)),
                                                                 ),
@@ -959,7 +963,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                  ].divide(const SizedBox(
+                                                                  ].divide(SizedBox(
                                                                       height:
                                                                           20.0)),
                                                                 ),
@@ -982,7 +986,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                         ),
                                                         child: Padding(
                                                           padding:
-                                                              const EdgeInsets.all(
+                                                              EdgeInsets.all(
                                                                   20.0),
                                                           child: Column(
                                                             mainAxisSize:
@@ -1026,9 +1030,9 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                       child:
                                                                           CachedNetworkImage(
                                                                         fadeInDuration:
-                                                                            const Duration(milliseconds: 500),
+                                                                            Duration(milliseconds: 500),
                                                                         fadeOutDuration:
-                                                                            const Duration(milliseconds: 500),
+                                                                            Duration(milliseconds: 500),
                                                                         imageUrl:
                                                                             'https://images.unsplash.com/photo-1435575653489-b0873ec954e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw2fHxidWlsZGluZ3xlbnwwfHx8fDE2OTgzNDgyMTB8MA&ixlib=rb-4.0.3&q=80&w=1080',
                                                                         width:
@@ -1045,9 +1049,9 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                       height:
                                                                           140.0,
                                                                       decoration:
-                                                                          const BoxDecoration(),
+                                                                          BoxDecoration(),
                                                                       alignment:
-                                                                          const AlignmentDirectional(
+                                                                          AlignmentDirectional(
                                                                               0.0,
                                                                               0.0),
                                                                       child:
@@ -1109,16 +1113,10 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                                   );
                                                                                 },
                                                                                 child: Container(
-                                                                                  decoration: const BoxDecoration(),
+                                                                                  decoration: BoxDecoration(),
                                                                                   child: MouseRegion(
                                                                                     opaque: false,
                                                                                     cursor: MouseCursor.defer ?? MouseCursor.defer,
-                                                                                    onEnter: ((event) async {
-                                                                                      setState(() => _model.addressRegionHovered = true);
-                                                                                    }),
-                                                                                    onExit: ((event) async {
-                                                                                      setState(() => _model.addressRegionHovered = false);
-                                                                                    }),
                                                                                     child: Row(
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       mainAxisAlignment: MainAxisAlignment.start,
@@ -1141,19 +1139,25 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                                         ),
                                                                                         if (_model.addressRegionHovered ?? true)
                                                                                           Padding(
-                                                                                            padding: const EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                                                                                             child: Icon(
                                                                                               Icons.launch_outlined,
                                                                                               color: FlutterFlowTheme.of(context).primaryText,
                                                                                               size: 16.0,
                                                                                             ).animateOnPageLoad(animationsMap['iconOnPageLoadAnimation']!),
                                                                                           ),
-                                                                                      ].divide(const SizedBox(width: 10.0)),
+                                                                                      ].divide(SizedBox(width: 10.0)),
                                                                                     ),
+                                                                                    onEnter: ((event) async {
+                                                                                      safeSetState(() => _model.addressRegionHovered = true);
+                                                                                    }),
+                                                                                    onExit: ((event) async {
+                                                                                      safeSetState(() => _model.addressRegionHovered = false);
+                                                                                    }),
                                                                                   ),
                                                                                 ),
                                                                               ),
-                                                                            ].divide(const SizedBox(height: 12.0)),
+                                                                            ].divide(SizedBox(height: 12.0)),
                                                                           ),
                                                                           Row(
                                                                             mainAxisSize:
@@ -1177,7 +1181,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                                           letterSpacing: 0.0,
                                                                                         ),
                                                                                   ),
-                                                                                ].divide(const SizedBox(width: 10.0)),
+                                                                                ].divide(SizedBox(width: 10.0)),
                                                                               ),
                                                                               Row(
                                                                                 mainAxisSize: MainAxisSize.max,
@@ -1196,7 +1200,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                                           letterSpacing: 0.0,
                                                                                         ),
                                                                                   ),
-                                                                                ].divide(const SizedBox(width: 10.0)),
+                                                                                ].divide(SizedBox(width: 10.0)),
                                                                               ),
                                                                               Row(
                                                                                 mainAxisSize: MainAxisSize.max,
@@ -1215,11 +1219,11 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                                           letterSpacing: 0.0,
                                                                                         ),
                                                                                   ),
-                                                                                ].divide(const SizedBox(width: 10.0)),
+                                                                                ].divide(SizedBox(width: 10.0)),
                                                                               ),
-                                                                            ].divide(const SizedBox(width: 25.0)),
+                                                                            ].divide(SizedBox(width: 25.0)),
                                                                           ),
-                                                                        ].divide(const SizedBox(height: 12.0)),
+                                                                        ].divide(SizedBox(height: 12.0)),
                                                                       ),
                                                                     ),
                                                                   ],
@@ -1246,12 +1250,12 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                             250.0,
                                                                         height:
                                                                             50.0,
-                                                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
                                                                             24.0,
                                                                             13.0,
                                                                             24.0,
                                                                             13.0),
-                                                                        iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                                                        iconPadding: EdgeInsetsDirectional.fromSTEB(
                                                                             0.0,
                                                                             0.0,
                                                                             0.0,
@@ -1268,7 +1272,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                         elevation:
                                                                             0.0,
                                                                         borderSide:
-                                                                            const BorderSide(
+                                                                            BorderSide(
                                                                           color:
                                                                               Colors.transparent,
                                                                           width:
@@ -1281,7 +1285,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                   ),
                                                                 ],
                                                               ),
-                                                            ].divide(const SizedBox(
+                                                            ].divide(SizedBox(
                                                                 height: 30.0)),
                                                           ),
                                                         ),
@@ -1300,7 +1304,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                         ),
                                                         child: Padding(
                                                           padding:
-                                                              const EdgeInsets.all(
+                                                              EdgeInsets.all(
                                                                   20.0),
                                                           child: Column(
                                                             mainAxisSize:
@@ -1350,7 +1354,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                               letterSpacing: 0.0,
                                                                             ),
                                                                       ),
-                                                                    ].divide(const SizedBox(
+                                                                    ].divide(SizedBox(
                                                                         width:
                                                                             16.0)),
                                                                   ),
@@ -1371,22 +1375,22 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                                                                       .cover,
                                                                 ),
                                                               ),
-                                                            ].divide(const SizedBox(
+                                                            ].divide(SizedBox(
                                                                 height: 20.0)),
                                                           ),
                                                         ),
                                                       ),
                                                     ].divide(
-                                                        const SizedBox(height: 24.0)),
+                                                        SizedBox(height: 24.0)),
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ),
                                         ]
-                                            .divide(const SizedBox(height: 20.0))
-                                            .addToStart(const SizedBox(height: 20.0))
-                                            .addToEnd(const SizedBox(height: 20.0)),
+                                            .divide(SizedBox(height: 20.0))
+                                            .addToStart(SizedBox(height: 20.0))
+                                            .addToEnd(SizedBox(height: 20.0)),
                                       ),
                                     ),
                                   ),
@@ -1402,11 +1406,11 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget>
                       phone: false,
                     ))
                       Align(
-                        alignment: const AlignmentDirectional(0.8, -0.97),
+                        alignment: AlignmentDirectional(0.8, -0.97),
                         child: wrapWithModel(
                           model: _model.navigatorModel,
-                          updateCallback: () => setState(() {}),
-                          child: const NavigatorWidget(
+                          updateCallback: () => safeSetState(() {}),
+                          child: NavigatorWidget(
                             expanded: true,
                           ),
                         ),

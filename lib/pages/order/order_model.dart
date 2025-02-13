@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 class OrderModel extends FlutterFlowModel<OrderWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // Model for Menu component.
   late MenuModel menuModel;
   // Model for Header component.
@@ -71,7 +70,6 @@ class OrderModel extends FlutterFlowModel<OrderWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     menuModel.dispose();
     headerModel.dispose();
     subHeaderModel.dispose();

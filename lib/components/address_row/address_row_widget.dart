@@ -51,7 +51,7 @@ class _AddressRowWidgetState extends State<AddressRowWidget>
       ),
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -76,16 +76,10 @@ class _AddressRowWidgetState extends State<AddressRowWidget>
       },
       child: Container(
         width: 200.0,
-        decoration: const BoxDecoration(),
+        decoration: BoxDecoration(),
         child: MouseRegion(
           opaque: false,
           cursor: MouseCursor.defer ?? MouseCursor.defer,
-          onEnter: ((event) async {
-            setState(() => _model.addressRegionHovered = true);
-          }),
-          onExit: ((event) async {
-            setState(() => _model.addressRegionHovered = false);
-          }),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -109,7 +103,7 @@ class _AddressRowWidgetState extends State<AddressRowWidget>
               ),
               if (_model.addressRegionHovered ?? true)
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                   child: Icon(
                     Icons.launch_outlined,
                     color: FlutterFlowTheme.of(context).primaryText,
@@ -117,8 +111,14 @@ class _AddressRowWidgetState extends State<AddressRowWidget>
                   ).animateOnPageLoad(
                       animationsMap['iconOnPageLoadAnimation']!),
                 ),
-            ].divide(const SizedBox(width: 10.0)),
+            ].divide(SizedBox(width: 10.0)),
           ),
+          onEnter: ((event) async {
+            safeSetState(() => _model.addressRegionHovered = true);
+          }),
+          onExit: ((event) async {
+            safeSetState(() => _model.addressRegionHovered = false);
+          }),
         ),
       ),
     );

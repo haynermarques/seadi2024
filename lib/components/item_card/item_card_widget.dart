@@ -65,7 +65,7 @@ class _ItemCardWidgetState extends State<ItemCardWidget>
       ),
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -95,8 +95,8 @@ class _ItemCardWidgetState extends State<ItemCardWidget>
           ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
             child: CachedNetworkImage(
-              fadeInDuration: const Duration(milliseconds: 500),
-              fadeOutDuration: const Duration(milliseconds: 500),
+              fadeInDuration: Duration(milliseconds: 500),
+              fadeOutDuration: Duration(milliseconds: 500),
               imageUrl: widget.image!,
               width: 200.0,
               height: 140.0,
@@ -106,8 +106,8 @@ class _ItemCardWidgetState extends State<ItemCardWidget>
           Container(
             width: 250.0,
             height: 140.0,
-            decoration: const BoxDecoration(),
-            alignment: const AlignmentDirectional(0.0, 0.0),
+            decoration: BoxDecoration(),
+            alignment: AlignmentDirectional(0.0, 0.0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,7 +126,7 @@ class _ItemCardWidgetState extends State<ItemCardWidget>
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
+                            padding: EdgeInsetsDirectional.fromSTEB(
                                 8.0, 4.0, 8.0, 4.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
@@ -183,16 +183,10 @@ class _ItemCardWidgetState extends State<ItemCardWidget>
                         );
                       },
                       child: Container(
-                        decoration: const BoxDecoration(),
+                        decoration: BoxDecoration(),
                         child: MouseRegion(
                           opaque: false,
                           cursor: MouseCursor.defer ?? MouseCursor.defer,
-                          onEnter: ((event) async {
-                            setState(() => _model.addressRegionHovered = true);
-                          }),
-                          onExit: ((event) async {
-                            setState(() => _model.addressRegionHovered = false);
-                          }),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -218,7 +212,7 @@ class _ItemCardWidgetState extends State<ItemCardWidget>
                               ),
                               if (_model.addressRegionHovered ?? true)
                                 Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
                                       5.0, 0.0, 0.0, 0.0),
                                   child: Icon(
                                     Icons.launch_outlined,
@@ -228,12 +222,20 @@ class _ItemCardWidgetState extends State<ItemCardWidget>
                                   ).animateOnPageLoad(animationsMap[
                                       'iconOnPageLoadAnimation']!),
                                 ),
-                            ].divide(const SizedBox(width: 10.0)),
+                            ].divide(SizedBox(width: 10.0)),
                           ),
+                          onEnter: ((event) async {
+                            safeSetState(
+                                () => _model.addressRegionHovered = true);
+                          }),
+                          onExit: ((event) async {
+                            safeSetState(
+                                () => _model.addressRegionHovered = false);
+                          }),
                         ),
                       ),
                     ),
-                  ].divide(const SizedBox(height: 12.0)),
+                  ].divide(SizedBox(height: 12.0)),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -260,7 +262,7 @@ class _ItemCardWidgetState extends State<ItemCardWidget>
                                 letterSpacing: 0.0,
                               ),
                         ),
-                      ].divide(const SizedBox(width: 10.0)),
+                      ].divide(SizedBox(width: 10.0)),
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.max,
@@ -284,7 +286,7 @@ class _ItemCardWidgetState extends State<ItemCardWidget>
                                 letterSpacing: 0.0,
                               ),
                         ),
-                      ].divide(const SizedBox(width: 10.0)),
+                      ].divide(SizedBox(width: 10.0)),
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.max,
@@ -308,11 +310,11 @@ class _ItemCardWidgetState extends State<ItemCardWidget>
                                 letterSpacing: 0.0,
                               ),
                         ),
-                      ].divide(const SizedBox(width: 10.0)),
+                      ].divide(SizedBox(width: 10.0)),
                     ),
-                  ].divide(const SizedBox(width: 25.0)),
+                  ].divide(SizedBox(width: 25.0)),
                 ),
-              ].divide(const SizedBox(height: 12.0)),
+              ].divide(SizedBox(height: 12.0)),
             ),
           ),
         ],

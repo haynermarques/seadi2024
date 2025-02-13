@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 class ChatModel extends FlutterFlowModel<ChatWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // Model for MessageItem component.
   late MessageItemModel messageItemModel1;
   // Model for MessageItem component.
@@ -23,7 +22,6 @@ class ChatModel extends FlutterFlowModel<ChatWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     messageItemModel1.dispose();
     messageItemModel2.dispose();
     messageItemModel3.dispose();

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 class LoginPageModel extends FlutterFlowModel<LoginPageWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
   // State field(s) for PageView widget.
   PageController? pageViewController;
@@ -61,7 +60,6 @@ class LoginPageModel extends FlutterFlowModel<LoginPageWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     emailTextFieldFocusNode?.dispose();
     emailTextFieldTextController?.dispose();
 

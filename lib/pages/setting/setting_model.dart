@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 class SettingModel extends FlutterFlowModel<SettingWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // Model for Menu component.
   late MenuModel menuModel;
   // Model for Header component.
@@ -61,7 +60,6 @@ class SettingModel extends FlutterFlowModel<SettingWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     menuModel.dispose();
     headerModel.dispose();
     subHeaderModel.dispose();

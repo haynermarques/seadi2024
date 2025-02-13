@@ -10,7 +10,7 @@ class SubHeaderWidget extends StatefulWidget {
     super.key,
     required this.title,
     bool? showBackBtn,
-  }) : showBackBtn = showBackBtn ?? false;
+  }) : this.showBackBtn = showBackBtn ?? false;
 
   final String? title;
   final bool showBackBtn;
@@ -33,7 +33,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
     super.initState();
     _model = createModel(context, () => SubHeaderModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -47,7 +47,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
   Widget build(BuildContext context) {
     return Container(
       height: 50.0,
-      decoration: const BoxDecoration(),
+      decoration: BoxDecoration(),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [

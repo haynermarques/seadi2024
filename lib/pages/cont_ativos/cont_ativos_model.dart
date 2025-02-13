@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 class ContAtivosModel extends FlutterFlowModel<ContAtivosWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // Model for Menu component.
   late MenuModel menuModel;
   // Model for Header component.
@@ -40,10 +39,11 @@ class ContAtivosModel extends FlutterFlowModel<ContAtivosWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     menuModel.dispose();
     headerModel.dispose();
     subHeaderModel.dispose();
     textFieldFocusNode?.dispose();
+
+    paginatedDataTableController.dispose();
   }
 }

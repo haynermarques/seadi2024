@@ -34,7 +34,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
     super.initState();
     _model = createModel(context, () => OrderStatusModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -58,7 +58,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
           borderRadius: BorderRadius.circular(30.0),
         ),
         child: Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(24.0, 8.0, 24.0, 8.0),
+          padding: EdgeInsetsDirectional.fromSTEB(24.0, 8.0, 24.0, 8.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,

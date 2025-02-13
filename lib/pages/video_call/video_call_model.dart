@@ -15,7 +15,6 @@ class VideoCallModel extends FlutterFlowModel<VideoCallWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // Model for Menu component.
   late MenuModel menuModel;
   // Model for Header component.
@@ -60,7 +59,6 @@ class VideoCallModel extends FlutterFlowModel<VideoCallWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     menuModel.dispose();
     headerModel.dispose();
     subHeaderModel.dispose();

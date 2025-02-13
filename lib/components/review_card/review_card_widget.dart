@@ -36,7 +36,7 @@ class _ReviewCardWidgetState extends State<ReviewCardWidget> {
     super.initState();
     _model = createModel(context, () => ReviewCardModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -58,7 +58,7 @@ class _ReviewCardWidgetState extends State<ReviewCardWidget> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(12.0),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -76,14 +76,14 @@ class _ReviewCardWidgetState extends State<ReviewCardWidget> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).brand100,
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(4.0),
+                      padding: EdgeInsets.all(4.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -115,7 +115,7 @@ class _ReviewCardWidgetState extends State<ReviewCardWidget> {
                             ),
                           ),
                           RatingBar.builder(
-                            onRatingUpdate: (newValue) => setState(
+                            onRatingUpdate: (newValue) => safeSetState(
                                 () => _model.ratingBarValue = newValue),
                             itemBuilder: (context, index) => Icon(
                               Icons.star_rounded,
@@ -132,7 +132,7 @@ class _ReviewCardWidgetState extends State<ReviewCardWidget> {
                             itemSize: 10.0,
                             glowColor: FlutterFlowTheme.of(context).primary,
                           ),
-                        ].divide(const SizedBox(width: 4.0)),
+                        ].divide(SizedBox(width: 4.0)),
                       ),
                     ),
                   ),
@@ -141,8 +141,8 @@ class _ReviewCardWidgetState extends State<ReviewCardWidget> {
             ),
             wrapWithModel(
               model: _model.dividerModel,
-              updateCallback: () => setState(() {}),
-              child: const DividerWidget(
+              updateCallback: () => safeSetState(() {}),
+              child: DividerWidget(
                 titleInLeftSide: false,
               ),
             ),
@@ -162,7 +162,7 @@ class _ReviewCardWidgetState extends State<ReviewCardWidget> {
                 ),
               ],
             ),
-          ].divide(const SizedBox(height: 12.0)),
+          ].divide(SizedBox(height: 12.0)),
         ),
       ),
     );

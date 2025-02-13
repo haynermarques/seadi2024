@@ -31,7 +31,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
     super.initState();
     _model = createModel(context, () => BarracontratosModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -44,12 +44,12 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: const AlignmentDirectional(-1.0, 0.0),
+      alignment: AlignmentDirectional(-1.0, 0.0),
       child: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(),
+        decoration: BoxDecoration(),
         child: Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 4.0),
+          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 4.0),
           child: FutureBuilder<List<VwContratostotalRow>>(
             future: VwContratostotalTable().querySingleRow(
               queryFn: (q) => q,
@@ -101,7 +101,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                 children: [
                   Padding(
                     padding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
+                        EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
                     child: Container(
                       width: () {
                         if (MediaQuery.sizeOf(context).width <
@@ -131,24 +131,24 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                           return 120.0;
                         }
                       }(),
-                      constraints: const BoxConstraints(
+                      constraints: BoxConstraints(
                         maxWidth: 270.0,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8.0),
                         border: Border.all(
-                          color: const Color(0xFFE5E7EB),
+                          color: Color(0xFFE5E7EB),
                           width: 1.0,
                         ),
                       ),
                       child: Padding(
                         padding:
-                            const EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 5.0, 0.0),
+                            EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 5.0, 0.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            const Padding(
+                            Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 9.0, 0.0),
                               child: Icon(
@@ -169,7 +169,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                         .labelMedium
                                         .override(
                                           fontFamily: 'Plus Jakarta Sans',
-                                          color: const Color(0xFF606A85),
+                                          color: Color(0xFF606A85),
                                           fontSize: 9.0,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.w500,
@@ -181,7 +181,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                       Expanded(
                                         child: Padding(
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
+                                              EdgeInsetsDirectional.fromSTEB(
                                                   0.0, 4.0, 4.0, 0.0),
                                           child: Text(
                                             formatNumber(
@@ -193,7 +193,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                                 .displaySmall
                                                 .override(
                                                   fontFamily: 'Outfit',
-                                                  color: const Color(0xFF15161E),
+                                                  color: Color(0xFF15161E),
                                                   fontSize: 15.0,
                                                   letterSpacing: 0.0,
                                                   fontWeight: FontWeight.w600,
@@ -213,7 +213,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
+                        EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
                     child: Container(
                       width: () {
                         if (MediaQuery.sizeOf(context).width <
@@ -243,24 +243,24 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                           return 120.0;
                         }
                       }(),
-                      constraints: const BoxConstraints(
+                      constraints: BoxConstraints(
                         maxWidth: 270.0,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8.0),
                         border: Border.all(
-                          color: const Color(0xFFE5E7EB),
+                          color: Color(0xFFE5E7EB),
                           width: 1.0,
                         ),
                       ),
                       child: Padding(
                         padding:
-                            const EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 5.0, 0.0),
+                            EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 5.0, 0.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            const Padding(
+                            Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 9.0, 0.0),
                               child: Icon(
@@ -281,7 +281,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                         .labelMedium
                                         .override(
                                           fontFamily: 'Plus Jakarta Sans',
-                                          color: const Color(0xFF606A85),
+                                          color: Color(0xFF606A85),
                                           fontSize: 9.0,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.w500,
@@ -291,7 +291,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 4.0, 4.0, 0.0),
                                         child: Text(
                                           topStatsVwContratostotalRow
@@ -301,7 +301,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                               .displaySmall
                                               .override(
                                                 fontFamily: 'Outfit',
-                                                color: const Color(0xFF15161E),
+                                                color: Color(0xFF15161E),
                                                 fontSize: 15.0,
                                                 letterSpacing: 0.0,
                                                 fontWeight: FontWeight.w600,
@@ -320,7 +320,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
+                        EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
                     child: InkWell(
                       splashColor: Colors.transparent,
                       focusColor: Colors.transparent,
@@ -368,24 +368,24 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                             return 120.0;
                           }
                         }(),
-                        constraints: const BoxConstraints(
+                        constraints: BoxConstraints(
                           maxWidth: 270.0,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8.0),
                           border: Border.all(
-                            color: const Color(0xFFE5E7EB),
+                            color: Color(0xFFE5E7EB),
                             width: 1.0,
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
+                          padding: EdgeInsetsDirectional.fromSTEB(
                               5.0, 0.0, 5.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 11.0, 0.0),
                                 child: Icon(
@@ -406,7 +406,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                           .labelMedium
                                           .override(
                                             fontFamily: 'Plus Jakarta Sans',
-                                            color: const Color(0xFF606A85),
+                                            color: Color(0xFF606A85),
                                             fontSize: 9.0,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w500,
@@ -417,7 +417,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                       children: [
                                         Padding(
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
+                                              EdgeInsetsDirectional.fromSTEB(
                                                   0.0, 4.0, 4.0, 0.0),
                                           child: Text(
                                             topStatsVwContratostotalRow
@@ -427,7 +427,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                                 .displaySmall
                                                 .override(
                                                   fontFamily: 'Outfit',
-                                                  color: const Color(0xFF15161E),
+                                                  color: Color(0xFF15161E),
                                                   fontSize: 15.0,
                                                   letterSpacing: 0.0,
                                                   fontWeight: FontWeight.w600,
@@ -447,7 +447,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
+                        EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
                     child: InkWell(
                       splashColor: Colors.transparent,
                       focusColor: Colors.transparent,
@@ -495,24 +495,24 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                             return 120.0;
                           }
                         }(),
-                        constraints: const BoxConstraints(
+                        constraints: BoxConstraints(
                           maxWidth: 270.0,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8.0),
                           border: Border.all(
-                            color: const Color(0xFFE5E7EB),
+                            color: Color(0xFFE5E7EB),
                             width: 1.0,
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
+                          padding: EdgeInsetsDirectional.fromSTEB(
                               5.0, 0.0, 5.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 11.0, 0.0),
                                 child: Icon(
@@ -533,7 +533,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                           .labelMedium
                                           .override(
                                             fontFamily: 'Plus Jakarta Sans',
-                                            color: const Color(0xFF606A85),
+                                            color: Color(0xFF606A85),
                                             fontSize: 9.0,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w500,
@@ -544,7 +544,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                       children: [
                                         Padding(
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
+                                              EdgeInsetsDirectional.fromSTEB(
                                                   0.0, 4.0, 4.0, 0.0),
                                           child: Text(
                                             topStatsVwContratostotalRow
@@ -554,7 +554,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                                 .displaySmall
                                                 .override(
                                                   fontFamily: 'Outfit',
-                                                  color: const Color(0xFF15161E),
+                                                  color: Color(0xFF15161E),
                                                   fontSize: 15.0,
                                                   letterSpacing: 0.0,
                                                   fontWeight: FontWeight.w600,
@@ -574,7 +574,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
+                        EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
                     child: InkWell(
                       splashColor: Colors.transparent,
                       focusColor: Colors.transparent,
@@ -622,24 +622,24 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                             return 120.0;
                           }
                         }(),
-                        constraints: const BoxConstraints(
+                        constraints: BoxConstraints(
                           maxWidth: 270.0,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8.0),
                           border: Border.all(
-                            color: const Color(0xFFE5E7EB),
+                            color: Color(0xFFE5E7EB),
                             width: 1.0,
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
+                          padding: EdgeInsetsDirectional.fromSTEB(
                               5.0, 0.0, 5.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 16.0, 0.0),
                                 child: Icon(
@@ -660,7 +660,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                           .labelMedium
                                           .override(
                                             fontFamily: 'Plus Jakarta Sans',
-                                            color: const Color(0xFF606A85),
+                                            color: Color(0xFF606A85),
                                             fontSize: 9.0,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w500,
@@ -671,7 +671,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                       children: [
                                         Padding(
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
+                                              EdgeInsetsDirectional.fromSTEB(
                                                   0.0, 4.0, 4.0, 0.0),
                                           child: Text(
                                             topStatsVwContratostotalRow
@@ -681,7 +681,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                                 .displaySmall
                                                 .override(
                                                   fontFamily: 'Outfit',
-                                                  color: const Color(0xFF15161E),
+                                                  color: Color(0xFF15161E),
                                                   fontSize: 15.0,
                                                   letterSpacing: 0.0,
                                                   fontWeight: FontWeight.w600,
@@ -701,7 +701,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
+                        EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
                     child: InkWell(
                       splashColor: Colors.transparent,
                       focusColor: Colors.transparent,
@@ -749,24 +749,24 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                             return 120.0;
                           }
                         }(),
-                        constraints: const BoxConstraints(
+                        constraints: BoxConstraints(
                           maxWidth: 270.0,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8.0),
                           border: Border.all(
-                            color: const Color(0xFFE5E7EB),
+                            color: Color(0xFFE5E7EB),
                             width: 1.0,
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
+                          padding: EdgeInsetsDirectional.fromSTEB(
                               5.0, 0.0, 5.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 16.0, 0.0),
                                 child: Icon(
@@ -787,7 +787,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                           .labelMedium
                                           .override(
                                             fontFamily: 'Plus Jakarta Sans',
-                                            color: const Color(0xFF606A85),
+                                            color: Color(0xFF606A85),
                                             fontSize: 9.0,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w500,
@@ -798,7 +798,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                       children: [
                                         Padding(
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
+                                              EdgeInsetsDirectional.fromSTEB(
                                                   0.0, 4.0, 4.0, 0.0),
                                           child: Text(
                                             topStatsVwContratostotalRow
@@ -808,7 +808,7 @@ class _BarracontratosWidgetState extends State<BarracontratosWidget> {
                                                 .displaySmall
                                                 .override(
                                                   fontFamily: 'Outfit',
-                                                  color: const Color(0xFF15161E),
+                                                  color: Color(0xFF15161E),
                                                   fontSize: 15.0,
                                                   letterSpacing: 0.0,
                                                   fontWeight: FontWeight.w600,

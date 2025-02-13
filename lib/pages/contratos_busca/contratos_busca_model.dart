@@ -24,7 +24,6 @@ class ContratosBuscaModel extends FlutterFlowModel<ContratosBuscaWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // Stores action output result for [Backend Call - Query Rows] action in ContratosBusca widget.
   List<ContratosSeadiRow>? queryResult;
   // Model for Menu component.
@@ -60,11 +59,12 @@ class ContratosBuscaModel extends FlutterFlowModel<ContratosBuscaWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     menuModel.dispose();
     headerModel.dispose();
     subHeaderModel.dispose();
     barracontratosModel.dispose();
     textFieldFocusNode?.dispose();
+
+    paginatedDataTableController.dispose();
   }
 }

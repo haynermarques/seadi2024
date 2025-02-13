@@ -15,7 +15,6 @@ class AbreModel extends FlutterFlowModel<AbreWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // Model for Menu component.
   late MenuModel menuModel;
   // Model for Header component.
@@ -47,7 +46,6 @@ class AbreModel extends FlutterFlowModel<AbreWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     menuModel.dispose();
     headerModel.dispose();
     subHeaderModel.dispose();

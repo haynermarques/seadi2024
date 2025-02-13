@@ -168,8 +168,8 @@ dynamic deserializeParam<T>(
         return null;
       }
       return paramValues
-          .whereType<String>()
-          .map((p) => p)
+          .where((p) => p is String)
+          .map((p) => p as String)
           .map((p) => deserializeParam<T>(p, paramType, false))
           .where((p) => p != null)
           .map((p) => p! as T)
@@ -209,6 +209,18 @@ dynamic deserializeParam<T>(
             return VwContratostotalRow(data);
           case ContratosSeadiRow:
             return ContratosSeadiRow(data);
+          case LotesVendRow:
+            return LotesVendRow(data);
+          case LoteTransacoesRow:
+            return LoteTransacoesRow(data);
+          case LotesRow:
+            return LotesRow(data);
+          case BensDoadosRow:
+            return BensDoadosRow(data);
+          case RelacaobensSeadiRow:
+            return RelacaobensSeadiRow(data);
+          case LotesClientesRow:
+            return LotesClientesRow(data);
           default:
             return null;
         }

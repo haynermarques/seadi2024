@@ -23,9 +23,9 @@ class ContAtivosWidget extends StatefulWidget {
     int? lisNum,
     bool? hasSubMenu,
     bool? subMenuExpanded,
-  })  : lisNum = lisNum ?? 120,
-        hasSubMenu = hasSubMenu ?? false,
-        subMenuExpanded = subMenuExpanded ?? false;
+  })  : this.lisNum = lisNum ?? 120,
+        this.hasSubMenu = hasSubMenu ?? false,
+        this.subMenuExpanded = subMenuExpanded ?? false;
 
   final int lisNum;
   final bool hasSubMenu;
@@ -47,7 +47,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
 
     _model.textController ??= TextEditingController();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -65,15 +65,16 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
         title: 'Cont_ativos',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -96,9 +97,9 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Ativos',
                                 pageIsInSubMenu: false,
                               ),
@@ -109,9 +110,9 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Container(
                                   width: double.infinity,
@@ -130,14 +131,14 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                         children: [
                                           Expanded(
                                             child: Padding(
-                                              padding: const EdgeInsetsDirectional
+                                              padding: EdgeInsetsDirectional
                                                   .fromSTEB(
                                                       20.0, 0.0, 20.0, 0.0),
                                               child: wrapWithModel(
                                                 model: _model.subHeaderModel,
                                                 updateCallback: () =>
-                                                    setState(() {}),
-                                                child: const SubHeaderWidget(
+                                                    safeSetState(() {}),
+                                                child: SubHeaderWidget(
                                                   title: 'CONTRATOS - Todos',
                                                   showBackBtn: true,
                                                 ),
@@ -160,12 +161,12 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                         children: [
                                           Align(
                                             alignment:
-                                                const AlignmentDirectional(-1.0, 0.0),
+                                                AlignmentDirectional(-1.0, 0.0),
                                             child: Container(
                                               width: double.infinity,
-                                              decoration: const BoxDecoration(),
+                                              decoration: BoxDecoration(),
                                               child: Padding(
-                                                padding: const EdgeInsetsDirectional
+                                                padding: EdgeInsetsDirectional
                                                     .fromSTEB(
                                                         0.0, 0.0, 0.0, 4.0),
                                                 child: FutureBuilder<
@@ -216,7 +217,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                         Expanded(
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         0.0,
                                                                         12.0,
@@ -225,7 +226,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                             child: Container(
                                                               height: 120.0,
                                                               constraints:
-                                                                  const BoxConstraints(
+                                                                  BoxConstraints(
                                                                 maxWidth: 270.0,
                                                               ),
                                                               decoration:
@@ -238,14 +239,14 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             8.0),
                                                                 border:
                                                                     Border.all(
-                                                                  color: const Color(
+                                                                  color: Color(
                                                                       0xFFE5E7EB),
                                                                   width: 1.0,
                                                                 ),
                                                               ),
                                                               child: Padding(
                                                                 padding:
-                                                                    const EdgeInsetsDirectional
+                                                                    EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             5.0,
                                                                             0.0,
@@ -256,7 +257,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                       MainAxisSize
                                                                           .max,
                                                                   children: [
-                                                                    const Padding(
+                                                                    Padding(
                                                                       padding: EdgeInsetsDirectional.fromSTEB(
                                                                           0.0,
                                                                           0.0,
@@ -284,10 +285,10 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                         children: [
                                                                           Align(
                                                                             alignment:
-                                                                                const AlignmentDirectional(1.0, 0.0),
+                                                                                AlignmentDirectional(1.0, 0.0),
                                                                             child:
                                                                                 Padding(
-                                                                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 11.0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 11.0),
                                                                               child: Icon(
                                                                                 Icons.arrow_upward_outlined,
                                                                                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -299,7 +300,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             'VALOR GERAL',
                                                                             style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF606A85),
+                                                                                  color: Color(0xFF606A85),
                                                                                   fontSize: 11.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -311,7 +312,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             children: [
                                                                               Expanded(
                                                                                 child: Padding(
-                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
                                                                                   child: Text(
                                                                                     formatNumber(
                                                                                       topStatsVwContratostotalRow!.totalSaldo!,
@@ -319,7 +320,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                                     ),
                                                                                     style: FlutterFlowTheme.of(context).displaySmall.override(
                                                                                           fontFamily: 'Outfit',
-                                                                                          color: const Color(0xFF15161E),
+                                                                                          color: Color(0xFF15161E),
                                                                                           fontSize: 21.0,
                                                                                           letterSpacing: 0.0,
                                                                                           fontWeight: FontWeight.w600,
@@ -341,7 +342,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                         Expanded(
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         0.0,
                                                                         12.0,
@@ -350,7 +351,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                             child: Container(
                                                               height: 120.0,
                                                               constraints:
-                                                                  const BoxConstraints(
+                                                                  BoxConstraints(
                                                                 maxWidth: 270.0,
                                                               ),
                                                               decoration:
@@ -363,14 +364,14 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             8.0),
                                                                 border:
                                                                     Border.all(
-                                                                  color: const Color(
+                                                                  color: Color(
                                                                       0xFFE5E7EB),
                                                                   width: 1.0,
                                                                 ),
                                                               ),
                                                               child: Padding(
                                                                 padding:
-                                                                    const EdgeInsetsDirectional
+                                                                    EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             5.0,
                                                                             0.0,
@@ -381,7 +382,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                       MainAxisSize
                                                                           .max,
                                                                   children: [
-                                                                    const Padding(
+                                                                    Padding(
                                                                       padding: EdgeInsetsDirectional.fromSTEB(
                                                                           0.0,
                                                                           0.0,
@@ -409,10 +410,10 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                         children: [
                                                                           Align(
                                                                             alignment:
-                                                                                const AlignmentDirectional(1.0, 0.0),
+                                                                                AlignmentDirectional(1.0, 0.0),
                                                                             child:
                                                                                 Padding(
-                                                                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 11.0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 11.0),
                                                                               child: Icon(
                                                                                 Icons.arrow_forward_ios,
                                                                                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -424,7 +425,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             'TOTAL DE CONTRATOS',
                                                                             style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF606A85),
+                                                                                  color: Color(0xFF606A85),
                                                                                   fontSize: 11.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -435,12 +436,12 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                                 MainAxisSize.max,
                                                                             children: [
                                                                               Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
                                                                                 child: Text(
                                                                                   topStatsVwContratostotalRow.totalRegistros!.toString(),
                                                                                   style: FlutterFlowTheme.of(context).displaySmall.override(
                                                                                         fontFamily: 'Outfit',
-                                                                                        color: const Color(0xFF15161E),
+                                                                                        color: Color(0xFF15161E),
                                                                                         fontSize: 21.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.w600,
@@ -461,7 +462,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                         Expanded(
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         0.0,
                                                                         12.0,
@@ -470,7 +471,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                             child: Container(
                                                               height: 120.0,
                                                               constraints:
-                                                                  const BoxConstraints(
+                                                                  BoxConstraints(
                                                                 maxWidth: 270.0,
                                                               ),
                                                               decoration:
@@ -483,14 +484,14 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             8.0),
                                                                 border:
                                                                     Border.all(
-                                                                  color: const Color(
+                                                                  color: Color(
                                                                       0xFFE5E7EB),
                                                                   width: 1.0,
                                                                 ),
                                                               ),
                                                               child: Padding(
                                                                 padding:
-                                                                    const EdgeInsetsDirectional
+                                                                    EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             5.0,
                                                                             0.0,
@@ -501,7 +502,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                       MainAxisSize
                                                                           .max,
                                                                   children: [
-                                                                    const Padding(
+                                                                    Padding(
                                                                       padding: EdgeInsetsDirectional.fromSTEB(
                                                                           0.0,
                                                                           0.0,
@@ -529,10 +530,10 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                         children: [
                                                                           Align(
                                                                             alignment:
-                                                                                const AlignmentDirectional(1.0, 0.0),
+                                                                                AlignmentDirectional(1.0, 0.0),
                                                                             child:
                                                                                 Padding(
-                                                                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 11.0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 11.0),
                                                                               child: Icon(
                                                                                 Icons.arrow_forward_ios,
                                                                                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -544,7 +545,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             'TOTAL  CONTÍNUOS',
                                                                             style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF606A85),
+                                                                                  color: Color(0xFF606A85),
                                                                                   fontSize: 11.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -555,12 +556,12 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                                 MainAxisSize.max,
                                                                             children: [
                                                                               Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
                                                                                 child: Text(
                                                                                   topStatsVwContratostotalRow.totalProcessoContinuo!.toString(),
                                                                                   style: FlutterFlowTheme.of(context).displaySmall.override(
                                                                                         fontFamily: 'Outfit',
-                                                                                        color: const Color(0xFF15161E),
+                                                                                        color: Color(0xFF15161E),
                                                                                         fontSize: 21.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.w600,
@@ -581,7 +582,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                         Expanded(
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         0.0,
                                                                         12.0,
@@ -590,7 +591,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                             child: Container(
                                                               height: 120.0,
                                                               constraints:
-                                                                  const BoxConstraints(
+                                                                  BoxConstraints(
                                                                 maxWidth: 270.0,
                                                               ),
                                                               decoration:
@@ -603,14 +604,14 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             8.0),
                                                                 border:
                                                                     Border.all(
-                                                                  color: const Color(
+                                                                  color: Color(
                                                                       0xFFE5E7EB),
                                                                   width: 1.0,
                                                                 ),
                                                               ),
                                                               child: Padding(
                                                                 padding:
-                                                                    const EdgeInsetsDirectional
+                                                                    EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             5.0,
                                                                             0.0,
@@ -621,7 +622,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                       MainAxisSize
                                                                           .max,
                                                                   children: [
-                                                                    const Padding(
+                                                                    Padding(
                                                                       padding: EdgeInsetsDirectional.fromSTEB(
                                                                           0.0,
                                                                           0.0,
@@ -649,10 +650,10 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                         children: [
                                                                           Align(
                                                                             alignment:
-                                                                                const AlignmentDirectional(1.0, 0.0),
+                                                                                AlignmentDirectional(1.0, 0.0),
                                                                             child:
                                                                                 Padding(
-                                                                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 11.0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 11.0),
                                                                               child: Icon(
                                                                                 Icons.arrow_forward_ios,
                                                                                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -664,7 +665,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             'FORMALIZAÇÃO 2024',
                                                                             style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF606A85),
+                                                                                  color: Color(0xFF606A85),
                                                                                   fontSize: 11.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -675,12 +676,12 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                                 MainAxisSize.max,
                                                                             children: [
                                                                               Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
                                                                                 child: Text(
                                                                                   topStatsVwContratostotalRow.totalFormalizacao!.toString(),
                                                                                   style: FlutterFlowTheme.of(context).displaySmall.override(
                                                                                         fontFamily: 'Outfit',
-                                                                                        color: const Color(0xFF15161E),
+                                                                                        color: Color(0xFF15161E),
                                                                                         fontSize: 21.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.w600,
@@ -701,7 +702,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                         Expanded(
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         0.0,
                                                                         12.0,
@@ -710,7 +711,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                             child: Container(
                                                               height: 120.0,
                                                               constraints:
-                                                                  const BoxConstraints(
+                                                                  BoxConstraints(
                                                                 maxWidth: 270.0,
                                                               ),
                                                               decoration:
@@ -723,14 +724,14 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             8.0),
                                                                 border:
                                                                     Border.all(
-                                                                  color: const Color(
+                                                                  color: Color(
                                                                       0xFFE5E7EB),
                                                                   width: 1.0,
                                                                 ),
                                                               ),
                                                               child: Padding(
                                                                 padding:
-                                                                    const EdgeInsetsDirectional
+                                                                    EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             5.0,
                                                                             0.0,
@@ -741,7 +742,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                       MainAxisSize
                                                                           .max,
                                                                   children: [
-                                                                    const Padding(
+                                                                    Padding(
                                                                       padding: EdgeInsetsDirectional.fromSTEB(
                                                                           0.0,
                                                                           0.0,
@@ -769,10 +770,10 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                         children: [
                                                                           Align(
                                                                             alignment:
-                                                                                const AlignmentDirectional(1.0, 0.0),
+                                                                                AlignmentDirectional(1.0, 0.0),
                                                                             child:
                                                                                 Padding(
-                                                                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 11.0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 11.0),
                                                                               child: Icon(
                                                                                 Icons.arrow_forward_ios,
                                                                                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -784,7 +785,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             'EM EXECUÇÃO',
                                                                             style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF606A85),
+                                                                                  color: Color(0xFF606A85),
                                                                                   fontSize: 11.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -795,12 +796,12 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                                 MainAxisSize.max,
                                                                             children: [
                                                                               Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
                                                                                 child: Text(
                                                                                   topStatsVwContratostotalRow.totalExecucao!.toString(),
                                                                                   style: FlutterFlowTheme.of(context).displaySmall.override(
                                                                                         fontFamily: 'Outfit',
-                                                                                        color: const Color(0xFF15161E),
+                                                                                        color: Color(0xFF15161E),
                                                                                         fontSize: 21.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.w600,
@@ -821,7 +822,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                         Expanded(
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         0.0,
                                                                         12.0,
@@ -830,7 +831,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                             child: Container(
                                                               height: 120.0,
                                                               constraints:
-                                                                  const BoxConstraints(
+                                                                  BoxConstraints(
                                                                 maxWidth: 270.0,
                                                               ),
                                                               decoration:
@@ -843,14 +844,14 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             8.0),
                                                                 border:
                                                                     Border.all(
-                                                                  color: const Color(
+                                                                  color: Color(
                                                                       0xFFE5E7EB),
                                                                   width: 1.0,
                                                                 ),
                                                               ),
                                                               child: Padding(
                                                                 padding:
-                                                                    const EdgeInsetsDirectional
+                                                                    EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             5.0,
                                                                             0.0,
@@ -861,7 +862,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                       MainAxisSize
                                                                           .max,
                                                                   children: [
-                                                                    const Padding(
+                                                                    Padding(
                                                                       padding: EdgeInsetsDirectional.fromSTEB(
                                                                           0.0,
                                                                           0.0,
@@ -889,10 +890,10 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                         children: [
                                                                           Align(
                                                                             alignment:
-                                                                                const AlignmentDirectional(1.0, 0.0),
+                                                                                AlignmentDirectional(1.0, 0.0),
                                                                             child:
                                                                                 Padding(
-                                                                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 11.0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 11.0),
                                                                               child: Icon(
                                                                                 Icons.arrow_forward_ios,
                                                                                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -904,7 +905,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                             'ARQUIVADOS',
                                                                             style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF606A85),
+                                                                                  color: Color(0xFF606A85),
                                                                                   fontSize: 11.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -915,12 +916,12 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                                 MainAxisSize.max,
                                                                             children: [
                                                                               Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
                                                                                 child: Text(
                                                                                   topStatsVwContratostotalRow.totalArquivado!.toString(),
                                                                                   style: FlutterFlowTheme.of(context).displaySmall.override(
                                                                                         fontFamily: 'Outfit',
-                                                                                        color: const Color(0xFF15161E),
+                                                                                        color: Color(0xFF15161E),
                                                                                         fontSize: 21.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.w600,
@@ -939,11 +940,11 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                           ),
                                                         ),
                                                       ]
-                                                          .divide(const SizedBox(
+                                                          .divide(SizedBox(
                                                               width: 16.0))
-                                                          .addToStart(const SizedBox(
+                                                          .addToStart(SizedBox(
                                                               width: 16.0))
-                                                          .addToEnd(const SizedBox(
+                                                          .addToEnd(SizedBox(
                                                               width: 16.0)),
                                                     );
                                                   },
@@ -954,9 +955,9 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                         ],
                                       ),
                                     ]
-                                        .divide(const SizedBox(height: 24.0))
-                                        .addToStart(const SizedBox(height: 0.0))
-                                        .addToEnd(const SizedBox(height: 0.0)),
+                                        .divide(SizedBox(height: 24.0))
+                                        .addToStart(SizedBox(height: 0.0))
+                                        .addToEnd(SizedBox(height: 0.0)),
                                   ),
                                 ),
                                 Column(
@@ -965,7 +966,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                       CrossAxisAlignment.stretch,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
                                           22.0, 11.0, 0.0, 0.0),
                                       child: Wrap(
                                         spacing: 0.0,
@@ -1002,14 +1003,14 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                 }
                                               }(),
                                             ),
-                                            decoration: const BoxDecoration(),
+                                            decoration: BoxDecoration(),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
                                                 AlignedTooltip(
                                                   content: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(4.0),
+                                                        EdgeInsets.all(4.0),
                                                     child: Text(
                                                       'Selecione o tipo de filtro',
                                                       style: FlutterFlowTheme
@@ -1035,9 +1036,9 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                   elevation: 4.0,
                                                   tailBaseWidth: 24.0,
                                                   tailLength: 12.0,
-                                                  waitDuration: const Duration(
+                                                  waitDuration: Duration(
                                                       milliseconds: 100),
-                                                  showDuration: const Duration(
+                                                  showDuration: Duration(
                                                       milliseconds: 1500),
                                                   triggerMode:
                                                       TooltipTriggerMode.tap,
@@ -1075,14 +1076,14 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                             .dropDownValueController ??=
                                                         FormFieldController<
                                                             String>(null),
-                                                    options: const [
+                                                    options: [
                                                       'PROCESSO',
                                                       'CONTRATO',
                                                       'OBEJO',
                                                       'EMPRESA'
                                                     ],
                                                     onChanged: (val) =>
-                                                        setState(() => _model
+                                                        safeSetState(() => _model
                                                                 .dropDownValue =
                                                             val),
                                                     width: 160.0,
@@ -1121,7 +1122,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                     borderWidth: 1.0,
                                                     borderRadius: 8.0,
                                                     margin:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(14.0, 4.0,
                                                                 10.0, 4.0),
                                                     hidesUnderline: true,
@@ -1132,7 +1133,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                 Expanded(
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(11.0, 0.0,
                                                                 11.0, 0.0),
                                                     child: Container(
@@ -1163,7 +1164,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                         }(),
                                                       ),
                                                       decoration:
-                                                          const BoxDecoration(),
+                                                          BoxDecoration(),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.min,
@@ -1172,7 +1173,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                             width: 48.0,
                                                             height: 48.0,
                                                             decoration:
-                                                                const BoxDecoration(),
+                                                                BoxDecoration(),
                                                             child: Icon(
                                                               Icons.search,
                                                               color: FlutterFlowTheme
@@ -1186,13 +1187,13 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                             phone: false,
                                                             tablet: false,
                                                           ))
-                                                            SizedBox(
+                                                            Container(
                                                               width: 333.0,
                                                               child:
                                                                   Autocomplete<
                                                                       String>(
                                                                 initialValue:
-                                                                    const TextEditingValue(),
+                                                                    TextEditingValue(),
                                                                 optionsBuilder:
                                                                     (textEditingValue) {
                                                                   if (textEditingValue
@@ -1239,7 +1240,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                               0.0,
                                                                         ),
                                                                     textHighlightStyle:
-                                                                        const TextStyle(),
+                                                                        TextStyle(),
                                                                     elevation:
                                                                         4.0,
                                                                     optionBackgroundColor:
@@ -1254,7 +1255,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                 },
                                                                 onSelected: (String
                                                                     selection) {
-                                                                  setState(() =>
+                                                                  safeSetState(() =>
                                                                       _model.textFieldSelectedOption =
                                                                           selection);
                                                                   FocusScope.of(
@@ -1286,10 +1287,10 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                         EasyDebounce
                                                                             .debounce(
                                                                       '_model.textController',
-                                                                      const Duration(
+                                                                      Duration(
                                                                           milliseconds:
                                                                               500),
-                                                                      () => setState(
+                                                                      () => safeSetState(
                                                                           () {}),
                                                                     ),
                                                                     autofocus:
@@ -1297,7 +1298,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                     obscureText:
                                                                         false,
                                                                     decoration:
-                                                                        const InputDecoration(
+                                                                        InputDecoration(
                                                                       isDense:
                                                                           false,
                                                                       hintText:
@@ -1340,7 +1341,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                     ),
                                                   ),
                                                 ),
-                                              ].divide(const SizedBox(width: 12.0)),
+                                              ].divide(SizedBox(width: 12.0)),
                                             ),
                                           ),
                                           Container(
@@ -1354,7 +1355,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                           .width,
                                                       124.0),
                                             ),
-                                            decoration: const BoxDecoration(),
+                                            decoration: BoxDecoration(),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.max,
                                               mainAxisAlignment:
@@ -1375,21 +1376,21 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                       );
                                                     },
                                                     text: 'Filtrar',
-                                                    icon: const Icon(
+                                                    icon: Icon(
                                                       Icons.filter_list_rounded,
                                                       size: 22.0,
                                                     ),
                                                     options: FFButtonOptions(
                                                       height: 40.0,
                                                       padding:
-                                                          const EdgeInsetsDirectional
+                                                          EdgeInsetsDirectional
                                                               .fromSTEB(
                                                                   24.0,
                                                                   13.0,
                                                                   24.0,
                                                                   13.0),
                                                       iconPadding:
-                                                          const EdgeInsetsDirectional
+                                                          EdgeInsetsDirectional
                                                               .fromSTEB(
                                                                   0.0,
                                                                   0.0,
@@ -1413,7 +1414,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                     0.0,
                                                               ),
                                                       elevation: 0.0,
-                                                      borderSide: const BorderSide(
+                                                      borderSide: BorderSide(
                                                         width: 1.0,
                                                       ),
                                                       borderRadius:
@@ -1423,7 +1424,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                     showLoadingIndicator: false,
                                                   ),
                                                 ),
-                                              ].divide(const SizedBox(width: 12.0)),
+                                              ].divide(SizedBox(width: 12.0)),
                                             ),
                                           ),
                                         ],
@@ -1433,7 +1434,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                 ),
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.all(22.0),
+                                    padding: EdgeInsets.all(22.0),
                                     child:
                                         FutureBuilder<List<ContratosSeadiRow>>(
                                       future: ContratosSeadiTable().queryRows(
@@ -1464,7 +1465,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
 
                                         return Container(
                                           height: 888.0,
-                                          decoration: const BoxDecoration(),
+                                          decoration: BoxDecoration(),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
@@ -1633,7 +1634,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                           contratoSeadiIndex %
                                                                       2 ==
                                                                   0
-                                                              ? const Color(
+                                                              ? Color(
                                                                   0xFFE1E1E1)
                                                               : FlutterFlowTheme
                                                                       .of(context)
@@ -1700,7 +1701,8 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                   .objeto,
                                                               '0',
                                                             ).maybeHandleOverflow(
-                                                                maxChars: 222),
+                                                              maxChars: 222,
+                                                            ),
                                                             maxLines: 1,
                                                             style: FlutterFlowTheme
                                                                     .of(context)
@@ -1720,7 +1722,8 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                                   .empresas,
                                                               '0',
                                                             ).maybeHandleOverflow(
-                                                                maxChars: 222),
+                                                              maxChars: 222,
+                                                            ),
                                                             maxLines: 1,
                                                             style: FlutterFlowTheme
                                                                     .of(context)
@@ -1769,7 +1772,7 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                       dataRowHeight: 48.0,
                                                       columnSpacing: 11.0,
                                                       headingRowColor:
-                                                          const Color(0xFFCBCBCB),
+                                                          Color(0xFFCBCBCB),
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               8.0),
@@ -1791,11 +1794,11 @@ class _ContAtivosWidgetState extends State<ContAtivosWidget> {
                                                       checkboxSelectedFillColor:
                                                           Colors.transparent,
                                                       checkboxCheckColor:
-                                                          const Color(0x8A000000),
+                                                          Color(0x8A000000),
                                                       checkboxUnselectedBorderColor:
-                                                          const Color(0x8A000000),
+                                                          Color(0x8A000000),
                                                       checkboxSelectedBorderColor:
-                                                          const Color(0x8A000000),
+                                                          Color(0x8A000000),
                                                     );
                                                   },
                                                 ),

@@ -39,7 +39,7 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       FFAppState().drawer = false;
-      setState(() {});
+      safeSetState(() {});
     });
 
     animationsMap.addAll({
@@ -58,7 +58,7 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
       ),
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -76,15 +76,16 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
         title: 'VirtualTour',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -107,9 +108,9 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Dashboard',
                                 pageIsInSubMenu: false,
                               ),
@@ -120,9 +121,9 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -140,7 +141,7 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                         children: [
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Container(
                                               decoration: BoxDecoration(
@@ -157,15 +158,15 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                 children: [
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(20.0, 0.0,
                                                                 20.0, 0.0),
                                                     child: wrapWithModel(
                                                       model:
                                                           _model.subHeaderModel,
                                                       updateCallback: () =>
-                                                          setState(() {}),
-                                                      child: const SubHeaderWidget(
+                                                          safeSetState(() {}),
+                                                      child: SubHeaderWidget(
                                                         title:
                                                             '3D  Virtual Tour',
                                                         showBackBtn: true,
@@ -174,7 +175,7 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(20.0, 0.0,
                                                                 20.0, 0.0),
                                                     child: Wrap(
@@ -206,11 +207,11 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                           ),
                                                           child: Align(
                                                             alignment:
-                                                                const AlignmentDirectional(
+                                                                AlignmentDirectional(
                                                                     0.0, 0.0),
                                                             child: Stack(
                                                               alignment:
-                                                                  const AlignmentDirectional(
+                                                                  AlignmentDirectional(
                                                                       0.0, 1.0),
                                                               children: [
                                                                 ClipRRect(
@@ -259,7 +260,7 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                         Container(
                                                           width: 280.0,
                                                           constraints:
-                                                              const BoxConstraints(
+                                                              BoxConstraints(
                                                             maxWidth: 500.0,
                                                           ),
                                                           decoration:
@@ -313,7 +314,7 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                   children: [
                                                                     Padding(
                                                                       padding:
-                                                                          const EdgeInsets.all(
+                                                                          EdgeInsets.all(
                                                                               8.0),
                                                                       child:
                                                                           Row(
@@ -344,7 +345,7 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                       ),
                                                                     ),
                                                                     Padding(
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           16.0,
                                                                           0.0,
                                                                           16.0,
@@ -370,8 +371,8 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                                 ClipRRect(
                                                                               borderRadius: BorderRadius.circular(4.0),
                                                                               child: CachedNetworkImage(
-                                                                                fadeInDuration: const Duration(milliseconds: 500),
-                                                                                fadeOutDuration: const Duration(milliseconds: 500),
+                                                                                fadeInDuration: Duration(milliseconds: 500),
+                                                                                fadeOutDuration: Duration(milliseconds: 500),
                                                                                 imageUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxfHx1c2VyfGVufDB8fHx8MTY5ODYxNDM4NHww&ixlib=rb-4.0.3&q=80&w=1080',
                                                                                 width: 48.0,
                                                                                 height: 48.0,
@@ -415,7 +416,7 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                                   ),
                                                                                 ],
                                                                               ),
-                                                                            ].divide(const SizedBox(height: 8.0)),
+                                                                            ].divide(SizedBox(height: 8.0)),
                                                                           ),
                                                                           Column(
                                                                             mainAxisSize:
@@ -434,16 +435,10 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                                   );
                                                                                 },
                                                                                 child: Container(
-                                                                                  decoration: const BoxDecoration(),
+                                                                                  decoration: BoxDecoration(),
                                                                                   child: MouseRegion(
                                                                                     opaque: false,
                                                                                     cursor: MouseCursor.defer ?? MouseCursor.defer,
-                                                                                    onEnter: ((event) async {
-                                                                                      setState(() => _model.addressRegionHovered = true);
-                                                                                    }),
-                                                                                    onExit: ((event) async {
-                                                                                      setState(() => _model.addressRegionHovered = false);
-                                                                                    }),
                                                                                     child: Row(
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -467,15 +462,21 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                                         ),
                                                                                         if (_model.addressRegionHovered ?? true)
                                                                                           Padding(
-                                                                                            padding: const EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                                                                                             child: Icon(
                                                                                               Icons.launch_outlined,
                                                                                               color: FlutterFlowTheme.of(context).primaryText,
                                                                                               size: 16.0,
                                                                                             ).animateOnPageLoad(animationsMap['iconOnPageLoadAnimation']!),
                                                                                           ),
-                                                                                      ].divide(const SizedBox(width: 10.0)),
+                                                                                      ].divide(SizedBox(width: 10.0)),
                                                                                     ),
+                                                                                    onEnter: ((event) async {
+                                                                                      safeSetState(() => _model.addressRegionHovered = true);
+                                                                                    }),
+                                                                                    onExit: ((event) async {
+                                                                                      safeSetState(() => _model.addressRegionHovered = false);
+                                                                                    }),
                                                                                   ),
                                                                                 ),
                                                                               ),
@@ -495,7 +496,7 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                                   ),
                                                                                 ],
                                                                               ),
-                                                                            ].divide(const SizedBox(height: 8.0)),
+                                                                            ].divide(SizedBox(height: 8.0)),
                                                                           ),
                                                                           Row(
                                                                             mainAxisSize:
@@ -508,14 +509,14 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                                     context.pushNamed('Message');
                                                                                   },
                                                                                   text: 'Message',
-                                                                                  icon: const Icon(
+                                                                                  icon: Icon(
                                                                                     Icons.message_outlined,
                                                                                     size: 16.0,
                                                                                   ),
                                                                                   options: FFButtonOptions(
                                                                                     height: 40.0,
-                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 9.0, 16.0, 9.0),
-                                                                                    iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(16.0, 9.0, 16.0, 9.0),
+                                                                                    iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                                                                     color: FlutterFlowTheme.of(context).primary,
                                                                                     textStyle: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
@@ -523,7 +524,7 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                                           letterSpacing: 0.0,
                                                                                         ),
                                                                                     elevation: 0.0,
-                                                                                    borderSide: const BorderSide(
+                                                                                    borderSide: BorderSide(
                                                                                       color: Colors.transparent,
                                                                                       width: 1.0,
                                                                                     ),
@@ -537,22 +538,22 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                                     print('Button pressed ...');
                                                                                   },
                                                                                   text: 'Call',
-                                                                                  icon: const Icon(
+                                                                                  icon: Icon(
                                                                                     Icons.call,
                                                                                     size: 16.0,
                                                                                   ),
                                                                                   options: FFButtonOptions(
                                                                                     height: 40.0,
-                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 9.0, 16.0, 9.0),
-                                                                                    iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                                                                    color: const Color(0xFF66B949),
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(16.0, 9.0, 16.0, 9.0),
+                                                                                    iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                                                                    color: Color(0xFF66B949),
                                                                                     textStyle: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
                                                                                           color: FlutterFlowTheme.of(context).primaryBackground,
                                                                                           letterSpacing: 0.0,
                                                                                         ),
                                                                                     elevation: 0.0,
-                                                                                    borderSide: const BorderSide(
+                                                                                    borderSide: BorderSide(
                                                                                       color: Colors.transparent,
                                                                                       width: 1.0,
                                                                                     ),
@@ -560,9 +561,9 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                                   ),
                                                                                 ),
                                                                               ),
-                                                                            ].divide(const SizedBox(width: 8.0)),
+                                                                            ].divide(SizedBox(width: 8.0)),
                                                                           ),
-                                                                        ].divide(const SizedBox(height: 24.0)),
+                                                                        ].divide(SizedBox(height: 24.0)),
                                                                       ),
                                                                     ),
                                                                   ],
@@ -595,9 +596,9 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                       child:
                                                                           CachedNetworkImage(
                                                                         fadeInDuration:
-                                                                            const Duration(milliseconds: 500),
+                                                                            Duration(milliseconds: 500),
                                                                         fadeOutDuration:
-                                                                            const Duration(milliseconds: 500),
+                                                                            Duration(milliseconds: 500),
                                                                         imageUrl:
                                                                             'https://picsum.photos/seed/605/600',
                                                                         height:
@@ -628,8 +629,8 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                                 FFButtonOptions(
                                                                               width: double.infinity,
                                                                               height: 40.0,
-                                                                              padding: const EdgeInsetsDirectional.fromSTEB(16.0, 9.0, 16.0, 9.0),
-                                                                              iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(16.0, 9.0, 16.0, 9.0),
+                                                                              iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                                                               color: FlutterFlowTheme.of(context).primary,
                                                                               textStyle: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                     fontFamily: 'Plus Jakarta Sans',
@@ -637,7 +638,7 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                                     letterSpacing: 0.0,
                                                                                   ),
                                                                               elevation: 0.0,
-                                                                              borderSide: const BorderSide(
+                                                                              borderSide: BorderSide(
                                                                                 color: Colors.transparent,
                                                                                 width: 1.0,
                                                                               ),
@@ -645,10 +646,10 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ].divide(const SizedBox(
+                                                                      ].divide(SizedBox(
                                                                               width: 16.0)),
                                                                     ),
-                                                                  ].divide(const SizedBox(
+                                                                  ].divide(SizedBox(
                                                                       height:
                                                                           24.0)),
                                                                 ),
@@ -661,18 +662,18 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                                                   ),
                                                 ]
                                                     .divide(
-                                                        const SizedBox(height: 24.0))
+                                                        SizedBox(height: 24.0))
                                                     .addToStart(
-                                                        const SizedBox(height: 12.0))
+                                                        SizedBox(height: 12.0))
                                                     .addToEnd(
-                                                        const SizedBox(height: 24.0)),
+                                                        SizedBox(height: 24.0)),
                                               ),
                                             ),
                                           ),
                                         ]
-                                            .divide(const SizedBox(height: 20.0))
-                                            .addToStart(const SizedBox(height: 20.0))
-                                            .addToEnd(const SizedBox(height: 20.0)),
+                                            .divide(SizedBox(height: 20.0))
+                                            .addToStart(SizedBox(height: 20.0))
+                                            .addToEnd(SizedBox(height: 20.0)),
                                       ),
                                     ),
                                   ),
@@ -688,11 +689,11 @@ class _VirtualTourWidgetState extends State<VirtualTourWidget>
                       phone: false,
                     ))
                       Align(
-                        alignment: const AlignmentDirectional(0.8, -0.97),
+                        alignment: AlignmentDirectional(0.8, -0.97),
                         child: wrapWithModel(
                           model: _model.navigatorModel,
-                          updateCallback: () => setState(() {}),
-                          child: const NavigatorWidget(
+                          updateCallback: () => safeSetState(() {}),
+                          child: NavigatorWidget(
                             expanded: true,
                           ),
                         ),

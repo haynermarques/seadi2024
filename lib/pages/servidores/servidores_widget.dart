@@ -14,7 +14,7 @@ class ServidoresWidget extends StatefulWidget {
   const ServidoresWidget({
     super.key,
     int? lisNum,
-  }) : lisNum = lisNum ?? 120;
+  }) : this.lisNum = lisNum ?? 120;
 
   final int lisNum;
 
@@ -32,7 +32,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
     super.initState();
     _model = createModel(context, () => ServidoresModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -50,15 +50,16 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
         title: 'Servidores',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -81,9 +82,9 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Servidores',
                                 pageIsInSubMenu: false,
                               ),
@@ -94,9 +95,9 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Container(
                                   width: double.infinity,
@@ -114,7 +115,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                       children: [
                                         Padding(
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
+                                              EdgeInsetsDirectional.fromSTEB(
                                                   20.0, 0.0, 20.0, 0.0),
                                           child: Wrap(
                                             spacing: 20.0,
@@ -152,7 +153,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                         Expanded(
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         20.0,
                                                                         0.0,
@@ -162,11 +163,11 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                 wrapWithModel(
                                                               model: _model
                                                                   .subHeaderModel,
-                                                              updateCallback:
-                                                                  () => setState(
+                                                              updateCallback: () =>
+                                                                  safeSetState(
                                                                       () {}),
                                                               child:
-                                                                  const SubHeaderWidget(
+                                                                  SubHeaderWidget(
                                                                 title:
                                                                     'SERVIDORES DA SEADI',
                                                                 showBackBtn:
@@ -179,12 +180,12 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                     ),
                                                     Align(
                                                       alignment:
-                                                          const AlignmentDirectional(
+                                                          AlignmentDirectional(
                                                               -1.0, 0.0),
                                                       child: Container(
                                                         width: double.infinity,
                                                         decoration:
-                                                            const BoxDecoration(),
+                                                            BoxDecoration(),
                                                         child: Wrap(
                                                           spacing: 0.0,
                                                           runSpacing: 0.0,
@@ -207,7 +208,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                           children: [
                                                             Padding(
                                                               padding:
-                                                                  const EdgeInsetsDirectional
+                                                                  EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           0.0,
                                                                           0.0,
@@ -224,7 +225,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                   Expanded(
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           0.0,
                                                                           12.0,
                                                                           0.0,
@@ -242,14 +243,14 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                           border:
                                                                               Border.all(
                                                                             color:
-                                                                                const Color(0xFFE5E7EB),
+                                                                                Color(0xFFE5E7EB),
                                                                             width:
                                                                                 1.0,
                                                                           ),
                                                                         ),
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               16.0,
                                                                               0.0,
                                                                               16.0,
@@ -259,7 +260,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             mainAxisSize:
                                                                                 MainAxisSize.max,
                                                                             children: [
-                                                                              const Padding(
+                                                                              Padding(
                                                                                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 0.0),
                                                                                 child: Icon(
                                                                                   Icons.trending_up_rounded,
@@ -277,7 +278,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                       'FOLHA DE PAGAMENTO',
                                                                                       style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                             fontFamily: 'Plus Jakarta Sans',
-                                                                                            color: const Color(0xFF606A85),
+                                                                                            color: Color(0xFF606A85),
                                                                                             fontSize: 14.0,
                                                                                             letterSpacing: 0.0,
                                                                                             fontWeight: FontWeight.w500,
@@ -288,12 +289,12 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                       children: [
                                                                                         Expanded(
                                                                                           child: Padding(
-                                                                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
                                                                                             child: Text(
                                                                                               'R\$ 324 mil',
                                                                                               style: FlutterFlowTheme.of(context).displaySmall.override(
                                                                                                     fontFamily: 'Outfit',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 26.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w600,
@@ -315,7 +316,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                   Expanded(
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           0.0,
                                                                           12.0,
                                                                           0.0,
@@ -325,7 +326,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         height:
                                                                             120.0,
                                                                         constraints:
-                                                                            const BoxConstraints(
+                                                                            BoxConstraints(
                                                                           maxWidth:
                                                                               270.0,
                                                                         ),
@@ -338,14 +339,14 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                           border:
                                                                               Border.all(
                                                                             color:
-                                                                                const Color(0xFFE5E7EB),
+                                                                                Color(0xFFE5E7EB),
                                                                             width:
                                                                                 1.0,
                                                                           ),
                                                                         ),
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               16.0,
                                                                               0.0,
                                                                               16.0,
@@ -355,7 +356,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             mainAxisSize:
                                                                                 MainAxisSize.max,
                                                                             children: [
-                                                                              const Padding(
+                                                                              Padding(
                                                                                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 0.0),
                                                                                 child: Icon(
                                                                                   Icons.trending_up_rounded,
@@ -373,7 +374,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                       'SERVIDORES ATIVOS',
                                                                                       style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                             fontFamily: 'Plus Jakarta Sans',
-                                                                                            color: const Color(0xFF606A85),
+                                                                                            color: Color(0xFF606A85),
                                                                                             fontSize: 14.0,
                                                                                             letterSpacing: 0.0,
                                                                                             fontWeight: FontWeight.w500,
@@ -383,12 +384,12 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       children: [
                                                                                         Padding(
-                                                                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
+                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
                                                                                           child: Text(
                                                                                             '456',
                                                                                             style: FlutterFlowTheme.of(context).displaySmall.override(
                                                                                                   fontFamily: 'Outfit',
-                                                                                                  color: const Color(0xFF15161E),
+                                                                                                  color: Color(0xFF15161E),
                                                                                                   fontSize: 26.0,
                                                                                                   letterSpacing: 0.0,
                                                                                                   fontWeight: FontWeight.w600,
@@ -409,7 +410,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                   Expanded(
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           0.0,
                                                                           12.0,
                                                                           0.0,
@@ -419,7 +420,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         height:
                                                                             120.0,
                                                                         constraints:
-                                                                            const BoxConstraints(
+                                                                            BoxConstraints(
                                                                           maxWidth:
                                                                               270.0,
                                                                         ),
@@ -432,14 +433,14 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                           border:
                                                                               Border.all(
                                                                             color:
-                                                                                const Color(0xFFE5E7EB),
+                                                                                Color(0xFFE5E7EB),
                                                                             width:
                                                                                 1.0,
                                                                           ),
                                                                         ),
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               16.0,
                                                                               0.0,
                                                                               16.0,
@@ -449,7 +450,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             mainAxisSize:
                                                                                 MainAxisSize.max,
                                                                             children: [
-                                                                              const Padding(
+                                                                              Padding(
                                                                                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 0.0),
                                                                                 child: Icon(
                                                                                   Icons.trending_up_rounded,
@@ -467,7 +468,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                       'SERVIDORES DE FÉRIAS',
                                                                                       style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                             fontFamily: 'Plus Jakarta Sans',
-                                                                                            color: const Color(0xFF606A85),
+                                                                                            color: Color(0xFF606A85),
                                                                                             fontSize: 14.0,
                                                                                             letterSpacing: 0.0,
                                                                                             fontWeight: FontWeight.w500,
@@ -477,12 +478,12 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       children: [
                                                                                         Padding(
-                                                                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
+                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
                                                                                           child: Text(
                                                                                             '11',
                                                                                             style: FlutterFlowTheme.of(context).displaySmall.override(
                                                                                                   fontFamily: 'Outfit',
-                                                                                                  color: const Color(0xFF15161E),
+                                                                                                  color: Color(0xFF15161E),
                                                                                                   fontSize: 26.0,
                                                                                                   letterSpacing: 0.0,
                                                                                                   fontWeight: FontWeight.w600,
@@ -501,15 +502,15 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                     ),
                                                                   ),
                                                                 ]
-                                                                    .divide(const SizedBox(
+                                                                    .divide(SizedBox(
                                                                         width:
                                                                             16.0))
                                                                     .addToStart(
-                                                                        const SizedBox(
+                                                                        SizedBox(
                                                                             width:
                                                                                 16.0))
                                                                     .addToEnd(
-                                                                        const SizedBox(
+                                                                        SizedBox(
                                                                             width:
                                                                                 16.0)),
                                                               ),
@@ -519,11 +520,11 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                       ),
                                                     ),
                                                   ]
-                                                      .divide(const SizedBox(
+                                                      .divide(SizedBox(
                                                           height: 24.0))
-                                                      .addToStart(const SizedBox(
+                                                      .addToStart(SizedBox(
                                                           height: 12.0))
-                                                      .addToEnd(const SizedBox(
+                                                      .addToEnd(SizedBox(
                                                           height: 12.0)),
                                                 ),
                                               ),
@@ -531,18 +532,18 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                           ),
                                         ),
                                       ]
-                                          .divide(const SizedBox(height: 20.0))
-                                          .addToStart(const SizedBox(height: 20.0))
-                                          .addToEnd(const SizedBox(height: 20.0)),
+                                          .divide(SizedBox(height: 20.0))
+                                          .addToStart(SizedBox(height: 20.0))
+                                          .addToEnd(SizedBox(height: 20.0)),
                                     ),
                                   ),
                                 ),
                                 Flexible(
                                   child: Padding(
-                                    padding: const EdgeInsets.all(22.0),
+                                    padding: EdgeInsets.all(22.0),
                                     child: Container(
                                       width: double.infinity,
-                                      decoration: const BoxDecoration(),
+                                      decoration: BoxDecoration(),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         mainAxisAlignment:
@@ -559,7 +560,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                       .secondaryBackground,
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(16.0),
+                                              padding: EdgeInsets.all(16.0),
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.max,
                                                 crossAxisAlignment:
@@ -582,7 +583,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                           children: [
                                                             Padding(
                                                               padding:
-                                                                  const EdgeInsetsDirectional
+                                                                  EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           0.0,
                                                                           0.0,
@@ -596,7 +597,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                     .override(
                                                                       fontFamily:
                                                                           'Outfit',
-                                                                      color: const Color(
+                                                                      color: Color(
                                                                           0xFF15161E),
                                                                       fontSize:
                                                                           24.0,
@@ -617,7 +618,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                               'Button pressed ...');
                                                         },
                                                         text: 'GERENCIAR',
-                                                        icon: const Icon(
+                                                        icon: Icon(
                                                           Icons.add_rounded,
                                                           color: Colors.white,
                                                           size: 15.0,
@@ -626,21 +627,21 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                             FFButtonOptions(
                                                           height: 40.0,
                                                           padding:
-                                                              const EdgeInsetsDirectional
+                                                              EdgeInsetsDirectional
                                                                   .fromSTEB(
                                                                       16.0,
                                                                       0.0,
                                                                       16.0,
                                                                       0.0),
                                                           iconPadding:
-                                                              const EdgeInsetsDirectional
+                                                              EdgeInsetsDirectional
                                                                   .fromSTEB(
                                                                       0.0,
                                                                       0.0,
                                                                       0.0,
                                                                       0.0),
                                                           color:
-                                                              const Color(0xFF6F61EF),
+                                                              Color(0xFF6F61EF),
                                                           textStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -660,7 +661,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                   ),
                                                           elevation: 2.0,
                                                           borderSide:
-                                                              const BorderSide(
+                                                              BorderSide(
                                                             color: Colors
                                                                 .transparent,
                                                             width: 1.0,
@@ -675,13 +676,13 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(0.0, 16.0,
                                                                 0.0, 0.0),
                                                     child: Container(
                                                       width: double.infinity,
                                                       height: 40.0,
-                                                      decoration: const BoxDecoration(
+                                                      decoration: BoxDecoration(
                                                         color:
                                                             Color(0xFFF1F4F8),
                                                         borderRadius:
@@ -702,7 +703,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                       ),
                                                       child: Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
+                                                            EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     16.0,
                                                                     0.0,
@@ -727,7 +728,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                       .override(
                                                                         fontFamily:
                                                                             'Plus Jakarta Sans',
-                                                                        color: const Color(
+                                                                        color: Color(
                                                                             0xFF606A85),
                                                                         fontSize:
                                                                             12.0,
@@ -748,7 +749,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                     .override(
                                                                       fontFamily:
                                                                           'Plus Jakarta Sans',
-                                                                      color: const Color(
+                                                                      color: Color(
                                                                           0xFF606A85),
                                                                       fontSize:
                                                                           12.0,
@@ -774,7 +775,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                       .override(
                                                                         fontFamily:
                                                                             'Plus Jakarta Sans',
-                                                                        color: const Color(
+                                                                        color: Color(
                                                                             0xFF606A85),
                                                                         fontSize:
                                                                             12.0,
@@ -795,7 +796,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                     .override(
                                                                       fontFamily:
                                                                           'Plus Jakarta Sans',
-                                                                      color: const Color(
+                                                                      color: Color(
                                                                           0xFF606A85),
                                                                       fontSize:
                                                                           12.0,
@@ -820,7 +821,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                     .override(
                                                                       fontFamily:
                                                                           'Plus Jakarta Sans',
-                                                                      color: const Color(
+                                                                      color: Color(
                                                                           0xFF606A85),
                                                                       fontSize:
                                                                           12.0,
@@ -845,7 +846,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                     children: [
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
+                                                            EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     0.0,
                                                                     0.0,
@@ -854,7 +855,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                         child: Container(
                                                           width: 100.0,
                                                           decoration:
-                                                              const BoxDecoration(
+                                                              BoxDecoration(
                                                             color: Colors.white,
                                                             boxShadow: [
                                                               BoxShadow(
@@ -870,7 +871,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                           ),
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         16.0,
                                                                         0.0,
@@ -898,7 +899,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Plus Jakarta Sans',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 14.0,
                                                                             letterSpacing:
@@ -912,7 +913,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                   flex: 4,
                                                                   child:
                                                                       Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0.0,
                                                                             8.0,
@@ -924,7 +925,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                               .max,
                                                                       children: [
                                                                         Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               0.0,
                                                                               0.0,
                                                                               8.0,
@@ -945,7 +946,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         Expanded(
                                                                           child:
                                                                               Padding(
-                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 4.0,
                                                                                 0.0,
                                                                                 0.0,
@@ -960,19 +961,19 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                   'Antonio  matos',
                                                                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                         fontFamily: 'Plus Jakarta Sans',
-                                                                                        color: const Color(0xFF15161E),
+                                                                                        color: Color(0xFF15161E),
                                                                                         fontSize: 14.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.bold,
                                                                                       ),
                                                                                 ),
                                                                                 Padding(
-                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                   child: Text(
                                                                                     'DISTRITO',
                                                                                     style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                          color: const Color(0xFF6F61EF),
+                                                                                          color: Color(0xFF6F61EF),
                                                                                           fontSize: 12.0,
                                                                                           letterSpacing: 0.0,
                                                                                           fontWeight: FontWeight.w500,
@@ -1003,7 +1004,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Outfit',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 22.0,
                                                                             letterSpacing:
@@ -1026,21 +1027,21 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           color:
-                                                                              const Color(0x4C39D2C0),
+                                                                              Color(0x4C39D2C0),
                                                                           borderRadius:
                                                                               BorderRadius.circular(40.0),
                                                                           border:
                                                                               Border.all(
                                                                             color:
-                                                                                const Color(0xFF39D2C0),
+                                                                                Color(0xFF39D2C0),
                                                                           ),
                                                                         ),
-                                                                        alignment: const AlignmentDirectional(
+                                                                        alignment: AlignmentDirectional(
                                                                             0.0,
                                                                             0.0),
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               12.0,
                                                                               0.0,
                                                                               12.0,
@@ -1050,7 +1051,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             'FÉRIAS',
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF15161E),
+                                                                                  color: Color(0xFF15161E),
                                                                                   fontSize: 14.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -1081,7 +1082,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         buttonSize:
                                                                             44.0,
                                                                         icon:
-                                                                            const Icon(
+                                                                            Icon(
                                                                           Icons
                                                                               .more_vert,
                                                                           color:
@@ -1105,7 +1106,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
+                                                            EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     0.0,
                                                                     0.0,
@@ -1114,7 +1115,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                         child: Container(
                                                           width: 100.0,
                                                           decoration:
-                                                              const BoxDecoration(
+                                                              BoxDecoration(
                                                             color: Colors.white,
                                                             boxShadow: [
                                                               BoxShadow(
@@ -1130,7 +1131,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                           ),
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         16.0,
                                                                         0.0,
@@ -1158,7 +1159,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Plus Jakarta Sans',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 14.0,
                                                                             letterSpacing:
@@ -1172,7 +1173,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                   flex: 4,
                                                                   child:
                                                                       Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0.0,
                                                                             8.0,
@@ -1184,7 +1185,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                               .max,
                                                                       children: [
                                                                         Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               0.0,
                                                                               0.0,
                                                                               8.0,
@@ -1205,7 +1206,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         Expanded(
                                                                           child:
                                                                               Padding(
-                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 4.0,
                                                                                 0.0,
                                                                                 0.0,
@@ -1220,19 +1221,19 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                   'João  Peterson',
                                                                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                         fontFamily: 'Plus Jakarta Sans',
-                                                                                        color: const Color(0xFF15161E),
+                                                                                        color: Color(0xFF15161E),
                                                                                         fontSize: 14.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.bold,
                                                                                       ),
                                                                                 ),
                                                                                 Padding(
-                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                   child: Text(
                                                                                     'GABINETE',
                                                                                     style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                          color: const Color(0xFF6F61EF),
+                                                                                          color: Color(0xFF6F61EF),
                                                                                           fontSize: 12.0,
                                                                                           letterSpacing: 0.0,
                                                                                           fontWeight: FontWeight.w500,
@@ -1263,7 +1264,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Outfit',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 22.0,
                                                                             letterSpacing:
@@ -1286,21 +1287,21 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           color:
-                                                                              const Color(0x4C39D2C0),
+                                                                              Color(0x4C39D2C0),
                                                                           borderRadius:
                                                                               BorderRadius.circular(40.0),
                                                                           border:
                                                                               Border.all(
                                                                             color:
-                                                                                const Color(0xFF39D2C0),
+                                                                                Color(0xFF39D2C0),
                                                                           ),
                                                                         ),
-                                                                        alignment: const AlignmentDirectional(
+                                                                        alignment: AlignmentDirectional(
                                                                             0.0,
                                                                             0.0),
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               12.0,
                                                                               0.0,
                                                                               12.0,
@@ -1310,7 +1311,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             'FÉRIAS',
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF15161E),
+                                                                                  color: Color(0xFF15161E),
                                                                                   fontSize: 14.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -1341,7 +1342,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         buttonSize:
                                                                             44.0,
                                                                         icon:
-                                                                            const Icon(
+                                                                            Icon(
                                                                           Icons
                                                                               .more_vert,
                                                                           color:
@@ -1365,7 +1366,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
+                                                            EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     0.0,
                                                                     0.0,
@@ -1374,7 +1375,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                         child: Container(
                                                           width: 100.0,
                                                           decoration:
-                                                              const BoxDecoration(
+                                                              BoxDecoration(
                                                             color: Colors.white,
                                                             boxShadow: [
                                                               BoxShadow(
@@ -1390,7 +1391,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                           ),
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         16.0,
                                                                         0.0,
@@ -1418,7 +1419,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Plus Jakarta Sans',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 14.0,
                                                                             letterSpacing:
@@ -1432,7 +1433,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                   flex: 4,
                                                                   child:
                                                                       Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0.0,
                                                                             8.0,
@@ -1444,7 +1445,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                               .max,
                                                                       children: [
                                                                         Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               0.0,
                                                                               0.0,
                                                                               8.0,
@@ -1465,7 +1466,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         Expanded(
                                                                           child:
                                                                               Padding(
-                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 4.0,
                                                                                 0.0,
                                                                                 0.0,
@@ -1480,19 +1481,19 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                   'Maria  Socorro',
                                                                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                         fontFamily: 'Plus Jakarta Sans',
-                                                                                        color: const Color(0xFF15161E),
+                                                                                        color: Color(0xFF15161E),
                                                                                         fontSize: 14.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.bold,
                                                                                       ),
                                                                                 ),
                                                                                 Padding(
-                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                   child: Text(
                                                                                     'ASCOM',
                                                                                     style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                          color: const Color(0xFF6F61EF),
+                                                                                          color: Color(0xFF6F61EF),
                                                                                           fontSize: 12.0,
                                                                                           letterSpacing: 0.0,
                                                                                           fontWeight: FontWeight.w500,
@@ -1523,7 +1524,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Outfit',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 22.0,
                                                                             letterSpacing:
@@ -1546,21 +1547,21 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           color:
-                                                                              const Color(0x4C39D2C0),
+                                                                              Color(0x4C39D2C0),
                                                                           borderRadius:
                                                                               BorderRadius.circular(40.0),
                                                                           border:
                                                                               Border.all(
                                                                             color:
-                                                                                const Color(0xFF39D2C0),
+                                                                                Color(0xFF39D2C0),
                                                                           ),
                                                                         ),
-                                                                        alignment: const AlignmentDirectional(
+                                                                        alignment: AlignmentDirectional(
                                                                             0.0,
                                                                             0.0),
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               12.0,
                                                                               0.0,
                                                                               12.0,
@@ -1570,7 +1571,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             'FÉRIAS',
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF15161E),
+                                                                                  color: Color(0xFF15161E),
                                                                                   fontSize: 14.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -1601,7 +1602,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         buttonSize:
                                                                             44.0,
                                                                         icon:
-                                                                            const Icon(
+                                                                            Icon(
                                                                           Icons
                                                                               .more_vert,
                                                                           color:
@@ -1625,7 +1626,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
+                                                            EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     0.0,
                                                                     0.0,
@@ -1634,7 +1635,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                         child: Container(
                                                           width: 100.0,
                                                           decoration:
-                                                              const BoxDecoration(
+                                                              BoxDecoration(
                                                             color: Colors.white,
                                                             boxShadow: [
                                                               BoxShadow(
@@ -1650,7 +1651,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                           ),
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         16.0,
                                                                         0.0,
@@ -1678,7 +1679,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Plus Jakarta Sans',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 14.0,
                                                                             letterSpacing:
@@ -1692,7 +1693,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                   flex: 4,
                                                                   child:
                                                                       Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0.0,
                                                                             8.0,
@@ -1704,7 +1705,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                               .max,
                                                                       children: [
                                                                         Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               0.0,
                                                                               0.0,
                                                                               8.0,
@@ -1725,7 +1726,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         Expanded(
                                                                           child:
                                                                               Padding(
-                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 4.0,
                                                                                 0.0,
                                                                                 0.0,
@@ -1740,19 +1741,19 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                   'José pedro',
                                                                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                         fontFamily: 'Plus Jakarta Sans',
-                                                                                        color: const Color(0xFF15161E),
+                                                                                        color: Color(0xFF15161E),
                                                                                         fontSize: 14.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.bold,
                                                                                       ),
                                                                                 ),
                                                                                 Padding(
-                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                   child: Text(
                                                                                     'CCI',
                                                                                     style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                          color: const Color(0xFF6F61EF),
+                                                                                          color: Color(0xFF6F61EF),
                                                                                           fontSize: 12.0,
                                                                                           letterSpacing: 0.0,
                                                                                           fontWeight: FontWeight.w500,
@@ -1783,7 +1784,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Outfit',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 22.0,
                                                                             letterSpacing:
@@ -1806,21 +1807,21 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           color:
-                                                                              const Color(0x4C39D2C0),
+                                                                              Color(0x4C39D2C0),
                                                                           borderRadius:
                                                                               BorderRadius.circular(40.0),
                                                                           border:
                                                                               Border.all(
                                                                             color:
-                                                                                const Color(0xFF39D2C0),
+                                                                                Color(0xFF39D2C0),
                                                                           ),
                                                                         ),
-                                                                        alignment: const AlignmentDirectional(
+                                                                        alignment: AlignmentDirectional(
                                                                             0.0,
                                                                             0.0),
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               12.0,
                                                                               0.0,
                                                                               12.0,
@@ -1830,7 +1831,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             'FÉRIAS',
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF15161E),
+                                                                                  color: Color(0xFF15161E),
                                                                                   fontSize: 14.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -1861,7 +1862,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         buttonSize:
                                                                             44.0,
                                                                         icon:
-                                                                            const Icon(
+                                                                            Icon(
                                                                           Icons
                                                                               .more_vert,
                                                                           color:
@@ -1885,7 +1886,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
+                                                            EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     0.0,
                                                                     0.0,
@@ -1894,7 +1895,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                         child: Container(
                                                           width: 100.0,
                                                           decoration:
-                                                              const BoxDecoration(
+                                                              BoxDecoration(
                                                             color: Colors.white,
                                                             boxShadow: [
                                                               BoxShadow(
@@ -1910,7 +1911,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                           ),
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         16.0,
                                                                         0.0,
@@ -1938,7 +1939,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Plus Jakarta Sans',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 14.0,
                                                                             letterSpacing:
@@ -1952,7 +1953,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                   flex: 4,
                                                                   child:
                                                                       Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0.0,
                                                                             8.0,
@@ -1964,7 +1965,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                               .max,
                                                                       children: [
                                                                         Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               0.0,
                                                                               0.0,
                                                                               8.0,
@@ -1985,7 +1986,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         Expanded(
                                                                           child:
                                                                               Padding(
-                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 4.0,
                                                                                 0.0,
                                                                                 0.0,
@@ -2000,19 +2001,19 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                   'João Pedro',
                                                                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                         fontFamily: 'Plus Jakarta Sans',
-                                                                                        color: const Color(0xFF15161E),
+                                                                                        color: Color(0xFF15161E),
                                                                                         fontSize: 14.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.bold,
                                                                                       ),
                                                                                 ),
                                                                                 Padding(
-                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                   child: Text(
                                                                                     'UAI',
                                                                                     style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                          color: const Color(0xFF6F61EF),
+                                                                                          color: Color(0xFF6F61EF),
                                                                                           fontSize: 12.0,
                                                                                           letterSpacing: 0.0,
                                                                                           fontWeight: FontWeight.w500,
@@ -2043,7 +2044,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Outfit',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 22.0,
                                                                             letterSpacing:
@@ -2066,16 +2067,16 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           color:
-                                                                              const Color(0xFFF1F4F8),
+                                                                              Color(0xFFF1F4F8),
                                                                           borderRadius:
                                                                               BorderRadius.circular(40.0),
                                                                         ),
-                                                                        alignment: const AlignmentDirectional(
+                                                                        alignment: AlignmentDirectional(
                                                                             0.0,
                                                                             0.0),
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               12.0,
                                                                               0.0,
                                                                               12.0,
@@ -2085,7 +2086,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             'Atestado',
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF15161E),
+                                                                                  color: Color(0xFF15161E),
                                                                                   fontSize: 14.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -2116,7 +2117,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         buttonSize:
                                                                             44.0,
                                                                         icon:
-                                                                            const Icon(
+                                                                            Icon(
                                                                           Icons
                                                                               .more_vert,
                                                                           color:
@@ -2140,7 +2141,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
+                                                            EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     0.0,
                                                                     0.0,
@@ -2149,7 +2150,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                         child: Container(
                                                           width: 100.0,
                                                           decoration:
-                                                              const BoxDecoration(
+                                                              BoxDecoration(
                                                             color: Colors.white,
                                                             boxShadow: [
                                                               BoxShadow(
@@ -2165,7 +2166,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                           ),
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         16.0,
                                                                         0.0,
@@ -2193,7 +2194,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Plus Jakarta Sans',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 14.0,
                                                                             letterSpacing:
@@ -2207,7 +2208,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                   flex: 4,
                                                                   child:
                                                                       Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0.0,
                                                                             8.0,
@@ -2219,7 +2220,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                               .max,
                                                                       children: [
                                                                         Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               0.0,
                                                                               0.0,
                                                                               8.0,
@@ -2240,7 +2241,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         Expanded(
                                                                           child:
                                                                               Padding(
-                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 4.0,
                                                                                 0.0,
                                                                                 0.0,
@@ -2255,19 +2256,19 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                   'Maria Silva',
                                                                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                         fontFamily: 'Plus Jakarta Sans',
-                                                                                        color: const Color(0xFF15161E),
+                                                                                        color: Color(0xFF15161E),
                                                                                         fontSize: 14.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.bold,
                                                                                       ),
                                                                                 ),
                                                                                 Padding(
-                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                   child: Text(
                                                                                     'ZEE',
                                                                                     style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                          color: const Color(0xFF6F61EF),
+                                                                                          color: Color(0xFF6F61EF),
                                                                                           fontSize: 12.0,
                                                                                           letterSpacing: 0.0,
                                                                                           fontWeight: FontWeight.w500,
@@ -2298,7 +2299,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Outfit',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 22.0,
                                                                             letterSpacing:
@@ -2321,16 +2322,16 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           color:
-                                                                              const Color(0xFFF1F4F8),
+                                                                              Color(0xFFF1F4F8),
                                                                           borderRadius:
                                                                               BorderRadius.circular(40.0),
                                                                         ),
-                                                                        alignment: const AlignmentDirectional(
+                                                                        alignment: AlignmentDirectional(
                                                                             0.0,
                                                                             0.0),
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               12.0,
                                                                               0.0,
                                                                               12.0,
@@ -2340,7 +2341,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             'Ativo',
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF15161E),
+                                                                                  color: Color(0xFF15161E),
                                                                                   fontSize: 14.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -2371,7 +2372,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         buttonSize:
                                                                             44.0,
                                                                         icon:
-                                                                            const Icon(
+                                                                            Icon(
                                                                           Icons
                                                                               .more_vert,
                                                                           color:
@@ -2395,7 +2396,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
+                                                            EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     0.0,
                                                                     0.0,
@@ -2404,7 +2405,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                         child: Container(
                                                           width: 100.0,
                                                           decoration:
-                                                              const BoxDecoration(
+                                                              BoxDecoration(
                                                             color: Colors.white,
                                                             boxShadow: [
                                                               BoxShadow(
@@ -2420,7 +2421,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                           ),
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         16.0,
                                                                         0.0,
@@ -2448,7 +2449,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Plus Jakarta Sans',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 14.0,
                                                                             letterSpacing:
@@ -2462,7 +2463,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                   flex: 4,
                                                                   child:
                                                                       Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0.0,
                                                                             8.0,
@@ -2474,7 +2475,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                               .max,
                                                                       children: [
                                                                         Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               0.0,
                                                                               0.0,
                                                                               8.0,
@@ -2495,7 +2496,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         Expanded(
                                                                           child:
                                                                               Padding(
-                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 4.0,
                                                                                 0.0,
                                                                                 0.0,
@@ -2510,19 +2511,19 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                                   'Jobson Santos',
                                                                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                         fontFamily: 'Plus Jakarta Sans',
-                                                                                        color: const Color(0xFF15161E),
+                                                                                        color: Color(0xFF15161E),
                                                                                         fontSize: 14.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.bold,
                                                                                       ),
                                                                                 ),
                                                                                 Padding(
-                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                   child: Text(
                                                                                     'CCI',
                                                                                     style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                          color: const Color(0xFF6F61EF),
+                                                                                          color: Color(0xFF6F61EF),
                                                                                           fontSize: 12.0,
                                                                                           letterSpacing: 0.0,
                                                                                           fontWeight: FontWeight.w500,
@@ -2553,7 +2554,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             fontFamily:
                                                                                 'Outfit',
                                                                             color:
-                                                                                const Color(0xFF15161E),
+                                                                                Color(0xFF15161E),
                                                                             fontSize:
                                                                                 22.0,
                                                                             letterSpacing:
@@ -2576,16 +2577,16 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           color:
-                                                                              const Color(0xFFF1F4F8),
+                                                                              Color(0xFFF1F4F8),
                                                                           borderRadius:
                                                                               BorderRadius.circular(40.0),
                                                                         ),
-                                                                        alignment: const AlignmentDirectional(
+                                                                        alignment: AlignmentDirectional(
                                                                             0.0,
                                                                             0.0),
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               12.0,
                                                                               0.0,
                                                                               12.0,
@@ -2595,7 +2596,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                             'Ativo',
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: const Color(0xFF15161E),
+                                                                                  color: Color(0xFF15161E),
                                                                                   fontSize: 14.0,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FontWeight.w500,
@@ -2626,7 +2627,7 @@ class _ServidoresWidgetState extends State<ServidoresWidget> {
                                                                         buttonSize:
                                                                             44.0,
                                                                         icon:
-                                                                            const Icon(
+                                                                            Icon(
                                                                           Icons
                                                                               .more_vert,
                                                                           color:

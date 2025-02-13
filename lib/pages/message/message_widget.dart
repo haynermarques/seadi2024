@@ -39,7 +39,7 @@ class _MessageWidgetState extends State<MessageWidget> {
     _model.messageTextFieldTextController ??= TextEditingController();
     _model.messageTextFieldFocusNode ??= FocusNode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -57,15 +57,16 @@ class _MessageWidgetState extends State<MessageWidget> {
         title: 'Message',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -88,9 +89,9 @@ class _MessageWidgetState extends State<MessageWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Dashboard',
                                 pageIsInSubMenu: false,
                               ),
@@ -101,9 +102,9 @@ class _MessageWidgetState extends State<MessageWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -121,7 +122,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                         Expanded(
                                           child: Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Container(
                                               width: double.infinity,
@@ -143,7 +144,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                       width: 347.0,
                                                       height: double.infinity,
                                                       decoration:
-                                                          const BoxDecoration(),
+                                                          BoxDecoration(),
                                                       child:
                                                           SingleChildScrollView(
                                                         child: Column(
@@ -155,7 +156,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                           children: [
                                                             Padding(
                                                               padding:
-                                                                  const EdgeInsetsDirectional
+                                                                  EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           20.0,
                                                                           0.0,
@@ -176,9 +177,9 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                           .subHeaderModel,
                                                                       updateCallback:
                                                                           () =>
-                                                                              setState(() {}),
+                                                                              safeSetState(() {}),
                                                                       child:
-                                                                          const SubHeaderWidget(
+                                                                          SubHeaderWidget(
                                                                         title:
                                                                             'Message',
                                                                         showBackBtn:
@@ -207,13 +208,13 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                           100.0,
                                                                       height:
                                                                           40.0,
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           24.0,
                                                                           13.0,
                                                                           24.0,
                                                                           13.0),
                                                                       iconPadding:
-                                                                          const EdgeInsets.all(
+                                                                          EdgeInsets.all(
                                                                               0.0),
                                                                       color: FlutterFlowTheme.of(
                                                                               context)
@@ -232,7 +233,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                       elevation:
                                                                           0.0,
                                                                       borderSide:
-                                                                          const BorderSide(
+                                                                          BorderSide(
                                                                         color: Colors
                                                                             .transparent,
                                                                         width:
@@ -254,14 +255,14 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                 Expanded(
                                                                   child:
                                                                       Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             20.0,
                                                                             0.0,
                                                                             20.0,
                                                                             0.0),
                                                                     child:
-                                                                        SizedBox(
+                                                                        Container(
                                                                       width:
                                                                           200.0,
                                                                       child:
@@ -274,10 +275,10 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                             (_) =>
                                                                                 EasyDebounce.debounce(
                                                                           '_model.searchTextFieldTextController',
-                                                                          const Duration(
+                                                                          Duration(
                                                                               milliseconds: 500),
                                                                           () =>
-                                                                              setState(() {}),
+                                                                              safeSetState(() {}),
                                                                         ),
                                                                         autofocus:
                                                                             false,
@@ -375,7 +376,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                         .max,
                                                                 children: [
                                                                   Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             20.0,
                                                                             0.0,
@@ -387,7 +388,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                           .senderItemModel1,
                                                                       updateCallback:
                                                                           () =>
-                                                                              setState(() {}),
+                                                                              safeSetState(() {}),
                                                                       child:
                                                                           SenderItemWidget(
                                                                         avatar:
@@ -402,7 +403,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                     ),
                                                                   ),
                                                                   Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             20.0,
                                                                             0.0,
@@ -414,7 +415,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                           .senderItemModel2,
                                                                       updateCallback:
                                                                           () =>
-                                                                              setState(() {}),
+                                                                              safeSetState(() {}),
                                                                       child:
                                                                           SenderItemWidget(
                                                                         avatar:
@@ -429,7 +430,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                     ),
                                                                   ),
                                                                   Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             20.0,
                                                                             0.0,
@@ -441,7 +442,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                           .senderItemModel3,
                                                                       updateCallback:
                                                                           () =>
-                                                                              setState(() {}),
+                                                                              safeSetState(() {}),
                                                                       child:
                                                                           SenderItemWidget(
                                                                         avatar:
@@ -455,19 +456,19 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ].divide(const SizedBox(
+                                                                ].divide(SizedBox(
                                                                     height:
                                                                         8.0)),
                                                               ),
                                                             ),
                                                           ]
-                                                              .divide(const SizedBox(
+                                                              .divide(SizedBox(
                                                                   height: 24.0))
                                                               .addToStart(
-                                                                  const SizedBox(
+                                                                  SizedBox(
                                                                       height:
                                                                           12.0))
-                                                              .addToEnd(const SizedBox(
+                                                              .addToEnd(SizedBox(
                                                                   height:
                                                                       24.0)),
                                                         ),
@@ -515,10 +516,10 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                     .infinity,
                                                                 height: 100.0,
                                                                 decoration:
-                                                                    const BoxDecoration(),
+                                                                    BoxDecoration(),
                                                                 child: Padding(
                                                                   padding:
-                                                                      const EdgeInsets
+                                                                      EdgeInsets
                                                                           .all(
                                                                               20.0),
                                                                   child: Column(
@@ -538,24 +539,24 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                                 Container(
                                                                                   width: 60.0,
                                                                                   height: 60.0,
-                                                                                  decoration: const BoxDecoration(
+                                                                                  decoration: BoxDecoration(
                                                                                     shape: BoxShape.rectangle,
                                                                                   ),
                                                                                   child: Padding(
-                                                                                    padding: const EdgeInsets.all(4.0),
-                                                                                    child: SizedBox(
+                                                                                    padding: EdgeInsets.all(4.0),
+                                                                                    child: Container(
                                                                                       width: double.infinity,
                                                                                       height: double.infinity,
                                                                                       child: Stack(
-                                                                                        alignment: const AlignmentDirectional(0.0, 0.0),
+                                                                                        alignment: AlignmentDirectional(0.0, 0.0),
                                                                                         children: [
                                                                                           Padding(
-                                                                                            padding: const EdgeInsets.all(2.0),
+                                                                                            padding: EdgeInsets.all(2.0),
                                                                                             child: ClipRRect(
                                                                                               borderRadius: BorderRadius.circular(8.0),
                                                                                               child: CachedNetworkImage(
-                                                                                                fadeInDuration: const Duration(milliseconds: 500),
-                                                                                                fadeOutDuration: const Duration(milliseconds: 500),
+                                                                                                fadeInDuration: Duration(milliseconds: 500),
+                                                                                                fadeOutDuration: Duration(milliseconds: 500),
                                                                                                 imageUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxfHx1c2VyfGVufDB8fHx8MTY5OTE4NDcxOXww&ixlib=rb-4.0.3&q=80&w=400',
                                                                                                 width: 40.0,
                                                                                                 height: 40.0,
@@ -564,7 +565,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                                             ),
                                                                                           ),
                                                                                           Align(
-                                                                                            alignment: const AlignmentDirectional(1.0, -1.0),
+                                                                                            alignment: AlignmentDirectional(1.0, -1.0),
                                                                                             child: Container(
                                                                                               width: 16.0,
                                                                                               height: 16.0,
@@ -619,10 +620,10 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                                           ),
                                                                                         ],
                                                                                       ),
-                                                                                    ].divide(const SizedBox(height: 8.0)),
+                                                                                    ].divide(SizedBox(height: 8.0)),
                                                                                   ),
                                                                                 ),
-                                                                              ].divide(const SizedBox(width: 20.0)),
+                                                                              ].divide(SizedBox(width: 20.0)),
                                                                             ),
                                                                           ),
                                                                           Row(
@@ -671,12 +672,12 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                                   context.pushNamed('Setting');
                                                                                 },
                                                                               ),
-                                                                            ].divide(const SizedBox(width: 32.0)),
+                                                                            ].divide(SizedBox(width: 32.0)),
                                                                           ),
                                                                         ],
                                                                       ),
                                                                       Padding(
-                                                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
                                                                             0.0,
                                                                             20.0,
                                                                             0.0,
@@ -686,9 +687,9 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                           model:
                                                                               _model.dividerModel1,
                                                                           updateCallback: () =>
-                                                                              setState(() {}),
+                                                                              safeSetState(() {}),
                                                                           child:
-                                                                              const DividerWidget(
+                                                                              DividerWidget(
                                                                             title:
                                                                                 'TODAY',
                                                                             titleInLeftSide:
@@ -709,7 +710,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                                 [
                                                                               wrapWithModel(
                                                                                 model: _model.messageItemModel1,
-                                                                                updateCallback: () => setState(() {}),
+                                                                                updateCallback: () => safeSetState(() {}),
                                                                                 child: MessageItemWidget(
                                                                                   sender: true,
                                                                                   messasge: 'hi i am sender. sender checked hi i am sender. sender checked\n',
@@ -720,7 +721,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                               ),
                                                                               wrapWithModel(
                                                                                 model: _model.messageItemModel2,
-                                                                                updateCallback: () => setState(() {}),
+                                                                                updateCallback: () => safeSetState(() {}),
                                                                                 child: MessageItemWidget(
                                                                                   sender: false,
                                                                                   messasge: 'hi i am reciver. sender is not cheched hi i am sender. sender checked hi i am sender. sender checked',
@@ -731,7 +732,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                               ),
                                                                               wrapWithModel(
                                                                                 model: _model.messageItemModel3,
-                                                                                updateCallback: () => setState(() {}),
+                                                                                updateCallback: () => safeSetState(() {}),
                                                                                 child: MessageItemWidget(
                                                                                   sender: false,
                                                                                   messasge: 'hi i am reciver. sender is not cheched',
@@ -742,7 +743,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                               ),
                                                                               wrapWithModel(
                                                                                 model: _model.messageItemModel4,
-                                                                                updateCallback: () => setState(() {}),
+                                                                                updateCallback: () => safeSetState(() {}),
                                                                                 child: MessageItemWidget(
                                                                                   sender: true,
                                                                                   messasge: 'hi i am sender. sender checked hi i am sender. sender checked\n',
@@ -753,7 +754,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                               ),
                                                                               wrapWithModel(
                                                                                 model: _model.messageItemModel5,
-                                                                                updateCallback: () => setState(() {}),
+                                                                                updateCallback: () => safeSetState(() {}),
                                                                                 child: MessageItemWidget(
                                                                                   sender: false,
                                                                                   messasge: 'hi i am reciver. sender is not cheched hi i am sender. sender checked hi i am sender. sender checked',
@@ -762,7 +763,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                                   hasAttachment: false,
                                                                                 ),
                                                                               ),
-                                                                            ].divide(const SizedBox(height: 8.0)),
+                                                                            ].divide(SizedBox(height: 8.0)),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -774,11 +775,11 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                             wrapWithModel(
                                                               model: _model
                                                                   .dividerModel2,
-                                                              updateCallback:
-                                                                  () => setState(
+                                                              updateCallback: () =>
+                                                                  safeSetState(
                                                                       () {}),
                                                               child:
-                                                                  const DividerWidget(
+                                                                  DividerWidget(
                                                                 titleInLeftSide:
                                                                     false,
                                                               ),
@@ -788,10 +789,10 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                   .infinity,
                                                               height: 80.0,
                                                               decoration:
-                                                                  const BoxDecoration(),
+                                                                  BoxDecoration(),
                                                               child: Padding(
                                                                 padding:
-                                                                    const EdgeInsets
+                                                                    EdgeInsets
                                                                         .all(
                                                                             20.0),
                                                                 child: Row(
@@ -807,16 +808,16 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                       clipBehavior:
                                                                           Clip.antiAlias,
                                                                       decoration:
-                                                                          const BoxDecoration(
+                                                                          BoxDecoration(
                                                                         shape: BoxShape
                                                                             .circle,
                                                                       ),
                                                                       child:
                                                                           CachedNetworkImage(
                                                                         fadeInDuration:
-                                                                            const Duration(milliseconds: 500),
+                                                                            Duration(milliseconds: 500),
                                                                         fadeOutDuration:
-                                                                            const Duration(milliseconds: 500),
+                                                                            Duration(milliseconds: 500),
                                                                         imageUrl:
                                                                             'https://images.unsplash.com/photo-1633332755192-727a05c4013d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxfHx1c2VyfGVufDB8fHx8MTY5OTE4NDcxOXww&ixlib=rb-4.0.3&q=80&w=400',
                                                                         fit: BoxFit
@@ -848,15 +849,15 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                           children:
                                                                               [
                                                                             Expanded(
-                                                                              child: SizedBox(
+                                                                              child: Container(
                                                                                 width: 250.0,
                                                                                 child: TextFormField(
                                                                                   controller: _model.messageTextFieldTextController,
                                                                                   focusNode: _model.messageTextFieldFocusNode,
                                                                                   onChanged: (_) => EasyDebounce.debounce(
                                                                                     '_model.messageTextFieldTextController',
-                                                                                    const Duration(milliseconds: 500),
-                                                                                    () => setState(() {}),
+                                                                                    Duration(milliseconds: 500),
+                                                                                    () => safeSetState(() {}),
                                                                                   ),
                                                                                   autofocus: false,
                                                                                   obscureText: false,
@@ -875,7 +876,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                                     focusedBorder: InputBorder.none,
                                                                                     errorBorder: InputBorder.none,
                                                                                     focusedErrorBorder: InputBorder.none,
-                                                                                    contentPadding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
+                                                                                    contentPadding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
                                                                                   ),
                                                                                   style: FlutterFlowTheme.of(context).labelLarge.override(
                                                                                         fontFamily: 'Plus Jakarta Sans',
@@ -914,7 +915,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                                 print('IconButton pressed ...');
                                                                               },
                                                                             ),
-                                                                          ].divide(const SizedBox(width: 16.0)),
+                                                                          ].divide(SizedBox(width: 16.0)),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -943,7 +944,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                                                             'IconButton pressed ...');
                                                                       },
                                                                     ),
-                                                                  ].divide(const SizedBox(
+                                                                  ].divide(SizedBox(
                                                                       width:
                                                                           16.0)),
                                                                 ),
@@ -959,9 +960,9 @@ class _MessageWidgetState extends State<MessageWidget> {
                                           ),
                                         ),
                                       ]
-                                          .divide(const SizedBox(height: 20.0))
-                                          .addToStart(const SizedBox(height: 20.0))
-                                          .addToEnd(const SizedBox(height: 20.0)),
+                                          .divide(SizedBox(height: 20.0))
+                                          .addToStart(SizedBox(height: 20.0))
+                                          .addToEnd(SizedBox(height: 20.0)),
                                     ),
                                   ),
                                 ),
@@ -976,11 +977,11 @@ class _MessageWidgetState extends State<MessageWidget> {
                       phone: false,
                     ))
                       Align(
-                        alignment: const AlignmentDirectional(0.8, -0.96),
+                        alignment: AlignmentDirectional(0.8, -0.96),
                         child: wrapWithModel(
                           model: _model.navigatorModel,
-                          updateCallback: () => setState(() {}),
-                          child: const NavigatorWidget(
+                          updateCallback: () => safeSetState(() {}),
+                          child: NavigatorWidget(
                             expanded: true,
                           ),
                         ),

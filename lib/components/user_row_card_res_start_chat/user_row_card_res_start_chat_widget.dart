@@ -61,7 +61,7 @@ class _UserRowCardResStartChatWidgetState
       ),
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -78,12 +78,6 @@ class _UserRowCardResStartChatWidgetState
     return MouseRegion(
       opaque: false,
       cursor: MouseCursor.defer ?? MouseCursor.defer,
-      onEnter: ((event) async {
-        setState(() => _model.mouseRegionHovered = true);
-      }),
-      onExit: ((event) async {
-        setState(() => _model.mouseRegionHovered = false);
-      }),
       child: Container(
         decoration: BoxDecoration(
           color: valueOrDefault<Color>(
@@ -100,24 +94,24 @@ class _UserRowCardResStartChatWidgetState
             Container(
               width: 44.0,
               height: 44.0,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: SizedBox(
+                padding: EdgeInsets.all(4.0),
+                child: Container(
                   width: double.infinity,
                   height: double.infinity,
                   child: Stack(
-                    alignment: const AlignmentDirectional(0.0, 0.0),
+                    alignment: AlignmentDirectional(0.0, 0.0),
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(2.0),
+                        padding: EdgeInsets.all(2.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
                           child: CachedNetworkImage(
-                            fadeInDuration: const Duration(milliseconds: 500),
-                            fadeOutDuration: const Duration(milliseconds: 500),
+                            fadeInDuration: Duration(milliseconds: 500),
+                            fadeOutDuration: Duration(milliseconds: 500),
                             imageUrl: widget.avatar!,
                             width: 300.0,
                             height: 200.0,
@@ -126,7 +120,7 @@ class _UserRowCardResStartChatWidgetState
                         ),
                       ),
                       Align(
-                        alignment: const AlignmentDirectional(1.0, -1.0),
+                        alignment: AlignmentDirectional(1.0, -1.0),
                         child: Container(
                           width: 10.0,
                           height: 10.0,
@@ -156,7 +150,7 @@ class _UserRowCardResStartChatWidgetState
               Container(
                 width: 200.0,
                 height: 44.0,
-                decoration: const BoxDecoration(),
+                decoration: BoxDecoration(),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -210,7 +204,7 @@ class _UserRowCardResStartChatWidgetState
                     if (_model.mouseRegionHovered ?? true)
                       Padding(
                         padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 6.0, 0.0),
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 6.0, 0.0),
                         child: FlutterFlowIconButton(
                           borderColor: Colors.transparent,
                           borderRadius: 8.0,
@@ -233,6 +227,12 @@ class _UserRowCardResStartChatWidgetState
           ],
         ),
       ),
+      onEnter: ((event) async {
+        safeSetState(() => _model.mouseRegionHovered = true);
+      }),
+      onExit: ((event) async {
+        safeSetState(() => _model.mouseRegionHovered = false);
+      }),
     );
   }
 }

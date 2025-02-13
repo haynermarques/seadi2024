@@ -29,7 +29,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
     super.initState();
     _model = createModel(context, () => ExploreModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -47,15 +47,16 @@ class _ExploreWidgetState extends State<ExploreWidget> {
         title: 'Explore',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -78,9 +79,9 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Explore',
                                 pageIsInSubMenu: false,
                               ),
@@ -91,9 +92,9 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -117,7 +118,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                         ),
                                         Padding(
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
+                                              EdgeInsetsDirectional.fromSTEB(
                                                   20.0, 40.0, 20.0, 40.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
@@ -151,7 +152,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                         width: 450.0,
                                                         height: 46.0,
                                                         constraints:
-                                                            const BoxConstraints(
+                                                            BoxConstraints(
                                                           minWidth: 400.0,
                                                           maxWidth: 450.0,
                                                         ),
@@ -167,7 +168,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                         ),
                                                         child: Padding(
                                                           padding:
-                                                              const EdgeInsetsDirectional
+                                                              EdgeInsetsDirectional
                                                                   .fromSTEB(
                                                                       16.0,
                                                                       0.0,
@@ -195,13 +196,13 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                                         .dropDownValueController1 ??= FormFieldController<
                                                                             String>(
                                                                         null),
-                                                                    options: const [
+                                                                    options: [
                                                                       'Rent',
                                                                       'Sell',
                                                                       'Buy'
                                                                     ],
                                                                     onChanged: (val) =>
-                                                                        setState(() =>
+                                                                        safeSetState(() =>
                                                                             _model.dropDownValue1 =
                                                                                 val),
                                                                     width:
@@ -240,7 +241,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                                         1.0,
                                                                     borderRadius:
                                                                         8.0,
-                                                                    margin: const EdgeInsets
+                                                                    margin: EdgeInsets
                                                                         .all(
                                                                             4.0),
                                                                     hidesUnderline:
@@ -250,7 +251,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                                     isMultiSelect:
                                                                         false,
                                                                   ),
-                                                                  const SizedBox(
+                                                                  SizedBox(
                                                                     height:
                                                                         30.0,
                                                                     child:
@@ -285,11 +286,11 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                                               letterSpacing: 0.0,
                                                                             ),
                                                                       ),
-                                                                    ].divide(const SizedBox(
+                                                                    ].divide(SizedBox(
                                                                         width:
                                                                             6.0)),
                                                                   ),
-                                                                ].divide(const SizedBox(
+                                                                ].divide(SizedBox(
                                                                     width:
                                                                         16.0)),
                                                               ),
@@ -340,7 +341,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                           ),
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         16.0,
                                                                         0.0,
@@ -375,13 +376,13 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                                       FormFieldController<
                                                                               String>(
                                                                           null),
-                                                                  options: const [
+                                                                  options: [
                                                                     'Near by',
                                                                     'Price',
                                                                     'Date'
                                                                   ],
                                                                   onChanged: (val) =>
-                                                                      setState(() =>
+                                                                      safeSetState(() =>
                                                                           _model.dropDownValue2 =
                                                                               val),
                                                                   width: 120.0,
@@ -419,7 +420,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                                   borderRadius:
                                                                       8.0,
                                                                   margin:
-                                                                      const EdgeInsets
+                                                                      EdgeInsets
                                                                           .all(
                                                                               4.0),
                                                                   hidesUnderline:
@@ -429,7 +430,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                                   isMultiSelect:
                                                                       false,
                                                                 ),
-                                                              ].divide(const SizedBox(
+                                                              ].divide(SizedBox(
                                                                   width: 16.0)),
                                                             ),
                                                           ),
@@ -488,7 +489,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                           },
                                                         ),
                                                       ].divide(
-                                                          const SizedBox(width: 8.0)),
+                                                          SizedBox(width: 8.0)),
                                                     ),
                                                 ],
                                               ),
@@ -510,7 +511,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                   children: [
                                                     Padding(
                                                       padding:
-                                                          const EdgeInsetsDirectional
+                                                          EdgeInsetsDirectional
                                                               .fromSTEB(
                                                                   24.0,
                                                                   0.0,
@@ -581,7 +582,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                     ),
                                                     Padding(
                                                       padding:
-                                                          const EdgeInsetsDirectional
+                                                          EdgeInsetsDirectional
                                                               .fromSTEB(
                                                                   20.0,
                                                                   0.0,
@@ -622,11 +623,11 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                                 wrapWithModel(
                                                               model: _model
                                                                   .propertyCardModel1,
-                                                              updateCallback:
-                                                                  () => setState(
+                                                              updateCallback: () =>
+                                                                  safeSetState(
                                                                       () {}),
                                                               child:
-                                                                  const PropertyCardWidget(
+                                                                  PropertyCardWidget(
                                                                 image:
                                                                     'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw5fHxidWlsZGluZ3xlbnwwfHx8fDE2OTgzNDgyMTB8MA&ixlib=rb-4.0.3&q=80&w=1080',
                                                                 title:
@@ -665,11 +666,11 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                                   wrapWithModel(
                                                                 model: _model
                                                                     .propertyCardModel2,
-                                                                updateCallback:
-                                                                    () => setState(
+                                                                updateCallback: () =>
+                                                                    safeSetState(
                                                                         () {}),
                                                                 child:
-                                                                    const PropertyCardWidget(
+                                                                    PropertyCardWidget(
                                                                   image:
                                                                       'https://images.unsplash.com/photo-1487958449943-2429e8be8625?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxNHx8YnVpbGRpbmd8ZW58MHx8fHwxNjk4MzQ4MjEwfDA&ixlib=rb-4.0.3&q=80&w=1080',
                                                                   title:
@@ -708,11 +709,11 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                                   wrapWithModel(
                                                                 model: _model
                                                                     .propertyCardModel3,
-                                                                updateCallback:
-                                                                    () => setState(
+                                                                updateCallback: () =>
+                                                                    safeSetState(
                                                                         () {}),
                                                                 child:
-                                                                    const PropertyCardWidget(
+                                                                    PropertyCardWidget(
                                                                   image:
                                                                       'https://images.unsplash.com/photo-1497465689543-5940d3cede89?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwyMnx8YnVpbGRpbmd8ZW58MHx8fHwxNjk4MzQ4MjEwfDA&ixlib=rb-4.0.3&q=80&w=1080',
                                                                   title:
@@ -741,7 +742,7 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
                                                                     .primaryBackground,
-                                                                boxShadow: const [
+                                                                boxShadow: [
                                                                   BoxShadow(
                                                                     blurRadius:
                                                                         25.0,
@@ -790,11 +791,11 @@ class _ExploreWidgetState extends State<ExploreWidget> {
                                                       ),
                                                     ),
                                                   ]
-                                                      .divide(const SizedBox(
+                                                      .divide(SizedBox(
                                                           height: 24.0))
-                                                      .addToStart(const SizedBox(
+                                                      .addToStart(SizedBox(
                                                           height: 24.0))
-                                                      .addToEnd(const SizedBox(
+                                                      .addToEnd(SizedBox(
                                                           height: 24.0)),
                                                 ),
                                               ),

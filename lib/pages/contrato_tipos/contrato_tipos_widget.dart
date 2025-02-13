@@ -25,8 +25,8 @@ class ContratoTiposWidget extends StatefulWidget {
     super.key,
     bool? hasSubMenu,
     bool? subMenuExpanded,
-  })  : hasSubMenu = hasSubMenu ?? false,
-        subMenuExpanded = subMenuExpanded ?? false;
+  })  : this.hasSubMenu = hasSubMenu ?? false,
+        this.subMenuExpanded = subMenuExpanded ?? false;
 
   final bool hasSubMenu;
   final bool subMenuExpanded;
@@ -49,7 +49,7 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       if (FFAppState().tipos != '') {
         _model.listContratos = await ContratosSeadiTable().queryRows(
-          queryFn: (q) => q.eq(
+          queryFn: (q) => q.eqOrNull(
             'tipo',
             FFAppState().tipos,
           ),
@@ -64,7 +64,7 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
 
     _model.textController ??= TextEditingController();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -82,15 +82,16 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
         title: 'Tipos',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -113,9 +114,9 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'ContratoTipos',
                                 pageIsInSubMenu: false,
                               ),
@@ -126,9 +127,9 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Container(
                                   width: double.infinity,
@@ -147,13 +148,13 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                         children: [
                                           Expanded(
                                             child: Padding(
-                                              padding: const EdgeInsetsDirectional
+                                              padding: EdgeInsetsDirectional
                                                   .fromSTEB(
                                                       20.0, 0.0, 20.0, 0.0),
                                               child: wrapWithModel(
                                                 model: _model.subHeaderModel,
                                                 updateCallback: () =>
-                                                    setState(() {}),
+                                                    safeSetState(() {}),
                                                 child: SubHeaderWidget(
                                                   title:
                                                       'CONTRATOS - ${FFAppState().tipos}',
@@ -178,12 +179,12 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                         children: [
                                           Align(
                                             alignment:
-                                                const AlignmentDirectional(-1.0, 0.0),
+                                                AlignmentDirectional(-1.0, 0.0),
                                             child: wrapWithModel(
                                               model: _model.barracontratosModel,
                                               updateCallback: () =>
-                                                  setState(() {}),
-                                              child: const BarracontratosWidget(
+                                                  safeSetState(() {}),
+                                              child: BarracontratosWidget(
                                                 pageName: 'ContratosTipos',
                                               ),
                                             ),
@@ -191,9 +192,9 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                         ],
                                       ),
                                     ]
-                                        .divide(const SizedBox(height: 24.0))
-                                        .addToStart(const SizedBox(height: 12.0))
-                                        .addToEnd(const SizedBox(height: 12.0)),
+                                        .divide(SizedBox(height: 24.0))
+                                        .addToStart(SizedBox(height: 12.0))
+                                        .addToEnd(SizedBox(height: 12.0)),
                                   ),
                                 ),
                                 Column(
@@ -235,13 +236,13 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                               }
                                             }(),
                                           ),
-                                          decoration: const BoxDecoration(),
+                                          decoration: BoxDecoration(),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               AlignedTooltip(
                                                 content: Padding(
-                                                  padding: const EdgeInsets.all(4.0),
+                                                  padding: EdgeInsets.all(4.0),
                                                   child: Text(
                                                     'Tipos de contratos',
                                                     style: FlutterFlowTheme.of(
@@ -266,8 +267,8 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                 tailBaseWidth: 24.0,
                                                 tailLength: 12.0,
                                                 waitDuration:
-                                                    const Duration(milliseconds: 100),
-                                                showDuration: const Duration(
+                                                    Duration(milliseconds: 100),
+                                                showDuration: Duration(
                                                     milliseconds: 1500),
                                                 triggerMode:
                                                     TooltipTriggerMode.tap,
@@ -304,14 +305,14 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                           .dropDownValueController ??=
                                                       FormFieldController<
                                                           String>(null),
-                                                  options: const [
+                                                  options: [
                                                     'PROCESSO',
                                                     'CONTRATO',
                                                     'OBJETO',
                                                     'EMPRESA'
                                                   ],
-                                                  onChanged: (val) => setState(
-                                                      () => _model
+                                                  onChanged: (val) =>
+                                                      safeSetState(() => _model
                                                           .dropDownValue = val),
                                                   width: 160.0,
                                                   height: 40.0,
@@ -348,7 +349,7 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                           .neutral200,
                                                   borderWidth: 1.0,
                                                   borderRadius: 8.0,
-                                                  margin: const EdgeInsetsDirectional
+                                                  margin: EdgeInsetsDirectional
                                                       .fromSTEB(
                                                           14.0, 4.0, 10.0, 4.0),
                                                   hidesUnderline: true,
@@ -356,12 +357,12 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                   isMultiSelect: false,
                                                 ),
                                               ),
-                                            ].divide(const SizedBox(width: 12.0)),
+                                            ].divide(SizedBox(width: 12.0)),
                                           ),
                                         ),
                                         Padding(
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
+                                              EdgeInsetsDirectional.fromSTEB(
                                                   11.0, 0.0, 11.0, 0.0),
                                           child: Container(
                                             width: 400.0,
@@ -386,7 +387,7 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                 }
                                               }(),
                                             ),
-                                            decoration: const BoxDecoration(),
+                                            decoration: BoxDecoration(),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
@@ -418,7 +419,7 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                 Container(
                                                   width: 48.0,
                                                   height: 48.0,
-                                                  decoration: const BoxDecoration(),
+                                                  decoration: BoxDecoration(),
                                                   child: Icon(
                                                     Icons.search,
                                                     color: FlutterFlowTheme.of(
@@ -432,11 +433,11 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                   phone: false,
                                                   tablet: false,
                                                 ))
-                                                  SizedBox(
+                                                  Container(
                                                     width: 222.0,
                                                     child: Autocomplete<String>(
                                                       initialValue:
-                                                          const TextEditingValue(),
+                                                          TextEditingValue(),
                                                       optionsBuilder:
                                                           (textEditingValue) {
                                                         if (textEditingValue
@@ -485,7 +486,7 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                                         0.0,
                                                                   ),
                                                           textHighlightStyle:
-                                                              const TextStyle(),
+                                                              TextStyle(),
                                                           elevation: 4.0,
                                                           optionBackgroundColor:
                                                               FlutterFlowTheme.of(
@@ -500,7 +501,7 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                       },
                                                       onSelected:
                                                           (String selection) {
-                                                        setState(() => _model
+                                                        safeSetState(() => _model
                                                                 .textFieldSelectedOption =
                                                             selection);
                                                         FocusScope.of(context)
@@ -529,11 +530,11 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                               EasyDebounce
                                                                   .debounce(
                                                             '_model.textController',
-                                                            const Duration(
+                                                            Duration(
                                                                 milliseconds:
                                                                     500),
-                                                            () =>
-                                                                setState(() {}),
+                                                            () => safeSetState(
+                                                                () {}),
                                                           ),
                                                           autofocus: false,
                                                           obscureText: false,
@@ -619,7 +620,7 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                         .width,
                                                     124.0),
                                           ),
-                                          decoration: const BoxDecoration(),
+                                          decoration: BoxDecoration(),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
@@ -634,14 +635,14 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                   options: FFButtonOptions(
                                                     height: 40.0,
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(
                                                                 24.0,
                                                                 13.0,
                                                                 24.0,
                                                                 13.0),
                                                     iconPadding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(0.0, 0.0,
                                                                 0.0, 0.0),
                                                     color: FlutterFlowTheme.of(
@@ -660,7 +661,7 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                           letterSpacing: 0.0,
                                                         ),
                                                     elevation: 0.0,
-                                                    borderSide: const BorderSide(
+                                                    borderSide: BorderSide(
                                                       color: Colors.transparent,
                                                       width: 1.0,
                                                     ),
@@ -670,7 +671,7 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                   ),
                                                 ),
                                               ),
-                                            ].divide(const SizedBox(width: 12.0)),
+                                            ].divide(SizedBox(width: 12.0)),
                                           ),
                                         ),
                                       ],
@@ -679,10 +680,10 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                 ),
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.all(22.0),
+                                    padding: EdgeInsets.all(22.0),
                                     child: Container(
                                       height: 888.0,
-                                      decoration: const BoxDecoration(),
+                                      decoration: BoxDecoration(),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         mainAxisAlignment:
@@ -837,7 +838,7 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                     color: WidgetStateProperty
                                                         .all(
                                                       contratosNewIndex % 2 == 0
-                                                          ? const Color(0xFFE1E1E1)
+                                                          ? Color(0xFFE1E1E1)
                                                           : FlutterFlowTheme.of(
                                                                   context)
                                                               .primaryBackground,
@@ -903,7 +904,8 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                               .objeto,
                                                           '0',
                                                         ).maybeHandleOverflow(
-                                                            maxChars: 222),
+                                                          maxChars: 222,
+                                                        ),
                                                         maxLines: 1,
                                                         style:
                                                             FlutterFlowTheme.of(
@@ -923,7 +925,8 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                               .empresas,
                                                           '0',
                                                         ).maybeHandleOverflow(
-                                                            maxChars: 222),
+                                                          maxChars: 222,
+                                                        ),
                                                         maxLines: 1,
                                                         style:
                                                             FlutterFlowTheme.of(
@@ -970,7 +973,7 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                   dataRowHeight: 48.0,
                                                   columnSpacing: 11.0,
                                                   headingRowColor:
-                                                      const Color(0xFFCBCBCB),
+                                                      Color(0xFFCBCBCB),
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           8.0),
@@ -990,11 +993,11 @@ class _ContratoTiposWidgetState extends State<ContratoTiposWidget> {
                                                   checkboxSelectedFillColor:
                                                       Colors.transparent,
                                                   checkboxCheckColor:
-                                                      const Color(0x8A000000),
+                                                      Color(0x8A000000),
                                                   checkboxUnselectedBorderColor:
-                                                      const Color(0x8A000000),
+                                                      Color(0x8A000000),
                                                   checkboxSelectedBorderColor:
-                                                      const Color(0x8A000000),
+                                                      Color(0x8A000000),
                                                 );
                                               },
                                             ),

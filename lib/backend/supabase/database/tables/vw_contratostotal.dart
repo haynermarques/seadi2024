@@ -10,7 +10,7 @@ class VwContratostotalTable extends SupabaseTable<VwContratostotalRow> {
 }
 
 class VwContratostotalRow extends SupabaseDataRow {
-  VwContratostotalRow(super.data);
+  VwContratostotalRow(Map<String, dynamic> data) : super(data);
 
   @override
   SupabaseTable get table => VwContratostotalTable();

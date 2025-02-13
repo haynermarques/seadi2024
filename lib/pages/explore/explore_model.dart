@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 class ExploreModel extends FlutterFlowModel<ExploreWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // Model for Menu component.
   late MenuModel menuModel;
   // Model for Header component.
@@ -38,7 +37,6 @@ class ExploreModel extends FlutterFlowModel<ExploreWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     menuModel.dispose();
     headerModel.dispose();
     propertyCardModel1.dispose();

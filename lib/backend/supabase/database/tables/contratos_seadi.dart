@@ -10,7 +10,7 @@ class ContratosSeadiTable extends SupabaseTable<ContratosSeadiRow> {
 }
 
 class ContratosSeadiRow extends SupabaseDataRow {
-  ContratosSeadiRow(super.data);
+  ContratosSeadiRow(Map<String, dynamic> data) : super(data);
 
   @override
   SupabaseTable get table => ContratosSeadiTable();

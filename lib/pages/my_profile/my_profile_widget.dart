@@ -31,7 +31,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     super.initState();
     _model = createModel(context, () => MyProfileModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -49,15 +49,16 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
         title: 'MyProfile',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -80,9 +81,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Dashboard',
                                 pageIsInSubMenu: false,
                               ),
@@ -93,9 +94,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -113,13 +114,13 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                         children: [
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: wrapWithModel(
                                               model: _model.subHeaderModel,
                                               updateCallback: () =>
-                                                  setState(() {}),
-                                              child: const SubHeaderWidget(
+                                                  safeSetState(() {}),
+                                              child: SubHeaderWidget(
                                                 title: 'My Profile',
                                                 showBackBtn: false,
                                               ),
@@ -127,7 +128,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                           ),
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Container(
                                               decoration: BoxDecoration(
@@ -153,12 +154,12 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                   Container(
                                                     width: 380.0,
                                                     height: 335.0,
-                                                    decoration: const BoxDecoration(),
+                                                    decoration: BoxDecoration(),
                                                     child: Stack(
                                                       children: [
                                                         ClipRRect(
                                                           borderRadius:
-                                                              const BorderRadius.only(
+                                                              BorderRadius.only(
                                                             bottomLeft:
                                                                 Radius.circular(
                                                                     16.0),
@@ -182,7 +183,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                         ),
                                                         Align(
                                                           alignment:
-                                                              const AlignmentDirectional(
+                                                              AlignmentDirectional(
                                                                   0.72, -0.82),
                                                           child: Container(
                                                             width: 80.0,
@@ -190,18 +191,18 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                             clipBehavior:
                                                                 Clip.antiAlias,
                                                             decoration:
-                                                                const BoxDecoration(
+                                                                BoxDecoration(
                                                               shape: BoxShape
                                                                   .circle,
                                                             ),
                                                             child:
                                                                 CachedNetworkImage(
                                                               fadeInDuration:
-                                                                  const Duration(
+                                                                  Duration(
                                                                       milliseconds:
                                                                           500),
                                                               fadeOutDuration:
-                                                                  const Duration(
+                                                                  Duration(
                                                                       milliseconds:
                                                                           500),
                                                               imageUrl:
@@ -212,11 +213,11 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                         ),
                                                         Align(
                                                           alignment:
-                                                              const AlignmentDirectional(
+                                                              AlignmentDirectional(
                                                                   -1.0, 1.0),
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         20.0,
                                                                         0.0,
@@ -264,7 +265,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                                         selectedMedia.every((m) => validateFileFormat(
                                                                             m.storagePath,
                                                                             context))) {
-                                                                      setState(() =>
+                                                                      safeSetState(() =>
                                                                           _model.isDataUploading =
                                                                               true);
                                                                       var selectedUploadedFiles =
@@ -288,13 +289,13 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                                               .length ==
                                                                           selectedMedia
                                                                               .length) {
-                                                                        setState(
+                                                                        safeSetState(
                                                                             () {
                                                                           _model.uploadedLocalFile =
                                                                               selectedUploadedFiles.first;
                                                                         });
                                                                       } else {
-                                                                        setState(
+                                                                        safeSetState(
                                                                             () {});
                                                                         return;
                                                                       }
@@ -318,7 +319,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                                     child:
                                                                         Padding(
                                                                       padding:
-                                                                          const EdgeInsets.all(
+                                                                          EdgeInsets.all(
                                                                               12.0),
                                                                       child:
                                                                           Row(
@@ -341,7 +342,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                                                   letterSpacing: 0.0,
                                                                                 ),
                                                                           ),
-                                                                        ].divide(const SizedBox(width: 12.0)),
+                                                                        ].divide(SizedBox(width: 12.0)),
                                                                       ),
                                                                     ),
                                                                   ),
@@ -355,10 +356,10 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                   ),
                                                   Container(
                                                     width: 600.0,
-                                                    decoration: const BoxDecoration(),
+                                                    decoration: BoxDecoration(),
                                                     child: Padding(
                                                       padding:
-                                                          const EdgeInsetsDirectional
+                                                          EdgeInsetsDirectional
                                                               .fromSTEB(
                                                                   20.0,
                                                                   0.0,
@@ -454,7 +455,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ].divide(const SizedBox(
+                                                                ].divide(SizedBox(
                                                                     height:
                                                                         8.0)),
                                                               ),
@@ -476,7 +477,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                                 ),
                                                                 child: Padding(
                                                                   padding:
-                                                                      const EdgeInsets
+                                                                      EdgeInsets
                                                                           .all(
                                                                               20.0),
                                                                   child: Column(
@@ -533,10 +534,10 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                                                     ),
                                                                                   ],
                                                                                 ),
-                                                                              ].divide(const SizedBox(height: 4.0)),
+                                                                              ].divide(SizedBox(height: 4.0)),
                                                                             ),
                                                                           ),
-                                                                        ].divide(const SizedBox(width: 12.0)),
+                                                                        ].divide(SizedBox(width: 12.0)),
                                                                       ),
                                                                       Wrap(
                                                                         spacing:
@@ -602,10 +603,10 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                                                         ),
                                                                                       ],
                                                                                     ),
-                                                                                  ].divide(const SizedBox(height: 4.0)),
+                                                                                  ].divide(SizedBox(height: 4.0)),
                                                                                 ),
                                                                               ),
-                                                                            ].divide(const SizedBox(width: 12.0)),
+                                                                            ].divide(SizedBox(width: 12.0)),
                                                                           ),
                                                                           Row(
                                                                             mainAxisSize:
@@ -653,20 +654,20 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                                                         ),
                                                                                       ],
                                                                                     ),
-                                                                                  ].divide(const SizedBox(height: 4.0)),
+                                                                                  ].divide(SizedBox(height: 4.0)),
                                                                                 ),
                                                                               ),
-                                                                            ].divide(const SizedBox(width: 12.0)),
+                                                                            ].divide(SizedBox(width: 12.0)),
                                                                           ),
                                                                         ],
                                                                       ),
-                                                                    ].divide(const SizedBox(
+                                                                    ].divide(SizedBox(
                                                                         height:
                                                                             24.0)),
                                                                   ),
                                                                 ),
                                                               ),
-                                                            ].divide(const SizedBox(
+                                                            ].divide(SizedBox(
                                                                 height: 24.0)),
                                                           ),
                                                         ],
@@ -679,7 +680,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                           ),
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Container(
                                               width: 100.0,
@@ -697,7 +698,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                 children: [
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(20.0, 0.0,
                                                                 20.0, 0.0),
                                                     child: Row(
@@ -754,7 +755,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(20.0, 0.0,
                                                                 0.0, 0.0),
                                                     child: Wrap(
@@ -790,11 +791,11 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                           child: wrapWithModel(
                                                             model: _model
                                                                 .propertyCardModel1,
-                                                            updateCallback:
-                                                                () => setState(
+                                                            updateCallback: () =>
+                                                                safeSetState(
                                                                     () {}),
                                                             child:
-                                                                const PropertyCardWidget(
+                                                                PropertyCardWidget(
                                                               image:
                                                                   'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw5fHxidWlsZGluZ3xlbnwwfHx8fDE2OTgzNDgyMTB8MA&ixlib=rb-4.0.3&q=80&w=1080',
                                                               title:
@@ -825,11 +826,11 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                           child: wrapWithModel(
                                                             model: _model
                                                                 .propertyCardModel2,
-                                                            updateCallback:
-                                                                () => setState(
+                                                            updateCallback: () =>
+                                                                safeSetState(
                                                                     () {}),
                                                             child:
-                                                                const PropertyCardWidget(
+                                                                PropertyCardWidget(
                                                               image:
                                                                   'https://images.unsplash.com/photo-1487958449943-2429e8be8625?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxNHx8YnVpbGRpbmd8ZW58MHx8fHwxNjk4MzQ4MjEwfDA&ixlib=rb-4.0.3&q=80&w=1080',
                                                               title:
@@ -860,11 +861,11 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                           child: wrapWithModel(
                                                             model: _model
                                                                 .propertyCardModel3,
-                                                            updateCallback:
-                                                                () => setState(
+                                                            updateCallback: () =>
+                                                                safeSetState(
                                                                     () {}),
                                                             child:
-                                                                const PropertyCardWidget(
+                                                                PropertyCardWidget(
                                                               image:
                                                                   'https://images.unsplash.com/photo-1497465689543-5940d3cede89?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwyMnx8YnVpbGRpbmd8ZW58MHx8fHwxNjk4MzQ4MjEwfDA&ixlib=rb-4.0.3&q=80&w=1080',
                                                               title:
@@ -887,7 +888,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                             color: FlutterFlowTheme
                                                                     .of(context)
                                                                 .primaryBackground,
-                                                            boxShadow: const [
+                                                            boxShadow: [
                                                               BoxShadow(
                                                                 blurRadius:
                                                                     25.0,
@@ -933,18 +934,18 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                   ),
                                                 ]
                                                     .divide(
-                                                        const SizedBox(height: 24.0))
+                                                        SizedBox(height: 24.0))
                                                     .addToStart(
-                                                        const SizedBox(height: 24.0))
+                                                        SizedBox(height: 24.0))
                                                     .addToEnd(
-                                                        const SizedBox(height: 24.0)),
+                                                        SizedBox(height: 24.0)),
                                               ),
                                             ),
                                           ),
                                         ]
-                                            .divide(const SizedBox(height: 20.0))
-                                            .addToStart(const SizedBox(height: 20.0))
-                                            .addToEnd(const SizedBox(height: 20.0)),
+                                            .divide(SizedBox(height: 20.0))
+                                            .addToStart(SizedBox(height: 20.0))
+                                            .addToEnd(SizedBox(height: 20.0)),
                                       ),
                                     ),
                                   ),
@@ -960,11 +961,11 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                       phone: false,
                     ))
                       Align(
-                        alignment: const AlignmentDirectional(0.79, -0.98),
+                        alignment: AlignmentDirectional(0.79, -0.98),
                         child: wrapWithModel(
                           model: _model.navigatorModel,
-                          updateCallback: () => setState(() {}),
-                          child: const NavigatorWidget(
+                          updateCallback: () => safeSetState(() {}),
+                          child: NavigatorWidget(
                             expanded: true,
                           ),
                         ),

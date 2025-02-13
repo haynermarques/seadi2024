@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 class ContratoTiposModel extends FlutterFlowModel<ContratoTiposWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // Stores action output result for [Backend Call - Query Rows] action in ContratoTipos widget.
   List<ContratosSeadiRow>? listContratos;
   // Model for Menu component.
@@ -46,11 +45,12 @@ class ContratoTiposModel extends FlutterFlowModel<ContratoTiposWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     menuModel.dispose();
     headerModel.dispose();
     subHeaderModel.dispose();
     barracontratosModel.dispose();
     textFieldFocusNode?.dispose();
+
+    paginatedDataTableController.dispose();
   }
 }

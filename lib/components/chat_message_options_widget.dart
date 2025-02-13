@@ -41,8 +41,8 @@ class _ChatMessageOptionsWidgetState extends State<ChatMessageOptionsWidget>
             curve: Curves.elasticOut,
             delay: 0.0.ms,
             duration: 500.0.ms,
-            begin: const Offset(0.0, 0.0),
-            end: const Offset(1.0, 1.0),
+            begin: Offset(0.0, 0.0),
+            end: Offset(1.0, 1.0),
           ),
         ],
       ),
@@ -54,14 +54,14 @@ class _ChatMessageOptionsWidgetState extends State<ChatMessageOptionsWidget>
             curve: Curves.elasticOut,
             delay: 150.0.ms,
             duration: 500.0.ms,
-            begin: const Offset(0.0, 0.0),
-            end: const Offset(1.0, 1.0),
+            begin: Offset(0.0, 0.0),
+            end: Offset(1.0, 1.0),
           ),
         ],
       ),
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -78,7 +78,7 @@ class _ChatMessageOptionsWidgetState extends State<ChatMessageOptionsWidget>
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(10.0, 4.0, 10.0, 4.0),
+        padding: EdgeInsetsDirectional.fromSTEB(10.0, 4.0, 10.0, 4.0),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -112,7 +112,7 @@ class _ChatMessageOptionsWidgetState extends State<ChatMessageOptionsWidget>
               },
             ).animateOnPageLoad(
                 animationsMap['iconButtonOnPageLoadAnimation2']!),
-          ].divide(const SizedBox(width: 10.0)),
+          ].divide(SizedBox(width: 10.0)),
         ),
       ),
     );

@@ -12,6 +12,8 @@ export 'serialization_util.dart';
 
 const kTransitionInfoKey = '__transition_info__';
 
+GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
+
 class AppStateNotifier extends ChangeNotifier {
   AppStateNotifier._();
 
@@ -30,6 +32,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
+      navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) => appStateNotifier.showSplashImage
           ? Builder(
               builder: (context) => Container(
@@ -40,7 +43,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 ),
               ),
             )
-          : const AbreWidget(),
+          : LoginPageWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
@@ -55,12 +58,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     ),
                   ),
                 )
-              : const AbreWidget(),
+              : LoginPageWidget(),
         ),
         FFRoute(
           name: 'LoginPage',
           path: '/loginPage',
-          builder: (context, params) => const LoginPageWidget(),
+          builder: (context, params) => LoginPageWidget(),
         ),
         FFRoute(
           name: 'ResetPassword',
@@ -75,77 +78,77 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'RegisterPage',
           path: '/registerPage',
-          builder: (context, params) => const RegisterPageWidget(),
+          builder: (context, params) => RegisterPageWidget(),
         ),
         FFRoute(
           name: 'Home',
           path: '/home',
-          builder: (context, params) => const HomeWidget(),
+          builder: (context, params) => HomeWidget(),
         ),
         FFRoute(
           name: 'DetailBuilding',
           path: '/detailBuilding',
-          builder: (context, params) => const DetailBuildingWidget(),
+          builder: (context, params) => DetailBuildingWidget(),
         ),
         FFRoute(
           name: 'VirtualTour',
           path: '/virtualTour',
-          builder: (context, params) => const VirtualTourWidget(),
+          builder: (context, params) => VirtualTourWidget(),
         ),
         FFRoute(
           name: 'Order',
           path: '/order',
-          builder: (context, params) => const OrderWidget(),
+          builder: (context, params) => OrderWidget(),
         ),
         FFRoute(
           name: 'Payment',
           path: '/payment',
-          builder: (context, params) => const PaymentWidget(),
+          builder: (context, params) => PaymentWidget(),
         ),
         FFRoute(
           name: 'Explore',
           path: '/explore',
-          builder: (context, params) => const ExploreWidget(),
+          builder: (context, params) => ExploreWidget(),
         ),
         FFRoute(
           name: 'MyOrder',
           path: '/myOrder',
-          builder: (context, params) => const MyOrderWidget(),
+          builder: (context, params) => MyOrderWidget(),
         ),
         FFRoute(
           name: 'OrderHistory',
           path: '/orderHistory',
-          builder: (context, params) => const OrderHistoryWidget(),
+          builder: (context, params) => OrderHistoryWidget(),
         ),
         FFRoute(
           name: 'Message',
           path: '/message',
-          builder: (context, params) => const MessageWidget(),
+          builder: (context, params) => MessageWidget(),
         ),
         FFRoute(
           name: 'VideoCall',
           path: '/videoCall',
-          builder: (context, params) => const VideoCallWidget(),
+          builder: (context, params) => VideoCallWidget(),
         ),
         FFRoute(
           name: 'MyProfile',
           path: '/myProfile',
-          builder: (context, params) => const MyProfileWidget(),
+          builder: (context, params) => MyProfileWidget(),
         ),
         FFRoute(
           name: 'EditProfile',
           path: '/editProfile',
-          builder: (context, params) => const EditProfileWidget(),
+          builder: (context, params) => EditProfileWidget(),
         ),
         FFRoute(
           name: 'Setting',
           path: '/setting',
-          builder: (context, params) => const SettingWidget(),
+          builder: (context, params) => SettingWidget(),
         ),
         FFRoute(
           name: 'chat',
           path: '/chat',
-          builder: (context, params) => const ChatWidget(),
+          builder: (context, params) => ChatWidget(),
         ),
         FFRoute(
           name: 'Abre',
@@ -160,7 +163,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'teste',
           path: '/teste',
-          builder: (context, params) => const TesteWidget(),
+          builder: (context, params) => TesteWidget(),
         ),
         FFRoute(
           name: 'Servidores',
@@ -380,7 +383,7 @@ class TransitionInfo {
   final Duration duration;
   final Alignment? alignment;
 
-  static TransitionInfo appDefault() => const TransitionInfo(hasTransition: false);
+  static TransitionInfo appDefault() => TransitionInfo(hasTransition: false);
 }
 
 class RootPageContext {

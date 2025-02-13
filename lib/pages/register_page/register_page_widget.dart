@@ -37,7 +37,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
     _model.passwordTextFieldTextController ??= TextEditingController();
     _model.passwordTextFieldFocusNode ??= FocusNode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -53,15 +53,16 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
         title: 'RegisterPage',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -91,18 +92,18 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                       .secondaryBackground,
                                 ),
                                 child: Align(
-                                  alignment: const AlignmentDirectional(0.0, 0.0),
+                                  alignment: AlignmentDirectional(0.0, 0.0),
                                   child: Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
                                         100.0, 0.0, 100.0, 0.0),
-                                    child: SizedBox(
+                                    child: Container(
                                       width: double.infinity,
                                       height: 700.0,
                                       child: Stack(
                                         children: [
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 0.0, 0.0, 40.0),
                                             child: PageView(
                                               controller:
@@ -180,7 +181,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                             ),
                                                           ],
                                                         ),
-                                                      ].divide(const SizedBox(
+                                                      ].divide(SizedBox(
                                                           height: 24.0)),
                                                     ),
                                                   ],
@@ -253,7 +254,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                             ),
                                                           ],
                                                         ),
-                                                      ].divide(const SizedBox(
+                                                      ].divide(SizedBox(
                                                           height: 24.0)),
                                                     ),
                                                   ],
@@ -327,7 +328,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                             ),
                                                           ],
                                                         ),
-                                                      ].divide(const SizedBox(
+                                                      ].divide(SizedBox(
                                                           height: 24.0)),
                                                     ),
                                                   ],
@@ -337,9 +338,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                           ),
                                           Align(
                                             alignment:
-                                                const AlignmentDirectional(-1.0, 1.0),
+                                                AlignmentDirectional(-1.0, 1.0),
                                             child: Padding(
-                                              padding: const EdgeInsetsDirectional
+                                              padding: EdgeInsetsDirectional
                                                   .fromSTEB(
                                                       0.0, 0.0, 0.0, 16.0),
                                               child: smooth_page_indicator
@@ -355,11 +356,11 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                       .pageViewController!
                                                       .animateToPage(
                                                     i,
-                                                    duration: const Duration(
+                                                    duration: Duration(
                                                         milliseconds: 500),
                                                     curve: Curves.ease,
                                                   );
-                                                  setState(() {});
+                                                  safeSetState(() {});
                                                 },
                                                 effect: smooth_page_indicator
                                                     .ExpandingDotsEffect(
@@ -407,9 +408,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                   ))
                                     Align(
                                       alignment:
-                                          const AlignmentDirectional(0.0, -1.0),
+                                          AlignmentDirectional(0.0, -1.0),
                                       child: Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             20.0, 0.0, 20.0, 0.0),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
@@ -430,7 +431,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                     fit: BoxFit.contain,
                                                   ),
                                                 ),
-                                              ].divide(const SizedBox(width: 4.0)),
+                                              ].divide(SizedBox(width: 4.0)),
                                             ),
                                             Text(
                                               'Register',
@@ -449,10 +450,10 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     ),
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
                                           20.0, 0.0, 20.0, 0.0),
                                       child: Container(
-                                        constraints: const BoxConstraints(
+                                        constraints: BoxConstraints(
                                           maxWidth: 446.0,
                                         ),
                                         decoration: BoxDecoration(
@@ -481,7 +482,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                       width: 100.0,
                                                       height: 120.0,
                                                       decoration:
-                                                          const BoxDecoration(),
+                                                          BoxDecoration(),
                                                     ),
                                                   Column(
                                                     mainAxisSize:
@@ -533,7 +534,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                         ],
                                                       ),
                                                     ].divide(
-                                                        const SizedBox(height: 16.0)),
+                                                        SizedBox(height: 16.0)),
                                                   ),
                                                   Form(
                                                     key: _model.formKey,
@@ -582,7 +583,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                               children: [
                                                                 Expanded(
                                                                   child:
-                                                                      SizedBox(
+                                                                      Container(
                                                                     width:
                                                                         250.0,
                                                                     child:
@@ -597,10 +598,10 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                           (_) =>
                                                                               EasyDebounce.debounce(
                                                                         '_model.fullNameTextFieldTextController',
-                                                                        const Duration(
+                                                                        Duration(
                                                                             milliseconds:
                                                                                 500),
-                                                                        () => setState(
+                                                                        () => safeSetState(
                                                                             () {}),
                                                                       ),
                                                                       autofocus:
@@ -672,7 +673,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                           borderRadius:
                                                                               BorderRadius.circular(8.0),
                                                                         ),
-                                                                        contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                                                                        contentPadding: EdgeInsetsDirectional.fromSTEB(
                                                                             24.0,
                                                                             0.0,
                                                                             0.0,
@@ -699,7 +700,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                 ),
                                                               ],
                                                             ),
-                                                          ].divide(const SizedBox(
+                                                          ].divide(SizedBox(
                                                               height: 12.0)),
                                                         ),
                                                         Column(
@@ -743,12 +744,12 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                         .originDropDownValueController ??= FormFieldController<
                                                                             String>(
                                                                         null),
-                                                                    options: const [
+                                                                    options: [
                                                                       'USA',
                                                                       'UK'
                                                                     ],
                                                                     onChanged: (val) =>
-                                                                        setState(() =>
+                                                                        safeSetState(() =>
                                                                             _model.originDropDownValue =
                                                                                 val),
                                                                     width:
@@ -789,7 +790,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                         1.0,
                                                                     borderRadius:
                                                                         8.0,
-                                                                    margin: const EdgeInsetsDirectional
+                                                                    margin: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             24.0,
                                                                             4.0,
@@ -805,7 +806,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                 ),
                                                               ],
                                                             ),
-                                                          ].divide(const SizedBox(
+                                                          ].divide(SizedBox(
                                                               height: 12.0)),
                                                         ),
                                                         Column(
@@ -843,7 +844,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                               children: [
                                                                 Expanded(
                                                                   child:
-                                                                      SizedBox(
+                                                                      Container(
                                                                     width:
                                                                         250.0,
                                                                     child:
@@ -858,10 +859,10 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                           (_) =>
                                                                               EasyDebounce.debounce(
                                                                         '_model.emailTextFieldTextController',
-                                                                        const Duration(
+                                                                        Duration(
                                                                             milliseconds:
                                                                                 500),
-                                                                        () => setState(
+                                                                        () => safeSetState(
                                                                             () {}),
                                                                       ),
                                                                       autofocus:
@@ -933,7 +934,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                           borderRadius:
                                                                               BorderRadius.circular(8.0),
                                                                         ),
-                                                                        contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                                                                        contentPadding: EdgeInsetsDirectional.fromSTEB(
                                                                             24.0,
                                                                             0.0,
                                                                             0.0,
@@ -963,7 +964,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                 ),
                                                               ],
                                                             ),
-                                                          ].divide(const SizedBox(
+                                                          ].divide(SizedBox(
                                                               height: 12.0)),
                                                         ),
                                                         Column(
@@ -1001,7 +1002,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                               children: [
                                                                 Expanded(
                                                                   child:
-                                                                      SizedBox(
+                                                                      Container(
                                                                     width:
                                                                         250.0,
                                                                     child:
@@ -1016,10 +1017,10 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                           (_) =>
                                                                               EasyDebounce.debounce(
                                                                         '_model.passwordTextFieldTextController',
-                                                                        const Duration(
+                                                                        Duration(
                                                                             milliseconds:
                                                                                 500),
-                                                                        () => setState(
+                                                                        () => safeSetState(
                                                                             () {}),
                                                                       ),
                                                                       autofocus:
@@ -1092,7 +1093,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                           borderRadius:
                                                                               BorderRadius.circular(8.0),
                                                                         ),
-                                                                        contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                                                                        contentPadding: EdgeInsetsDirectional.fromSTEB(
                                                                             24.0,
                                                                             0.0,
                                                                             0.0,
@@ -1100,7 +1101,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                         suffixIcon:
                                                                             InkWell(
                                                                           onTap: () =>
-                                                                              setState(
+                                                                              safeSetState(
                                                                             () =>
                                                                                 _model.passwordTextFieldVisibility = !_model.passwordTextFieldVisibility,
                                                                           ),
@@ -1139,7 +1140,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                 ),
                                                               ],
                                                             ),
-                                                          ].divide(const SizedBox(
+                                                          ].divide(SizedBox(
                                                               height: 12.0)),
                                                         ),
                                                         Row(
@@ -1181,7 +1182,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                           false,
                                                                       onChanged:
                                                                           (newValue) async {
-                                                                        setState(() =>
+                                                                        safeSetState(() =>
                                                                             _model.cbTermsValue =
                                                                                 newValue!);
                                                                       },
@@ -1263,7 +1264,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                           ),
                                                                     ),
                                                                   ),
-                                                                ].divide(const SizedBox(
+                                                                ].divide(SizedBox(
                                                                     width:
                                                                         12.0)),
                                                               ),
@@ -1295,14 +1296,14 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                             width: 250.0,
                                                             height: 50.0,
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         24.0,
                                                                         13.0,
                                                                         24.0,
                                                                         13.0),
                                                             iconPadding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         0.0,
                                                                         0.0,
@@ -1326,7 +1327,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                     ),
                                                             elevation: 0.0,
                                                             borderSide:
-                                                                const BorderSide(
+                                                                BorderSide(
                                                               color: Colors
                                                                   .transparent,
                                                               width: 1.0,
@@ -1336,7 +1337,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                     .circular(
                                                                         8.0),
                                                             disabledColor:
-                                                                const Color(
+                                                                Color(
                                                                     0x834A74EA),
                                                           ),
                                                         ),
@@ -1370,7 +1371,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                                 ),
                                                                 child: Padding(
                                                                   padding:
-                                                                      const EdgeInsets
+                                                                      EdgeInsets
                                                                           .all(
                                                                               8.0),
                                                                   child:
@@ -1421,9 +1422,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                           ],
                                                         ),
                                                       ]
-                                                          .divide(const SizedBox(
+                                                          .divide(SizedBox(
                                                               height: 24.0))
-                                                          .addToStart(const SizedBox(
+                                                          .addToStart(SizedBox(
                                                               height: 48.0)),
                                                     ),
                                                   ),
@@ -1435,7 +1436,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                       ),
                                     ),
                                   ),
-                                ].divide(const SizedBox(height: 16.0)),
+                                ].divide(SizedBox(height: 16.0)),
                               ),
                             ),
                           ),
@@ -1447,7 +1448,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                       phone: false,
                     ))
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
+                        padding: EdgeInsetsDirectional.fromSTEB(
                             40.0, 0.0, 40.0, 0.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
@@ -1474,7 +1475,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     fit: BoxFit.contain,
                                   ),
                                 ),
-                              ].divide(const SizedBox(width: 4.0)),
+                              ].divide(SizedBox(width: 4.0)),
                             ),
                             Text(
                               'Register',
@@ -1493,11 +1494,11 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                       phone: false,
                     ))
                       Align(
-                        alignment: const AlignmentDirectional(0.89, -0.86),
+                        alignment: AlignmentDirectional(0.89, -0.86),
                         child: wrapWithModel(
                           model: _model.navigatorModel,
-                          updateCallback: () => setState(() {}),
-                          child: const NavigatorWidget(
+                          updateCallback: () => safeSetState(() {}),
+                          child: NavigatorWidget(
                             expanded: true,
                           ),
                         ),

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 class RegisterPageModel extends FlutterFlowModel<RegisterPageWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
   // State field(s) for PageView widget.
   PageController? pageViewController;
@@ -74,7 +73,6 @@ class RegisterPageModel extends FlutterFlowModel<RegisterPageWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     fullNameTextFieldFocusNode?.dispose();
     fullNameTextFieldTextController?.dispose();
 

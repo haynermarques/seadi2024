@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 class ResetPasswordModel extends FlutterFlowModel<ResetPasswordWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
   // State field(s) for PageView widget.
   PageController? pageViewController;
@@ -45,7 +44,6 @@ class ResetPasswordModel extends FlutterFlowModel<ResetPasswordWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     emailTextFieldFocusNode?.dispose();
     emailTextFieldTextController?.dispose();
 

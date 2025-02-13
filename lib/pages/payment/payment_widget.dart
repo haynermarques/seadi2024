@@ -46,7 +46,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
     _model.nameTextFieldTextController4 ??= TextEditingController();
     _model.nameTextFieldFocusNode4 ??= FocusNode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -64,15 +64,16 @@ class _PaymentWidgetState extends State<PaymentWidget> {
         title: 'Payment',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -95,9 +96,9 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Dashboard',
                                 pageIsInSubMenu: true,
                               ),
@@ -108,9 +109,9 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -128,7 +129,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                         children: [
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Wrap(
                                               spacing: 20.0,
@@ -166,7 +167,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                           Expanded(
                                                             child: Padding(
                                                               padding:
-                                                                  const EdgeInsetsDirectional
+                                                                  EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           20.0,
                                                                           0.0,
@@ -176,11 +177,11 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                   wrapWithModel(
                                                                 model: _model
                                                                     .subHeaderModel,
-                                                                updateCallback:
-                                                                    () => setState(
+                                                                updateCallback: () =>
+                                                                    safeSetState(
                                                                         () {}),
                                                                 child:
-                                                                    const SubHeaderWidget(
+                                                                    SubHeaderWidget(
                                                                   title:
                                                                       'Payment',
                                                                   showBackBtn:
@@ -193,7 +194,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
+                                                            EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     20.0,
                                                                     0.0,
@@ -245,7 +246,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                     ),
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           20.0,
                                                                           12.0,
                                                                           20.0,
@@ -325,7 +326,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                             model:
                                                                                 _model.creditCardModel,
                                                                             updateCallback: () =>
-                                                                                setState(() {}),
+                                                                                safeSetState(() {}),
                                                                             child:
                                                                                 CreditCardWidget(
                                                                               icon: FaIcon(
@@ -355,10 +356,13 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                 builder: (context) {
                                                                                   return WebViewAware(
                                                                                     child: GestureDetector(
-                                                                                      onTap: () => _model.unfocusNode.canRequestFocus ? FocusScope.of(context).requestFocus(_model.unfocusNode) : FocusScope.of(context).unfocus(),
+                                                                                      onTap: () {
+                                                                                        FocusScope.of(context).unfocus();
+                                                                                        FocusManager.instance.primaryFocus?.unfocus();
+                                                                                      },
                                                                                       child: Padding(
                                                                                         padding: MediaQuery.viewInsetsOf(context),
-                                                                                        child: const NewCardModal2Widget(),
+                                                                                        child: NewCardModal2Widget(),
                                                                                       ),
                                                                                     ),
                                                                                   );
@@ -412,13 +416,13 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                       ),
                                                                                     ],
                                                                                   ),
-                                                                                ].divide(const SizedBox(height: 24.0)),
+                                                                                ].divide(SizedBox(height: 24.0)),
                                                                               ),
                                                                             ),
                                                                           ),
                                                                         ],
                                                                       ),
-                                                                    ].divide(const SizedBox(
+                                                                    ].divide(SizedBox(
                                                                         height:
                                                                             16.0)),
                                                                   ),
@@ -490,15 +494,15 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                     ),
                                                                                   ],
                                                                                 ),
-                                                                                SizedBox(
+                                                                                Container(
                                                                                   width: double.infinity,
                                                                                   child: TextFormField(
                                                                                     controller: _model.nameTextFieldTextController1,
                                                                                     focusNode: _model.nameTextFieldFocusNode1,
                                                                                     onChanged: (_) => EasyDebounce.debounce(
                                                                                       '_model.nameTextFieldTextController1',
-                                                                                      const Duration(milliseconds: 500),
-                                                                                      () => setState(() {}),
+                                                                                      Duration(milliseconds: 500),
+                                                                                      () => safeSetState(() {}),
                                                                                     ),
                                                                                     autofocus: false,
                                                                                     readOnly: true,
@@ -542,7 +546,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                         ),
                                                                                         borderRadius: BorderRadius.circular(4.0),
                                                                                       ),
-                                                                                      contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
+                                                                                      contentPadding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
                                                                                     ),
                                                                                     style: FlutterFlowTheme.of(context).labelLarge.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
@@ -552,7 +556,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                     validator: _model.nameTextFieldTextController1Validator.asValidator(context),
                                                                                   ),
                                                                                 ),
-                                                                              ].divide(const SizedBox(height: 10.0)),
+                                                                              ].divide(SizedBox(height: 10.0)),
                                                                             ),
                                                                           ),
                                                                           Container(
@@ -581,15 +585,15 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                     ),
                                                                                   ],
                                                                                 ),
-                                                                                SizedBox(
+                                                                                Container(
                                                                                   width: double.infinity,
                                                                                   child: TextFormField(
                                                                                     controller: _model.nameTextFieldTextController2,
                                                                                     focusNode: _model.nameTextFieldFocusNode2,
                                                                                     onChanged: (_) => EasyDebounce.debounce(
                                                                                       '_model.nameTextFieldTextController2',
-                                                                                      const Duration(milliseconds: 500),
-                                                                                      () => setState(() {}),
+                                                                                      Duration(milliseconds: 500),
+                                                                                      () => safeSetState(() {}),
                                                                                     ),
                                                                                     autofocus: false,
                                                                                     readOnly: true,
@@ -633,7 +637,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                         ),
                                                                                         borderRadius: BorderRadius.circular(4.0),
                                                                                       ),
-                                                                                      contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
+                                                                                      contentPadding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
                                                                                     ),
                                                                                     style: FlutterFlowTheme.of(context).labelLarge.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
@@ -644,7 +648,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                     validator: _model.nameTextFieldTextController2Validator.asValidator(context),
                                                                                   ),
                                                                                 ),
-                                                                              ].divide(const SizedBox(height: 10.0)),
+                                                                              ].divide(SizedBox(height: 10.0)),
                                                                             ),
                                                                           ),
                                                                           Container(
@@ -673,15 +677,15 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                     ),
                                                                                   ],
                                                                                 ),
-                                                                                SizedBox(
+                                                                                Container(
                                                                                   width: double.infinity,
                                                                                   child: TextFormField(
                                                                                     controller: _model.nameTextFieldTextController3,
                                                                                     focusNode: _model.nameTextFieldFocusNode3,
                                                                                     onChanged: (_) => EasyDebounce.debounce(
                                                                                       '_model.nameTextFieldTextController3',
-                                                                                      const Duration(milliseconds: 500),
-                                                                                      () => setState(() {}),
+                                                                                      Duration(milliseconds: 500),
+                                                                                      () => safeSetState(() {}),
                                                                                     ),
                                                                                     autofocus: false,
                                                                                     readOnly: true,
@@ -725,7 +729,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                         ),
                                                                                         borderRadius: BorderRadius.circular(4.0),
                                                                                       ),
-                                                                                      contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
+                                                                                      contentPadding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
                                                                                       suffixIcon: Icon(
                                                                                         Icons.calendar_month_outlined,
                                                                                         color: FlutterFlowTheme.of(context).primaryText,
@@ -741,7 +745,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                     validator: _model.nameTextFieldTextController3Validator.asValidator(context),
                                                                                   ),
                                                                                 ),
-                                                                              ].divide(const SizedBox(height: 10.0)),
+                                                                              ].divide(SizedBox(height: 10.0)),
                                                                             ),
                                                                           ),
                                                                           Container(
@@ -770,15 +774,15 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                     ),
                                                                                   ],
                                                                                 ),
-                                                                                SizedBox(
+                                                                                Container(
                                                                                   width: double.infinity,
                                                                                   child: TextFormField(
                                                                                     controller: _model.nameTextFieldTextController4,
                                                                                     focusNode: _model.nameTextFieldFocusNode4,
                                                                                     onChanged: (_) => EasyDebounce.debounce(
                                                                                       '_model.nameTextFieldTextController4',
-                                                                                      const Duration(milliseconds: 500),
-                                                                                      () => setState(() {}),
+                                                                                      Duration(milliseconds: 500),
+                                                                                      () => safeSetState(() {}),
                                                                                     ),
                                                                                     autofocus: false,
                                                                                     readOnly: true,
@@ -822,7 +826,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                         ),
                                                                                         borderRadius: BorderRadius.circular(4.0),
                                                                                       ),
-                                                                                      contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
+                                                                                      contentPadding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
                                                                                       suffixIcon: Icon(
                                                                                         Icons.info_outline,
                                                                                         color: FlutterFlowTheme.of(context).primaryText,
@@ -838,12 +842,12 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                                     validator: _model.nameTextFieldTextController4Validator.asValidator(context),
                                                                                   ),
                                                                                 ),
-                                                                              ].divide(const SizedBox(height: 10.0)),
+                                                                              ].divide(SizedBox(height: 10.0)),
                                                                             ),
                                                                           ),
                                                                         ],
                                                                       ),
-                                                                    ].divide(const SizedBox(
+                                                                    ].divide(SizedBox(
                                                                         height:
                                                                             16.0)),
                                                                   ),
@@ -859,7 +863,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                     ),
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           20.0,
                                                                           12.0,
                                                                           20.0,
@@ -926,9 +930,9 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                             model:
                                                                                 _model.dividerModel1,
                                                                             updateCallback: () =>
-                                                                                setState(() {}),
+                                                                                safeSetState(() {}),
                                                                             child:
-                                                                                const DividerWidget(
+                                                                                DividerWidget(
                                                                               titleInLeftSide: false,
                                                                             ),
                                                                           ),
@@ -957,11 +961,11 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                               ),
                                                                             ],
                                                                           ),
-                                                                        ].divide(const SizedBox(height: 10.0)),
+                                                                        ].divide(SizedBox(height: 10.0)),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ].divide(const SizedBox(
+                                                                ].divide(SizedBox(
                                                                     height:
                                                                         24.0)),
                                                               ),
@@ -970,17 +974,17 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                         ),
                                                       ),
                                                     ]
-                                                        .divide(const SizedBox(
+                                                        .divide(SizedBox(
                                                             height: 24.0))
-                                                        .addToStart(const SizedBox(
+                                                        .addToStart(SizedBox(
                                                             height: 12.0))
-                                                        .addToEnd(const SizedBox(
+                                                        .addToEnd(SizedBox(
                                                             height: 24.0)),
                                                   ),
                                                 ),
                                                 Container(
                                                   width: 250.0,
-                                                  constraints: const BoxConstraints(
+                                                  constraints: BoxConstraints(
                                                     maxWidth: 500.0,
                                                   ),
                                                   decoration: BoxDecoration(
@@ -1024,7 +1028,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                             ),
                                                             child: Padding(
                                                               padding:
-                                                                  const EdgeInsetsDirectional
+                                                                  EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           16.0,
                                                                           20.0,
@@ -1058,7 +1062,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                     ],
                                                                   ),
                                                                   Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0.0,
                                                                             24.0,
@@ -1070,9 +1074,9 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                           .propertyCardModel,
                                                                       updateCallback:
                                                                           () =>
-                                                                              setState(() {}),
+                                                                              safeSetState(() {}),
                                                                       child:
-                                                                          const PropertyCardWidget(
+                                                                          PropertyCardWidget(
                                                                         image:
                                                                             'https://images.unsplash.com/photo-1620332372374-f108c53d2e03?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxMHx8aG9zdGVsfGVufDB8fHx8MTY5ODkxMzc1NXww&ixlib=rb-4.0.3&q=80&w=1080',
                                                                         title:
@@ -1093,7 +1097,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                     ),
                                                                   ),
                                                                   Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0.0,
                                                                             24.0,
@@ -1169,9 +1173,9 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                           model:
                                                                               _model.dividerModel2,
                                                                           updateCallback: () =>
-                                                                              setState(() {}),
+                                                                              safeSetState(() {}),
                                                                           child:
-                                                                              const DividerWidget(
+                                                                              DividerWidget(
                                                                             titleInLeftSide:
                                                                                 false,
                                                                           ),
@@ -1203,7 +1207,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                             ),
                                                                           ],
                                                                         ),
-                                                                      ].divide(const SizedBox(
+                                                                      ].divide(SizedBox(
                                                                               height: 12.0)),
                                                                     ),
                                                                   ),
@@ -1213,7 +1217,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                           ),
                                                           Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         0.0,
                                                                         20.0,
@@ -1243,12 +1247,12 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                           .infinity,
                                                                       height:
                                                                           40.0,
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           16.0,
                                                                           9.0,
                                                                           16.0,
                                                                           9.0),
-                                                                      iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      iconPadding: EdgeInsetsDirectional.fromSTEB(
                                                                           0.0,
                                                                           0.0,
                                                                           0.0,
@@ -1270,7 +1274,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                       elevation:
                                                                           0.0,
                                                                       borderSide:
-                                                                          const BorderSide(
+                                                                          BorderSide(
                                                                         color: Colors
                                                                             .transparent,
                                                                         width:
@@ -1282,7 +1286,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ].divide(const SizedBox(
+                                                              ].divide(SizedBox(
                                                                   width: 16.0)),
                                                             ),
                                                           ),
@@ -1295,9 +1299,9 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                             ),
                                           ),
                                         ]
-                                            .divide(const SizedBox(height: 20.0))
-                                            .addToStart(const SizedBox(height: 20.0))
-                                            .addToEnd(const SizedBox(height: 20.0)),
+                                            .divide(SizedBox(height: 20.0))
+                                            .addToStart(SizedBox(height: 20.0))
+                                            .addToEnd(SizedBox(height: 20.0)),
                                       ),
                                     ),
                                   ),
@@ -1313,11 +1317,11 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                       phone: false,
                     ))
                       Align(
-                        alignment: const AlignmentDirectional(0.8, -0.97),
+                        alignment: AlignmentDirectional(0.8, -0.97),
                         child: wrapWithModel(
                           model: _model.navigatorModel,
-                          updateCallback: () => setState(() {}),
-                          child: const NavigatorWidget(
+                          updateCallback: () => safeSetState(() {}),
+                          child: NavigatorWidget(
                             expanded: true,
                           ),
                         ),

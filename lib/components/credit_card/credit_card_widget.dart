@@ -10,8 +10,8 @@ class CreditCardWidget extends StatefulWidget {
     this.icon,
     String? name,
     String? cardNumber,
-  })  : name = name ?? 'Name',
-        cardNumber = cardNumber ?? '1234 - 6198 - 5191 - 6519';
+  })  : this.name = name ?? 'Name',
+        this.cardNumber = cardNumber ?? '1234 - 6198 - 5191 - 6519';
 
   final Widget? icon;
   final String name;
@@ -35,7 +35,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget> {
     super.initState();
     _model = createModel(context, () => CreditCardWidgetModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -55,7 +55,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget> {
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(20.0, 16.0, 20.0, 16.0),
+        padding: EdgeInsetsDirectional.fromSTEB(20.0, 16.0, 20.0, 16.0),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,7 +111,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget> {
                     ),
                   ],
                 ),
-              ].divide(const SizedBox(height: 4.0)),
+              ].divide(SizedBox(height: 4.0)),
             ),
           ],
         ),

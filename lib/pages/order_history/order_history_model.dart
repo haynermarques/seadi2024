@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 class OrderHistoryModel extends FlutterFlowModel<OrderHistoryWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // Model for Menu component.
   late MenuModel menuModel;
   // Model for Header component.
@@ -38,7 +37,6 @@ class OrderHistoryModel extends FlutterFlowModel<OrderHistoryWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     menuModel.dispose();
     headerModel.dispose();
     subHeaderModel.dispose();

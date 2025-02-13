@@ -41,7 +41,7 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
     _model.textController4 ??= TextEditingController();
     _model.textFieldFocusNode4 ??= FocusNode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -69,7 +69,7 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              const Spacer(),
+              Spacer(),
               Expanded(
                 flex: 4,
                 child: Row(
@@ -80,11 +80,11 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                       phone: false,
                       tablet: false,
                     ))
-                      const Spacer(),
+                      Spacer(),
                     Expanded(
                       flex: 2,
                       child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
+                        padding: EdgeInsetsDirectional.fromSTEB(
                             20.0, 0.0, 20.0, 0.0),
                         child: Container(
                           height: 500.0,
@@ -109,7 +109,7 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                       children: [
                                         Padding(
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
+                                              EdgeInsetsDirectional.fromSTEB(
                                                   0.0, 10.0, 10.0, 0.0),
                                           child: FlutterFlowIconButton(
                                             borderRadius: 20.0,
@@ -130,7 +130,7 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                       ],
                                     ),
                                     Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
                                           20.0, 0.0, 20.0, 0.0),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
@@ -154,14 +154,14 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 32.0, 0.0, 0.0),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
@@ -197,8 +197,8 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                   onChanged: (_) =>
                                                       EasyDebounce.debounce(
                                                     '_model.textController1',
-                                                    const Duration(milliseconds: 500),
-                                                    () => setState(() {}),
+                                                    Duration(milliseconds: 500),
+                                                    () => safeSetState(() {}),
                                                   ),
                                                   autofocus: false,
                                                   obscureText: false,
@@ -277,7 +277,7 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                               4.0),
                                                     ),
                                                     contentPadding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(10.0, 0.0,
                                                                 0.0, 0.0),
                                                   ),
@@ -297,12 +297,12 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                       .textController1Validator
                                                       .asValidator(context),
                                                 ),
-                                              ].divide(const SizedBox(height: 8.0)),
+                                              ].divide(SizedBox(height: 8.0)),
                                             ),
                                           ),
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
@@ -338,8 +338,8 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                   onChanged: (_) =>
                                                       EasyDebounce.debounce(
                                                     '_model.textController2',
-                                                    const Duration(milliseconds: 500),
-                                                    () => setState(() {}),
+                                                    Duration(milliseconds: 500),
+                                                    () => safeSetState(() {}),
                                                   ),
                                                   autofocus: false,
                                                   obscureText: false,
@@ -418,7 +418,7 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                               4.0),
                                                     ),
                                                     contentPadding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(10.0, 0.0,
                                                                 0.0, 0.0),
                                                   ),
@@ -438,19 +438,19 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                       .textController2Validator
                                                       .asValidator(context),
                                                 ),
-                                              ].divide(const SizedBox(height: 8.0)),
+                                              ].divide(SizedBox(height: 8.0)),
                                             ),
                                           ),
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
                                                 Container(
                                                   width: 160.0,
-                                                  decoration: const BoxDecoration(),
+                                                  decoration: BoxDecoration(),
                                                   child: Column(
                                                     mainAxisSize:
                                                         MainAxisSize.max,
@@ -479,7 +479,7 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                       Container(
                                                         width: 180.0,
                                                         decoration:
-                                                            const BoxDecoration(),
+                                                            BoxDecoration(),
                                                         child: TextFormField(
                                                           controller: _model
                                                               .textController3,
@@ -489,11 +489,11 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                               EasyDebounce
                                                                   .debounce(
                                                             '_model.textController3',
-                                                            const Duration(
+                                                            Duration(
                                                                 milliseconds:
                                                                     500),
-                                                            () =>
-                                                                setState(() {}),
+                                                            () => safeSetState(
+                                                                () {}),
                                                           ),
                                                           autofocus: false,
                                                           obscureText: false,
@@ -581,7 +581,7 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                                           4.0),
                                                             ),
                                                             contentPadding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         10.0,
                                                                         0.0,
@@ -619,12 +619,12 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                         ),
                                                       ),
                                                     ].divide(
-                                                        const SizedBox(height: 8.0)),
+                                                        SizedBox(height: 8.0)),
                                                   ),
                                                 ),
                                                 Container(
                                                   width: 160.0,
-                                                  decoration: const BoxDecoration(),
+                                                  decoration: BoxDecoration(),
                                                   child: Column(
                                                     mainAxisSize:
                                                         MainAxisSize.max,
@@ -653,7 +653,7 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                       Container(
                                                         width: 180.0,
                                                         decoration:
-                                                            const BoxDecoration(),
+                                                            BoxDecoration(),
                                                         child: TextFormField(
                                                           controller: _model
                                                               .textController4,
@@ -663,11 +663,11 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                               EasyDebounce
                                                                   .debounce(
                                                             '_model.textController4',
-                                                            const Duration(
+                                                            Duration(
                                                                 milliseconds:
                                                                     500),
-                                                            () =>
-                                                                setState(() {}),
+                                                            () => safeSetState(
+                                                                () {}),
                                                           ),
                                                           autofocus: false,
                                                           obscureText: false,
@@ -755,7 +755,7 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                                           4.0),
                                                             ),
                                                             contentPadding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         10.0,
                                                                         0.0,
@@ -793,20 +793,20 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                         ),
                                                       ),
                                                     ].divide(
-                                                        const SizedBox(height: 8.0)),
+                                                        SizedBox(height: 8.0)),
                                                   ),
                                                 ),
-                                              ].divide(const SizedBox(width: 16.0)),
+                                              ].divide(SizedBox(width: 16.0)),
                                             ),
                                           ),
-                                        ].divide(const SizedBox(height: 16.0)),
+                                        ].divide(SizedBox(height: 16.0)),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(20.0),
+                                padding: EdgeInsets.all(20.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
@@ -831,7 +831,7 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                         ),
                                               ),
                                               duration:
-                                                  const Duration(milliseconds: 3000),
+                                                  Duration(milliseconds: 3000),
                                               backgroundColor:
                                                   FlutterFlowTheme.of(context)
                                                       .primary,
@@ -844,10 +844,10 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                           width: 250.0,
                                           height: 50.0,
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
+                                              EdgeInsetsDirectional.fromSTEB(
                                                   24.0, 13.0, 24.0, 13.0),
                                           iconPadding:
-                                              const EdgeInsetsDirectional.fromSTEB(
+                                              EdgeInsetsDirectional.fromSTEB(
                                                   0.0, 0.0, 0.0, 0.0),
                                           color: FlutterFlowTheme.of(context)
                                               .primary,
@@ -862,7 +862,7 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                                                 letterSpacing: 0.0,
                                               ),
                                           elevation: 0.0,
-                                          borderSide: const BorderSide(
+                                          borderSide: BorderSide(
                                             color: Colors.transparent,
                                             width: 1.0,
                                           ),
@@ -884,11 +884,11 @@ class _NewCardModal2WidgetState extends State<NewCardModal2Widget> {
                       phone: false,
                       tablet: false,
                     ))
-                      const Spacer(),
+                      Spacer(),
                   ],
                 ),
               ),
-              const Spacer(),
+              Spacer(),
             ],
           ),
         ),

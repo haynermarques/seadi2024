@@ -35,7 +35,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     super.initState();
     _model = createModel(context, () => HomeModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -53,15 +53,16 @@ class _HomeWidgetState extends State<HomeWidget> {
         title: 'Home',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -84,9 +85,9 @@ class _HomeWidgetState extends State<HomeWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Dashboard',
                                 pageIsInSubMenu: false,
                               ),
@@ -97,9 +98,9 @@ class _HomeWidgetState extends State<HomeWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -117,13 +118,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                                         children: [
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: wrapWithModel(
                                               model: _model.subHeaderModel,
                                               updateCallback: () =>
-                                                  setState(() {}),
-                                              child: const SubHeaderWidget(
+                                                  safeSetState(() {}),
+                                              child: SubHeaderWidget(
                                                 title:
                                                     'Find Your Best Real Estate',
                                                 showBackBtn: false,
@@ -132,7 +133,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                           ),
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Container(
                                               width: 100.0,
@@ -150,7 +151,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                 children: [
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(24.0, 0.0,
                                                                 24.0, 0.0),
                                                     child: Row(
@@ -197,7 +198,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                       100.0),
                                                                 ),
                                                                 decoration:
-                                                                    const BoxDecoration(),
+                                                                    BoxDecoration(),
                                                                 child: Row(
                                                                   mainAxisSize:
                                                                       MainAxisSize
@@ -229,14 +230,14 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                               maxWidth: functions.responsiveMaxWidth(1.0, 4.0, 2, MediaQuery.sizeOf(context).width, 124.0),
                                                                             ),
                                                                             decoration:
-                                                                                const BoxDecoration(),
+                                                                                BoxDecoration(),
                                                                             child:
                                                                                 Row(
                                                                               mainAxisSize: MainAxisSize.max,
                                                                               children: [
                                                                                 AlignedTooltip(
                                                                                   content: Padding(
-                                                                                    padding: const EdgeInsets.all(4.0),
+                                                                                    padding: EdgeInsets.all(4.0),
                                                                                     child: Text(
                                                                                       'Find your Building here',
                                                                                       style: FlutterFlowTheme.of(context).bodyLarge.override(
@@ -252,8 +253,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                                   elevation: 4.0,
                                                                                   tailBaseWidth: 24.0,
                                                                                   tailLength: 12.0,
-                                                                                  waitDuration: const Duration(milliseconds: 100),
-                                                                                  showDuration: const Duration(milliseconds: 1500),
+                                                                                  waitDuration: Duration(milliseconds: 100),
+                                                                                  showDuration: Duration(milliseconds: 1500),
                                                                                   triggerMode: TooltipTriggerMode.tap,
                                                                                   child: Container(
                                                                                     width: 40.0,
@@ -275,12 +276,12 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                                 Expanded(
                                                                                   child: FlutterFlowDropDown<String>(
                                                                                     controller: _model.dropDownValueController1 ??= FormFieldController<String>(null),
-                                                                                    options: const [
+                                                                                    options: [
                                                                                       'House',
                                                                                       'Villa',
                                                                                       'Apartment'
                                                                                     ],
-                                                                                    onChanged: (val) => setState(() => _model.dropDownValue1 = val),
+                                                                                    onChanged: (val) => safeSetState(() => _model.dropDownValue1 = val),
                                                                                     width: 160.0,
                                                                                     height: 40.0,
                                                                                     textStyle: FlutterFlowTheme.of(context).labelMedium.override(
@@ -299,13 +300,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                                     borderColor: FlutterFlowTheme.of(context).neutral200,
                                                                                     borderWidth: 1.0,
                                                                                     borderRadius: 8.0,
-                                                                                    margin: const EdgeInsetsDirectional.fromSTEB(14.0, 4.0, 10.0, 4.0),
+                                                                                    margin: EdgeInsetsDirectional.fromSTEB(14.0, 4.0, 10.0, 4.0),
                                                                                     hidesUnderline: true,
                                                                                     isSearchable: false,
                                                                                     isMultiSelect: false,
                                                                                   ),
                                                                                 ),
-                                                                              ].divide(const SizedBox(width: 12.0)),
+                                                                              ].divide(SizedBox(width: 12.0)),
                                                                             ),
                                                                           ),
                                                                           Container(
@@ -314,7 +315,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                               maxWidth: functions.responsiveMaxWidth(1.0, 4.0, 2, MediaQuery.sizeOf(context).width, 124.0),
                                                                             ),
                                                                             decoration:
-                                                                                const BoxDecoration(),
+                                                                                BoxDecoration(),
                                                                             child:
                                                                                 Row(
                                                                               mainAxisSize: MainAxisSize.max,
@@ -338,10 +339,10 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                                 Expanded(
                                                                                   child: FlutterFlowDropDown<String>(
                                                                                     controller: _model.dropDownValueController2 ??= FormFieldController<String>(null),
-                                                                                    options: const [
+                                                                                    options: [
                                                                                       'Option 1'
                                                                                     ],
-                                                                                    onChanged: (val) => setState(() => _model.dropDownValue2 = val),
+                                                                                    onChanged: (val) => safeSetState(() => _model.dropDownValue2 = val),
                                                                                     width: 160.0,
                                                                                     height: 40.0,
                                                                                     textStyle: FlutterFlowTheme.of(context).labelMedium.override(
@@ -360,13 +361,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                                     borderColor: FlutterFlowTheme.of(context).neutral200,
                                                                                     borderWidth: 1.0,
                                                                                     borderRadius: 8.0,
-                                                                                    margin: const EdgeInsetsDirectional.fromSTEB(14.0, 4.0, 10.0, 4.0),
+                                                                                    margin: EdgeInsetsDirectional.fromSTEB(14.0, 4.0, 10.0, 4.0),
                                                                                     hidesUnderline: true,
                                                                                     isSearchable: false,
                                                                                     isMultiSelect: false,
                                                                                   ),
                                                                                 ),
-                                                                              ].divide(const SizedBox(width: 12.0)),
+                                                                              ].divide(SizedBox(width: 12.0)),
                                                                             ),
                                                                           ),
                                                                         ],
@@ -388,7 +389,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                       100.0),
                                                                 ),
                                                                 decoration:
-                                                                    const BoxDecoration(),
+                                                                    BoxDecoration(),
                                                                 child: Row(
                                                                   mainAxisSize:
                                                                       MainAxisSize
@@ -420,7 +421,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                               maxWidth: functions.responsiveMaxWidth(1.0, 4.0, 2, MediaQuery.sizeOf(context).width, 124.0),
                                                                             ),
                                                                             decoration:
-                                                                                const BoxDecoration(),
+                                                                                BoxDecoration(),
                                                                             child:
                                                                                 Row(
                                                                               mainAxisSize: MainAxisSize.max,
@@ -444,13 +445,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                                 Expanded(
                                                                                   child: FlutterFlowDropDown<String>(
                                                                                     controller: _model.dropDownValueController3 ??= FormFieldController<String>(null),
-                                                                                    options: const [
+                                                                                    options: [
                                                                                       'West',
                                                                                       'North',
                                                                                       'South',
                                                                                       'East'
                                                                                     ],
-                                                                                    onChanged: (val) => setState(() => _model.dropDownValue3 = val),
+                                                                                    onChanged: (val) => safeSetState(() => _model.dropDownValue3 = val),
                                                                                     width: 160.0,
                                                                                     height: 40.0,
                                                                                     textStyle: FlutterFlowTheme.of(context).labelMedium.override(
@@ -469,13 +470,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                                     borderColor: FlutterFlowTheme.of(context).neutral200,
                                                                                     borderWidth: 1.0,
                                                                                     borderRadius: 8.0,
-                                                                                    margin: const EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 8.0, 4.0),
+                                                                                    margin: EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 8.0, 4.0),
                                                                                     hidesUnderline: true,
                                                                                     isSearchable: false,
                                                                                     isMultiSelect: false,
                                                                                   ),
                                                                                 ),
-                                                                              ].divide(const SizedBox(width: 12.0)),
+                                                                              ].divide(SizedBox(width: 12.0)),
                                                                             ),
                                                                           ),
                                                                           Container(
@@ -484,7 +485,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                               maxWidth: functions.responsiveMaxWidth(1.0, 4.0, 2, MediaQuery.sizeOf(context).width, 124.0),
                                                                             ),
                                                                             decoration:
-                                                                                const BoxDecoration(),
+                                                                                BoxDecoration(),
                                                                             child:
                                                                                 Row(
                                                                               mainAxisSize: MainAxisSize.max,
@@ -497,8 +498,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                                     text: 'Search',
                                                                                     options: FFButtonOptions(
                                                                                       height: 40.0,
-                                                                                      padding: const EdgeInsetsDirectional.fromSTEB(24.0, 13.0, 24.0, 13.0),
-                                                                                      iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(24.0, 13.0, 24.0, 13.0),
+                                                                                      iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                                                                       color: FlutterFlowTheme.of(context).primary,
                                                                                       textStyle: FlutterFlowTheme.of(context).labelLarge.override(
                                                                                             fontFamily: 'Plus Jakarta Sans',
@@ -506,7 +507,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                                             letterSpacing: 0.0,
                                                                                           ),
                                                                                       elevation: 0.0,
-                                                                                      borderSide: const BorderSide(
+                                                                                      borderSide: BorderSide(
                                                                                         color: Colors.transparent,
                                                                                         width: 1.0,
                                                                                       ),
@@ -529,7 +530,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                                     context.pushNamed('OrderHistory');
                                                                                   },
                                                                                 ),
-                                                                              ].divide(const SizedBox(width: 12.0)),
+                                                                              ].divide(SizedBox(width: 12.0)),
                                                                             ),
                                                                           ),
                                                                         ],
@@ -546,22 +547,22 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(24.0, 0.0,
                                                                 24.0, 0.0),
                                                     child: wrapWithModel(
                                                       model:
                                                           _model.dividerModel,
                                                       updateCallback: () =>
-                                                          setState(() {}),
-                                                      child: const DividerWidget(
+                                                          safeSetState(() {}),
+                                                      child: DividerWidget(
                                                         titleInLeftSide: false,
                                                       ),
                                                     ),
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(24.0, 0.0,
                                                                 0.0, 0.0),
                                                     child: Wrap(
@@ -597,11 +598,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                           child: wrapWithModel(
                                                             model: _model
                                                                 .propertyCardModel1,
-                                                            updateCallback:
-                                                                () => setState(
+                                                            updateCallback: () =>
+                                                                safeSetState(
                                                                     () {}),
                                                             child:
-                                                                const PropertyCardWidget(
+                                                                PropertyCardWidget(
                                                               image:
                                                                   'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw5fHxidWlsZGluZ3xlbnwwfHx8fDE2OTgzNDgyMTB8MA&ixlib=rb-4.0.3&q=80&w=1080',
                                                               title:
@@ -632,11 +633,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                           child: wrapWithModel(
                                                             model: _model
                                                                 .propertyCardModel2,
-                                                            updateCallback:
-                                                                () => setState(
+                                                            updateCallback: () =>
+                                                                safeSetState(
                                                                     () {}),
                                                             child:
-                                                                const PropertyCardWidget(
+                                                                PropertyCardWidget(
                                                               image:
                                                                   'https://images.unsplash.com/photo-1487958449943-2429e8be8625?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxNHx8YnVpbGRpbmd8ZW58MHx8fHwxNjk4MzQ4MjEwfDA&ixlib=rb-4.0.3&q=80&w=1080',
                                                               title:
@@ -667,11 +668,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                           child: wrapWithModel(
                                                             model: _model
                                                                 .propertyCardModel3,
-                                                            updateCallback:
-                                                                () => setState(
+                                                            updateCallback: () =>
+                                                                safeSetState(
                                                                     () {}),
                                                             child:
-                                                                const PropertyCardWidget(
+                                                                PropertyCardWidget(
                                                               image:
                                                                   'https://images.unsplash.com/photo-1497465689543-5940d3cede89?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwyMnx8YnVpbGRpbmd8ZW58MHx8fHwxNjk4MzQ4MjEwfDA&ixlib=rb-4.0.3&q=80&w=1080',
                                                               title:
@@ -694,7 +695,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                             color: FlutterFlowTheme
                                                                     .of(context)
                                                                 .primaryBackground,
-                                                            boxShadow: const [
+                                                            boxShadow: [
                                                               BoxShadow(
                                                                 blurRadius:
                                                                     25.0,
@@ -738,17 +739,17 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                   ),
                                                 ]
                                                     .divide(
-                                                        const SizedBox(height: 24.0))
+                                                        SizedBox(height: 24.0))
                                                     .addToStart(
-                                                        const SizedBox(height: 24.0))
+                                                        SizedBox(height: 24.0))
                                                     .addToEnd(
-                                                        const SizedBox(height: 24.0)),
+                                                        SizedBox(height: 24.0)),
                                               ),
                                             ),
                                           ),
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Container(
                                               width: double.infinity,
@@ -766,7 +767,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                 children: [
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(24.0, 0.0,
                                                                 24.0, 0.0),
                                                     child: Row(
@@ -810,7 +811,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                           56.0),
                                                                 ),
                                                                 decoration:
-                                                                    const BoxDecoration(),
+                                                                    BoxDecoration(),
                                                                 child: Row(
                                                                   mainAxisSize:
                                                                       MainAxisSize
@@ -819,7 +820,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                     Expanded(
                                                                       child:
                                                                           FlutterFlowChoiceChips(
-                                                                        options: const [
+                                                                        options: [
                                                                           ChipData(
                                                                               'Popular',
                                                                               Icons.add_outlined),
@@ -830,7 +831,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                         ],
                                                                         onChanged:
                                                                             (val) =>
-                                                                                setState(() => _model.choiceChipsValue = val?.firstOrNull),
+                                                                                safeSetState(() => _model.choiceChipsValue = val?.firstOrNull),
                                                                         selectedChipStyle:
                                                                             ChipStyle(
                                                                           backgroundColor:
@@ -908,7 +909,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                           56.0),
                                                                 ),
                                                                 decoration:
-                                                                    const BoxDecoration(),
+                                                                    BoxDecoration(),
                                                                 child: Row(
                                                                   mainAxisSize:
                                                                       MainAxisSize
@@ -921,14 +922,14 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                             .dropDownValueController4 ??= FormFieldController<
                                                                                 String>(
                                                                             null),
-                                                                        options: const [
+                                                                        options: [
                                                                           'House',
                                                                           'Villa',
                                                                           'Apartment'
                                                                         ],
                                                                         onChanged:
                                                                             (val) =>
-                                                                                setState(() => _model.dropDownValue4 = val),
+                                                                                safeSetState(() => _model.dropDownValue4 = val),
                                                                         width:
                                                                             160.0,
                                                                         height:
@@ -961,7 +962,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                             1.0,
                                                                         borderRadius:
                                                                             8.0,
-                                                                        margin: const EdgeInsetsDirectional.fromSTEB(
+                                                                        margin: EdgeInsetsDirectional.fromSTEB(
                                                                             14.0,
                                                                             4.0,
                                                                             10.0,
@@ -1002,7 +1003,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                                             'MyOrder');
                                                                       },
                                                                     ),
-                                                                  ].divide(const SizedBox(
+                                                                  ].divide(SizedBox(
                                                                       width:
                                                                           16.0)),
                                                                 ),
@@ -1015,7 +1016,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(24.0, 0.0,
                                                                 24.0, 0.0),
                                                     child: Wrap(
@@ -1039,8 +1040,9 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                           model: _model
                                                               .itemCardModel1,
                                                           updateCallback: () =>
-                                                              setState(() {}),
-                                                          child: const ItemCardWidget(
+                                                              safeSetState(
+                                                                  () {}),
+                                                          child: ItemCardWidget(
                                                             image:
                                                                 'https://images.unsplash.com/photo-1455587734955-081b22074882?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwzfHxob3RlbHxlbnwwfHx8fDE2OTg0NTkzMzl8MA&ixlib=rb-4.0.3&q=80&w=1080',
                                                             title:
@@ -1057,8 +1059,9 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                           model: _model
                                                               .itemCardModel2,
                                                           updateCallback: () =>
-                                                              setState(() {}),
-                                                          child: const ItemCardWidget(
+                                                              safeSetState(
+                                                                  () {}),
+                                                          child: ItemCardWidget(
                                                             image:
                                                                 'https://images.unsplash.com/photo-1554435493-93422e8220c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw4fHxidWlsZGluZ3xlbnwwfHx8fDE2OTg0ODIxNTJ8MA&ixlib=rb-4.0.3&q=80&w=1080',
                                                             title:
@@ -1075,8 +1078,9 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                           model: _model
                                                               .itemCardModel3,
                                                           updateCallback: () =>
-                                                              setState(() {}),
-                                                          child: const ItemCardWidget(
+                                                              safeSetState(
+                                                                  () {}),
+                                                          child: ItemCardWidget(
                                                             image:
                                                                 'https://images.unsplash.com/photo-1527853787696-f7be74f2e39a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwyM3x8aG9zdGVsfGVufDB8fHx8MTY5ODQ4MjI1MHww&ixlib=rb-4.0.3&q=80&w=1080',
                                                             title:
@@ -1094,18 +1098,18 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                   ),
                                                 ]
                                                     .divide(
-                                                        const SizedBox(height: 24.0))
+                                                        SizedBox(height: 24.0))
                                                     .addToStart(
-                                                        const SizedBox(height: 24.0))
+                                                        SizedBox(height: 24.0))
                                                     .addToEnd(
-                                                        const SizedBox(height: 24.0)),
+                                                        SizedBox(height: 24.0)),
                                               ),
                                             ),
                                           ),
                                         ]
-                                            .divide(const SizedBox(height: 20.0))
-                                            .addToStart(const SizedBox(height: 20.0))
-                                            .addToEnd(const SizedBox(height: 20.0)),
+                                            .divide(SizedBox(height: 20.0))
+                                            .addToStart(SizedBox(height: 20.0))
+                                            .addToEnd(SizedBox(height: 20.0)),
                                       ),
                                     ),
                                   ),

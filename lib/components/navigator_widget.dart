@@ -15,7 +15,7 @@ class NavigatorWidget extends StatefulWidget {
   const NavigatorWidget({
     super.key,
     bool? expanded,
-  }) : expanded = expanded ?? false;
+  }) : this.expanded = expanded ?? false;
 
   final bool expanded;
 
@@ -43,14 +43,14 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
     // On component load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.expanded = !widget.expanded;
-      setState(() {});
+      safeSetState(() {});
     });
 
     _model.tabBarController = TabController(
       vsync: this,
       length: 4,
       initialIndex: 0,
-    )..addListener(() => setState(() {}));
+    )..addListener(() => safeSetState(() {}));
     animationsMap.addAll({
       'containerOnPageLoadAnimation': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,
@@ -60,8 +60,8 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
             curve: Curves.easeOut,
             delay: 0.0.ms,
             duration: 400.0.ms,
-            begin: const Offset(400.0, 0.0),
-            end: const Offset(0.0, 0.0),
+            begin: Offset(400.0, 0.0),
+            end: Offset(0.0, 0.0),
           ),
         ],
       ),
@@ -80,14 +80,14 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
             curve: Curves.elasticOut,
             delay: 200.0.ms,
             duration: 900.0.ms,
-            begin: const Offset(0.0, 0.0),
-            end: const Offset(1.0, 1.0),
+            begin: Offset(0.0, 0.0),
+            end: Offset(1.0, 1.0),
           ),
         ],
       ),
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -109,17 +109,17 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Stack(
-              alignment: const AlignmentDirectional(1.0, -1.0),
+              alignment: AlignmentDirectional(1.0, -1.0),
               children: [
                 if (!widget.expanded)
                   Align(
-                    alignment: const AlignmentDirectional(1.0, -1.0),
+                    alignment: AlignmentDirectional(1.0, -1.0),
                     child: Container(
                       width: 375.0,
                       height: 440.0,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
-                        boxShadow: const [
+                        boxShadow: [
                           BoxShadow(
                             blurRadius: 25.0,
                             color: Color(0x18000000),
@@ -134,14 +134,14 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                       child: Column(
                         children: [
                           Align(
-                            alignment: const Alignment(-1.0, 0),
+                            alignment: Alignment(-1.0, 0),
                             child: TabBar(
                               isScrollable: true,
                               labelColor:
                                   FlutterFlowTheme.of(context).primaryText,
                               unselectedLabelColor:
                                   FlutterFlowTheme.of(context).secondaryText,
-                              labelPadding: const EdgeInsetsDirectional.fromSTEB(
+                              labelPadding: EdgeInsetsDirectional.fromSTEB(
                                   8.0, 0.0, 8.0, 0.0),
                               labelStyle: FlutterFlowTheme.of(context)
                                   .labelSmall
@@ -158,7 +158,7 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                   ),
                               indicatorColor:
                                   FlutterFlowTheme.of(context).primary,
-                              tabs: const [
+                              tabs: [
                                 Tab(
                                   text: 'Pages',
                                 ),
@@ -193,40 +193,47 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                     scrollDirection: Axis.vertical,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
-                                        child: ListTile(
-                                          leading: Icon(
-                                            Icons.file_copy_rounded,
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            size: 16.0,
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: ListTile(
+                                            leading: Icon(
+                                              Icons.file_copy_rounded,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryText,
+                                              size: 16.0,
+                                            ),
+                                            title: Text(
+                                              'Call',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Plus Jakarta Sans',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 14.0,
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                            ),
+                                            trailing: Icon(
+                                              Icons.keyboard_arrow_right,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryText,
+                                              size: 22.0,
+                                            ),
+                                            dense: true,
                                           ),
-                                          title: Text(
-                                            'Call',
-                                            style: FlutterFlowTheme.of(context)
-                                                .titleMedium
-                                                .override(
-                                                  fontFamily:
-                                                      'Plus Jakarta Sans',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  fontSize: 14.0,
-                                                  letterSpacing: 0.0,
-                                                ),
-                                          ),
-                                          trailing: Icon(
-                                            Icons.keyboard_arrow_right,
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            size: 22.0,
-                                          ),
-                                          dense: true,
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -236,43 +243,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('DetailBuilding');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Detail Building',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Detail Building',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -282,43 +291,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('EditProfile');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Edit Profile',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Edit Profile',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -328,43 +339,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('Explore');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Explore',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Explore',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -374,43 +387,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('Home');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Home',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Home',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -420,43 +435,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('LoginPage');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Login Page',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Login Page',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -466,43 +483,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('Message');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Message',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Message',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -512,43 +531,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('MyOrder');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'My Order',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'My Order',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -558,43 +579,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('MyProfile');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'My Profile',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'My Profile',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -604,43 +627,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('Order');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Order',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Order',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -650,43 +675,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('OrderHistory');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Order History',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Order History',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -696,43 +723,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('Payment');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Payment',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Payment',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -742,43 +771,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('RegisterPage');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Register Page',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Register Page',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -788,43 +819,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('ResetPassword');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Reset Password',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Reset Password',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -834,43 +867,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('Setting');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Setting',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Setting',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -880,43 +915,45 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('VideoCall');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Video Call',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Video Call',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -926,38 +963,40 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onTap: () async {
                                             context.pushNamed('VideoCall');
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.file_copy_rounded,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.file_copy_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'Virtual Tour',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'Virtual Tour',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
@@ -970,7 +1009,7 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                     scrollDirection: Axis.vertical,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             3.0, 0.0, 0.0, 0.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
@@ -991,7 +1030,7 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                                     padding:
                                                         MediaQuery.viewInsetsOf(
                                                             context),
-                                                    child: const SizedBox(
+                                                    child: Container(
                                                       height: double.infinity,
                                                       child:
                                                           NewCardModal2Widget(),
@@ -1002,38 +1041,40 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                             ).then(
                                                 (value) => safeSetState(() {}));
                                           },
-                                          child: ListTile(
-                                            leading: Icon(
-                                              Icons.diamond_outlined,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 16.0,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.diamond_outlined,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 16.0,
+                                              ),
+                                              title: Text(
+                                                'New Card',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                              trailing: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 22.0,
+                                              ),
+                                              dense: true,
                                             ),
-                                            title: Text(
-                                              'New Card',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Plus Jakarta Sans',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                            trailing: Icon(
-                                              Icons.keyboard_arrow_right,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 22.0,
-                                            ),
-                                            dense: true,
                                           ),
                                         ),
                                       ),
@@ -1044,7 +1085,7 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                   builder: (context) => Container(
                                     width: double.infinity,
                                     height: double.infinity,
-                                    decoration: const BoxDecoration(),
+                                    decoration: BoxDecoration(),
                                     child: SingleChildScrollView(
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,
@@ -1055,7 +1096,7 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                             onLinkTap: (url, _, __) =>
                                                 launchURL(url!),
                                           ),
-                                        ].addToEnd(const SizedBox(height: 24.0)),
+                                        ].addToEnd(SizedBox(height: 24.0)),
                                       ),
                                     ),
                                   ),
@@ -1071,7 +1112,7 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                           onLinkTap: (url, _, __) =>
                                               launchURL(url!),
                                         ),
-                                      ].addToEnd(const SizedBox(height: 24.0)),
+                                      ].addToEnd(SizedBox(height: 24.0)),
                                     ),
                                   ),
                                 ),
@@ -1085,22 +1126,22 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                   ),
                 if (!_model.hide)
                   Align(
-                    alignment: const AlignmentDirectional(1.0, -1.0),
-                    child: SizedBox(
+                    alignment: AlignmentDirectional(1.0, -1.0),
+                    child: Container(
                       width: 50.0,
                       height: 50.0,
                       child: Stack(
-                        alignment: const AlignmentDirectional(0.0, 0.0),
+                        alignment: AlignmentDirectional(0.0, 0.0),
                         children: [
                           Align(
-                            alignment: const AlignmentDirectional(0.0, 0.0),
+                            alignment: AlignmentDirectional(0.0, 0.0),
                             child: Container(
                               width: 38.0,
                               height: 38.0,
                               decoration: BoxDecoration(
                                 color: FlutterFlowTheme.of(context)
                                     .secondaryBackground,
-                                boxShadow: const [
+                                boxShadow: [
                                   BoxShadow(
                                     blurRadius: 20.0,
                                     color: Color(0x24000000),
@@ -1112,10 +1153,10 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                 ],
                                 shape: BoxShape.circle,
                               ),
-                              alignment: const AlignmentDirectional(0.0, 0.0),
+                              alignment: AlignmentDirectional(0.0, 0.0),
                               child: ToggleIcon(
                                 onPressed: () async {
-                                  setState(
+                                  safeSetState(
                                       () => _model.expanded = !_model.expanded);
                                 },
                                 value: !_model.expanded,
@@ -1135,7 +1176,7 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                           ),
                           if (!_model.expanded)
                             Align(
-                              alignment: const AlignmentDirectional(1.0, -1.0),
+                              alignment: AlignmentDirectional(1.0, -1.0),
                               child: InkWell(
                                 splashColor: Colors.transparent,
                                 focusColor: Colors.transparent,
@@ -1144,7 +1185,7 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                 onTap: () async {
                                   _model.hide = false;
                                   _model.expanded = true;
-                                  setState(() {});
+                                  safeSetState(() {});
                                 },
                                 child: Container(
                                   width: 17.0,
@@ -1154,9 +1195,9 @@ class _NavigatorWidgetState extends State<NavigatorWidget>
                                         FlutterFlowTheme.of(context).tertiary,
                                     shape: BoxShape.circle,
                                   ),
-                                  alignment: const AlignmentDirectional(0.0, 0.0),
+                                  alignment: AlignmentDirectional(0.0, 0.0),
                                   child: Align(
-                                    alignment: const AlignmentDirectional(0.0, 0.0),
+                                    alignment: AlignmentDirectional(0.0, 0.0),
                                     child: Icon(
                                       Icons.close,
                                       color: FlutterFlowTheme.of(context)

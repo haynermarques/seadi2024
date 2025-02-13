@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 class PaymentModel extends FlutterFlowModel<PaymentWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // Model for Menu component.
   late MenuModel menuModel;
   // Model for Header component.
@@ -64,7 +63,6 @@ class PaymentModel extends FlutterFlowModel<PaymentWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     menuModel.dispose();
     headerModel.dispose();
     subHeaderModel.dispose();

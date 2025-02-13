@@ -31,7 +31,7 @@ class _SettingWidgetState extends State<SettingWidget> {
     super.initState();
     _model = createModel(context, () => SettingModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -49,15 +49,16 @@ class _SettingWidgetState extends State<SettingWidget> {
         title: 'Setting',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -80,9 +81,9 @@ class _SettingWidgetState extends State<SettingWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Dashboard',
                                 pageIsInSubMenu: false,
                               ),
@@ -93,9 +94,9 @@ class _SettingWidgetState extends State<SettingWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -113,7 +114,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                         children: [
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Wrap(
                                               spacing: 20.0,
@@ -151,7 +152,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                           Expanded(
                                                             child: Padding(
                                                               padding:
-                                                                  const EdgeInsetsDirectional
+                                                                  EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           20.0,
                                                                           0.0,
@@ -161,11 +162,11 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                   wrapWithModel(
                                                                 model: _model
                                                                     .subHeaderModel,
-                                                                updateCallback:
-                                                                    () => setState(
+                                                                updateCallback: () =>
+                                                                    safeSetState(
                                                                         () {}),
                                                                 child:
-                                                                    const SubHeaderWidget(
+                                                                    SubHeaderWidget(
                                                                   title:
                                                                       'Setting',
                                                                   showBackBtn:
@@ -178,7 +179,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
+                                                            EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     20.0,
                                                                     0.0,
@@ -248,7 +249,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                               children: [
                                                                                 Container(
                                                                                   width: 300.0,
-                                                                                  decoration: const BoxDecoration(),
+                                                                                  decoration: BoxDecoration(),
                                                                                   child: Row(
                                                                                     mainAxisSize: MainAxisSize.max,
                                                                                     children: [
@@ -264,18 +265,18 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                 ),
                                                                                 Container(
                                                                                   width: 600.0,
-                                                                                  decoration: const BoxDecoration(),
+                                                                                  decoration: BoxDecoration(),
                                                                                   child: Row(
                                                                                     mainAxisSize: MainAxisSize.max,
                                                                                     children: [
                                                                                       FlutterFlowDropDown<String>(
                                                                                         controller: _model.languageDropDownValueController ??= FormFieldController<String>(null),
-                                                                                        options: const [
+                                                                                        options: [
                                                                                           'English',
                                                                                           'French',
                                                                                           'Chinese'
                                                                                         ],
-                                                                                        onChanged: (val) => setState(() => _model.languageDropDownValue = val),
+                                                                                        onChanged: (val) => safeSetState(() => _model.languageDropDownValue = val),
                                                                                         width: () {
                                                                                           if (MediaQuery.sizeOf(context).width < kBreakpointSmall) {
                                                                                             return 200.0;
@@ -303,7 +304,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                         borderColor: FlutterFlowTheme.of(context).neutral100,
                                                                                         borderWidth: 1.0,
                                                                                         borderRadius: 8.0,
-                                                                                        margin: const EdgeInsetsDirectional.fromSTEB(24.0, 4.0, 16.0, 4.0),
+                                                                                        margin: EdgeInsetsDirectional.fromSTEB(24.0, 4.0, 16.0, 4.0),
                                                                                         hidesUnderline: true,
                                                                                         isSearchable: false,
                                                                                         isMultiSelect: false,
@@ -315,8 +316,8 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                             ),
                                                                             wrapWithModel(
                                                                               model: _model.dividerModel1,
-                                                                              updateCallback: () => setState(() {}),
-                                                                              child: const DividerWidget(
+                                                                              updateCallback: () => safeSetState(() {}),
+                                                                              child: DividerWidget(
                                                                                 titleInLeftSide: false,
                                                                               ),
                                                                             ),
@@ -332,7 +333,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                               children: [
                                                                                 Container(
                                                                                   width: 300.0,
-                                                                                  decoration: const BoxDecoration(),
+                                                                                  decoration: BoxDecoration(),
                                                                                   child: Row(
                                                                                     mainAxisSize: MainAxisSize.max,
                                                                                     children: [
@@ -348,18 +349,18 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                 ),
                                                                                 Container(
                                                                                   width: 600.0,
-                                                                                  decoration: const BoxDecoration(),
+                                                                                  decoration: BoxDecoration(),
                                                                                   child: Row(
                                                                                     mainAxisSize: MainAxisSize.max,
                                                                                     children: [
                                                                                       FlutterFlowDropDown<String>(
                                                                                         controller: _model.timezoneDropDownValueController ??= FormFieldController<String>(null),
-                                                                                        options: const [
+                                                                                        options: [
                                                                                           'US',
                                                                                           'Canada',
                                                                                           'UK'
                                                                                         ],
-                                                                                        onChanged: (val) => setState(() => _model.timezoneDropDownValue = val),
+                                                                                        onChanged: (val) => safeSetState(() => _model.timezoneDropDownValue = val),
                                                                                         width: () {
                                                                                           if (MediaQuery.sizeOf(context).width < kBreakpointSmall) {
                                                                                             return 220.0;
@@ -387,7 +388,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                         borderColor: FlutterFlowTheme.of(context).neutral100,
                                                                                         borderWidth: 1.0,
                                                                                         borderRadius: 8.0,
-                                                                                        margin: const EdgeInsetsDirectional.fromSTEB(24.0, 4.0, 16.0, 4.0),
+                                                                                        margin: EdgeInsetsDirectional.fromSTEB(24.0, 4.0, 16.0, 4.0),
                                                                                         hidesUnderline: true,
                                                                                         isSearchable: false,
                                                                                         isMultiSelect: false,
@@ -399,8 +400,8 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                             ),
                                                                             wrapWithModel(
                                                                               model: _model.dividerModel2,
-                                                                              updateCallback: () => setState(() {}),
-                                                                              child: const DividerWidget(
+                                                                              updateCallback: () => safeSetState(() {}),
+                                                                              child: DividerWidget(
                                                                                 titleInLeftSide: false,
                                                                               ),
                                                                             ),
@@ -416,7 +417,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                               children: [
                                                                                 Container(
                                                                                   width: 300.0,
-                                                                                  decoration: const BoxDecoration(),
+                                                                                  decoration: BoxDecoration(),
                                                                                   child: Row(
                                                                                     mainAxisSize: MainAxisSize.max,
                                                                                     children: [
@@ -432,13 +433,13 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                 ),
                                                                                 Container(
                                                                                   width: 600.0,
-                                                                                  decoration: const BoxDecoration(),
+                                                                                  decoration: BoxDecoration(),
                                                                                   child: FlutterFlowChoiceChips(
-                                                                                    options: const [
+                                                                                    options: [
                                                                                       ChipData('24 Hourd', Icons.radio_button_checked),
                                                                                       ChipData('12 Hours', Icons.radio_button_checked)
                                                                                     ],
-                                                                                    onChanged: (val) => setState(() => _model.choiceChipsValue = val?.firstOrNull),
+                                                                                    onChanged: (val) => safeSetState(() => _model.choiceChipsValue = val?.firstOrNull),
                                                                                     selectedChipStyle: ChipStyle(
                                                                                       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
                                                                                       textStyle: FlutterFlowTheme.of(context).labelMedium.override(
@@ -447,7 +448,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                           ),
                                                                                       iconColor: FlutterFlowTheme.of(context).primary,
                                                                                       iconSize: 18.0,
-                                                                                      labelPadding: const EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 20.0, 10.0),
+                                                                                      labelPadding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 20.0, 10.0),
                                                                                       elevation: 0.0,
                                                                                       borderColor: FlutterFlowTheme.of(context).primary,
                                                                                       borderWidth: 1.0,
@@ -463,7 +464,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                           ),
                                                                                       iconColor: FlutterFlowTheme.of(context).neutral100,
                                                                                       iconSize: 18.0,
-                                                                                      labelPadding: const EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 20.0, 10.0),
+                                                                                      labelPadding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 20.0, 10.0),
                                                                                       elevation: 0.0,
                                                                                       borderColor: FlutterFlowTheme.of(context).neutral100,
                                                                                       borderRadius: BorderRadius.circular(4.0),
@@ -482,8 +483,8 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                             ),
                                                                             wrapWithModel(
                                                                               model: _model.dividerModel3,
-                                                                              updateCallback: () => setState(() {}),
-                                                                              child: const DividerWidget(
+                                                                              updateCallback: () => safeSetState(() {}),
+                                                                              child: DividerWidget(
                                                                                 titleInLeftSide: false,
                                                                               ),
                                                                             ),
@@ -499,7 +500,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                               children: [
                                                                                 Container(
                                                                                   width: 300.0,
-                                                                                  decoration: const BoxDecoration(),
+                                                                                  decoration: BoxDecoration(),
                                                                                   child: Row(
                                                                                     mainAxisSize: MainAxisSize.max,
                                                                                     children: [
@@ -515,18 +516,18 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                 ),
                                                                                 Container(
                                                                                   width: 600.0,
-                                                                                  decoration: const BoxDecoration(),
+                                                                                  decoration: BoxDecoration(),
                                                                                   child: Row(
                                                                                     mainAxisSize: MainAxisSize.max,
                                                                                     children: [
                                                                                       FlutterFlowDropDown<String>(
                                                                                         controller: _model.notificationDropDownValueController ??= FormFieldController<String>(null),
-                                                                                        options: const [
+                                                                                        options: [
                                                                                           'Active for all activity',
                                                                                           'Active for all activity 2',
                                                                                           'Active for all activity 3'
                                                                                         ],
-                                                                                        onChanged: (val) => setState(() => _model.notificationDropDownValue = val),
+                                                                                        onChanged: (val) => safeSetState(() => _model.notificationDropDownValue = val),
                                                                                         width: () {
                                                                                           if (MediaQuery.sizeOf(context).width < kBreakpointSmall) {
                                                                                             return 220.0;
@@ -554,7 +555,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                         borderColor: FlutterFlowTheme.of(context).neutral100,
                                                                                         borderWidth: 1.0,
                                                                                         borderRadius: 8.0,
-                                                                                        margin: const EdgeInsetsDirectional.fromSTEB(24.0, 4.0, 16.0, 4.0),
+                                                                                        margin: EdgeInsetsDirectional.fromSTEB(24.0, 4.0, 16.0, 4.0),
                                                                                         hidesUnderline: true,
                                                                                         isSearchable: false,
                                                                                         isMultiSelect: false,
@@ -566,8 +567,8 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                             ),
                                                                             wrapWithModel(
                                                                               model: _model.dividerModel4,
-                                                                              updateCallback: () => setState(() {}),
-                                                                              child: const DividerWidget(
+                                                                              updateCallback: () => safeSetState(() {}),
+                                                                              child: DividerWidget(
                                                                                 titleInLeftSide: false,
                                                                               ),
                                                                             ),
@@ -583,7 +584,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                               children: [
                                                                                 Container(
                                                                                   width: 300.0,
-                                                                                  decoration: const BoxDecoration(),
+                                                                                  decoration: BoxDecoration(),
                                                                                   child: Row(
                                                                                     mainAxisSize: MainAxisSize.max,
                                                                                     children: [
@@ -599,18 +600,18 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                 ),
                                                                                 Container(
                                                                                   width: 600.0,
-                                                                                  decoration: const BoxDecoration(),
+                                                                                  decoration: BoxDecoration(),
                                                                                   child: Row(
                                                                                     mainAxisSize: MainAxisSize.max,
                                                                                     children: [
                                                                                       FlutterFlowDropDown<String>(
                                                                                         controller: _model.locationDropDownValueController ??= FormFieldController<String>(null),
-                                                                                        options: const [
+                                                                                        options: [
                                                                                           'Active when the app is used',
                                                                                           'Active when the app is used 2',
                                                                                           'Active when the app is used 3'
                                                                                         ],
-                                                                                        onChanged: (val) => setState(() => _model.locationDropDownValue = val),
+                                                                                        onChanged: (val) => safeSetState(() => _model.locationDropDownValue = val),
                                                                                         width: () {
                                                                                           if (MediaQuery.sizeOf(context).width < kBreakpointSmall) {
                                                                                             return 220.0;
@@ -638,7 +639,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                         borderColor: FlutterFlowTheme.of(context).neutral100,
                                                                                         borderWidth: 1.0,
                                                                                         borderRadius: 8.0,
-                                                                                        margin: const EdgeInsetsDirectional.fromSTEB(24.0, 4.0, 16.0, 4.0),
+                                                                                        margin: EdgeInsetsDirectional.fromSTEB(24.0, 4.0, 16.0, 4.0),
                                                                                         hidesUnderline: true,
                                                                                         isSearchable: false,
                                                                                         isMultiSelect: false,
@@ -659,8 +660,8 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                   options: FFButtonOptions(
                                                                                     width: 200.0,
                                                                                     height: 50.0,
-                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(24.0, 13.0, 24.0, 13.0),
-                                                                                    iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(24.0, 13.0, 24.0, 13.0),
+                                                                                    iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                                                                     color: FlutterFlowTheme.of(context).primary,
                                                                                     textStyle: FlutterFlowTheme.of(context).labelLarge.override(
                                                                                           fontFamily: 'Plus Jakarta Sans',
@@ -668,7 +669,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                           letterSpacing: 0.0,
                                                                                         ),
                                                                                     elevation: 0.0,
-                                                                                    borderSide: const BorderSide(
+                                                                                    borderSide: BorderSide(
                                                                                       color: Colors.transparent,
                                                                                       width: 1.0,
                                                                                     ),
@@ -677,14 +678,14 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                                                 ),
                                                                               ],
                                                                             ),
-                                                                          ].divide(const SizedBox(height: 24.0)),
+                                                                          ].divide(SizedBox(height: 24.0)),
                                                                         ),
                                                                       ),
-                                                                    ].divide(const SizedBox(
+                                                                    ].divide(SizedBox(
                                                                         height:
                                                                             16.0)),
                                                                   ),
-                                                                ].divide(const SizedBox(
+                                                                ].divide(SizedBox(
                                                                     height:
                                                                         24.0)),
                                                               ),
@@ -693,11 +694,11 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                         ),
                                                       ),
                                                     ]
-                                                        .divide(const SizedBox(
+                                                        .divide(SizedBox(
                                                             height: 24.0))
-                                                        .addToStart(const SizedBox(
+                                                        .addToStart(SizedBox(
                                                             height: 12.0))
-                                                        .addToEnd(const SizedBox(
+                                                        .addToEnd(SizedBox(
                                                             height: 24.0)),
                                                   ),
                                                 ),
@@ -705,9 +706,9 @@ class _SettingWidgetState extends State<SettingWidget> {
                                             ),
                                           ),
                                         ]
-                                            .divide(const SizedBox(height: 20.0))
-                                            .addToStart(const SizedBox(height: 20.0))
-                                            .addToEnd(const SizedBox(height: 20.0)),
+                                            .divide(SizedBox(height: 20.0))
+                                            .addToStart(SizedBox(height: 20.0))
+                                            .addToEnd(SizedBox(height: 20.0)),
                                       ),
                                     ),
                                   ),
@@ -723,11 +724,11 @@ class _SettingWidgetState extends State<SettingWidget> {
                       phone: false,
                     ))
                       Align(
-                        alignment: const AlignmentDirectional(0.8, -0.97),
+                        alignment: AlignmentDirectional(0.8, -0.97),
                         child: wrapWithModel(
                           model: _model.navigatorModel,
-                          updateCallback: () => setState(() {}),
-                          child: const NavigatorWidget(
+                          updateCallback: () => safeSetState(() {}),
+                          child: NavigatorWidget(
                             expanded: true,
                           ),
                         ),

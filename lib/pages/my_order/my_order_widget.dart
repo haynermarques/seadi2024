@@ -29,7 +29,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
     super.initState();
     _model = createModel(context, () => MyOrderModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -47,15 +47,16 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
         title: 'MyOrder',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -78,9 +79,9 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Dashboard',
                                 pageIsInSubMenu: false,
                               ),
@@ -91,9 +92,9 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -111,7 +112,7 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                         children: [
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
@@ -138,23 +139,21 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                         return WebViewAware(
                                                           child:
                                                               GestureDetector(
-                                                            onTap: () => _model
-                                                                    .unfocusNode
-                                                                    .canRequestFocus
-                                                                ? FocusScope.of(
-                                                                        context)
-                                                                    .requestFocus(
-                                                                        _model
-                                                                            .unfocusNode)
-                                                                : FocusScope.of(
-                                                                        context)
-                                                                    .unfocus(),
+                                                            onTap: () {
+                                                              FocusScope.of(
+                                                                      context)
+                                                                  .unfocus();
+                                                              FocusManager
+                                                                  .instance
+                                                                  .primaryFocus
+                                                                  ?.unfocus();
+                                                            },
                                                             child: Padding(
                                                               padding: MediaQuery
                                                                   .viewInsetsOf(
                                                                       context),
                                                               child:
-                                                                  const NotificationsWidget(),
+                                                                  NotificationsWidget(),
                                                             ),
                                                           ),
                                                         );
@@ -166,8 +165,8 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                     model:
                                                         _model.subHeaderModel1,
                                                     updateCallback: () =>
-                                                        setState(() {}),
-                                                    child: const SubHeaderWidget(
+                                                        safeSetState(() {}),
+                                                    child: SubHeaderWidget(
                                                       title: 'My Order',
                                                       showBackBtn: false,
                                                     ),
@@ -195,7 +194,8 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                           model: _model
                                                               .orderItemsModel1,
                                                           updateCallback: () =>
-                                                              setState(() {}),
+                                                              safeSetState(
+                                                                  () {}),
                                                           updateOnChange: true,
                                                           child:
                                                               OrderItemsWidget(
@@ -226,12 +226,12 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                     ),
                                                   ],
                                                 ),
-                                              ].divide(const SizedBox(height: 16.0)),
+                                              ].divide(SizedBox(height: 16.0)),
                                             ),
                                           ),
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
@@ -241,8 +241,8 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                 wrapWithModel(
                                                   model: _model.subHeaderModel2,
                                                   updateCallback: () =>
-                                                      setState(() {}),
-                                                  child: const SubHeaderWidget(
+                                                      safeSetState(() {}),
+                                                  child: SubHeaderWidget(
                                                     title: 'Order History',
                                                     showBackBtn: false,
                                                   ),
@@ -274,8 +274,8 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                                 wrapWithModel(
                                                               model: _model
                                                                   .orderItemsModel2,
-                                                              updateCallback:
-                                                                  () => setState(
+                                                              updateCallback: () =>
+                                                                  safeSetState(
                                                                       () {}),
                                                               updateOnChange:
                                                                   true,
@@ -332,8 +332,8 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                                 wrapWithModel(
                                                               model: _model
                                                                   .orderItemsModel3,
-                                                              updateCallback:
-                                                                  () => setState(
+                                                              updateCallback: () =>
+                                                                  safeSetState(
                                                                       () {}),
                                                               child:
                                                                   OrderItemsWidget(
@@ -365,15 +365,15 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                                                       ],
                                                     ),
                                                   ].divide(
-                                                      const SizedBox(height: 16.0)),
+                                                      SizedBox(height: 16.0)),
                                                 ),
-                                              ].divide(const SizedBox(height: 16.0)),
+                                              ].divide(SizedBox(height: 16.0)),
                                             ),
                                           ),
                                         ]
-                                            .divide(const SizedBox(height: 20.0))
-                                            .addToStart(const SizedBox(height: 20.0))
-                                            .addToEnd(const SizedBox(height: 20.0)),
+                                            .divide(SizedBox(height: 20.0))
+                                            .addToStart(SizedBox(height: 20.0))
+                                            .addToEnd(SizedBox(height: 20.0)),
                                       ),
                                     ),
                                   ),
@@ -389,11 +389,11 @@ class _MyOrderWidgetState extends State<MyOrderWidget> {
                       phone: false,
                     ))
                       Align(
-                        alignment: const AlignmentDirectional(0.8, -0.97),
+                        alignment: AlignmentDirectional(0.8, -0.97),
                         child: wrapWithModel(
                           model: _model.navigatorModel,
-                          updateCallback: () => setState(() {}),
-                          child: const NavigatorWidget(
+                          updateCallback: () => safeSetState(() {}),
+                          child: NavigatorWidget(
                             expanded: true,
                           ),
                         ),

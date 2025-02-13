@@ -23,7 +23,7 @@ class AbreWidget extends StatefulWidget {
   const AbreWidget({
     super.key,
     bool? subMenuExpanded,
-  }) : subMenuExpanded = subMenuExpanded ?? true;
+  }) : this.subMenuExpanded = subMenuExpanded ?? true;
 
   final bool subMenuExpanded;
 
@@ -58,15 +58,15 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
             curve: Curves.easeInOut,
             delay: 0.0.ms,
             duration: 600.0.ms,
-            begin: const Offset(-50.0, 0.0),
-            end: const Offset(0.0, 0.0),
+            begin: Offset(-50.0, 0.0),
+            end: Offset(0.0, 0.0),
           ),
           ScaleEffect(
             curve: Curves.easeInOut,
             delay: 0.0.ms,
             duration: 600.0.ms,
-            begin: const Offset(0.7, 0.7),
-            end: const Offset(1.0, 1.0),
+            begin: Offset(0.7, 0.7),
+            end: Offset(1.0, 1.0),
           ),
         ],
       ),
@@ -84,15 +84,15 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
             curve: Curves.easeInOut,
             delay: 0.0.ms,
             duration: 600.0.ms,
-            begin: const Offset(-50.0, 0.0),
-            end: const Offset(0.0, 0.0),
+            begin: Offset(-50.0, 0.0),
+            end: Offset(0.0, 0.0),
           ),
           ScaleEffect(
             curve: Curves.easeInOut,
             delay: 0.0.ms,
             duration: 600.0.ms,
-            begin: const Offset(0.7, 0.7),
-            end: const Offset(1.0, 1.0),
+            begin: Offset(0.7, 0.7),
+            end: Offset(1.0, 1.0),
           ),
         ],
       ),
@@ -104,7 +104,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
       this,
     );
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -122,15 +122,16 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
         title: 'Abre',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -153,9 +154,9 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'Abre',
                                 pageIsInSubMenu: false,
                               ),
@@ -166,9 +167,9 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -186,13 +187,13 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                         children: [
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: wrapWithModel(
                                               model: _model.subHeaderModel,
                                               updateCallback: () =>
-                                                  setState(() {}),
-                                              child: const SubHeaderWidget(
+                                                  safeSetState(() {}),
+                                              child: SubHeaderWidget(
                                                 title: 'PAINEL SEADI',
                                                 showBackBtn: false,
                                               ),
@@ -200,7 +201,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                           ),
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Container(
                                               width: 100.0,
@@ -218,15 +219,15 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                 children: [
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(24.0, 0.0,
                                                                 24.0, 0.0),
                                                     child: wrapWithModel(
                                                       model:
                                                           _model.dividerModel,
                                                       updateCallback: () =>
-                                                          setState(() {}),
-                                                      child: const DividerWidget(
+                                                          safeSetState(() {}),
+                                                      child: DividerWidget(
                                                         title: 'SEADI EM DADOS',
                                                         titleInLeftSide: false,
                                                       ),
@@ -236,24 +237,24 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                     model: _model
                                                         .barracontratosModel,
                                                     updateCallback: () =>
-                                                        setState(() {}),
-                                                    child: const BarracontratosWidget(
+                                                        safeSetState(() {}),
+                                                    child: BarracontratosWidget(
                                                       pageName: 'home',
                                                     ),
                                                   ),
                                                 ]
                                                     .divide(
-                                                        const SizedBox(height: 24.0))
+                                                        SizedBox(height: 24.0))
                                                     .addToStart(
-                                                        const SizedBox(height: 24.0))
+                                                        SizedBox(height: 24.0))
                                                     .addToEnd(
-                                                        const SizedBox(height: 24.0)),
+                                                        SizedBox(height: 24.0)),
                                               ),
                                             ),
                                           ),
                                           Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Container(
                                               width: double.infinity,
@@ -271,7 +272,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                 children: [
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(24.0, 0.0,
                                                                 24.0, 0.0),
                                                     child: Row(
@@ -318,7 +319,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                           45.0),
                                                                 ),
                                                                 decoration:
-                                                                    const BoxDecoration(),
+                                                                    BoxDecoration(),
                                                                 child: Row(
                                                                   mainAxisSize:
                                                                       MainAxisSize
@@ -330,14 +331,14 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                       Expanded(
                                                                         child:
                                                                             FlutterFlowChoiceChips(
-                                                                          options: const [
+                                                                          options: [
                                                                             ChipData('SERVIÇOS',
                                                                                 Icons.add_outlined),
                                                                             ChipData('CONTRATOS'),
                                                                             ChipData('LEGISLAÇÃO')
                                                                           ],
                                                                           onChanged: (val) =>
-                                                                              setState(() => _model.choiceChipsValue = val?.firstOrNull),
+                                                                              safeSetState(() => _model.choiceChipsValue = val?.firstOrNull),
                                                                           selectedChipStyle:
                                                                               ChipStyle(
                                                                             backgroundColor:
@@ -418,7 +419,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                             .hideMenu = !(FFAppState()
                                                                                 .hideMenu ??
                                                                             true);
-                                                                        setState(
+                                                                        safeSetState(
                                                                             () {});
                                                                       },
                                                                     ),
@@ -438,7 +439,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                           56.0),
                                                                 ),
                                                                 decoration:
-                                                                    const BoxDecoration(),
+                                                                    BoxDecoration(),
                                                                 child: Row(
                                                                   mainAxisSize:
                                                                       MainAxisSize
@@ -451,14 +452,14 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                             .dropDownValueController ??= FormFieldController<
                                                                                 String>(
                                                                             null),
-                                                                        options: const [
+                                                                        options: [
                                                                           'Lei 215',
                                                                           'Zee dados',
                                                                           'Paa dados'
                                                                         ],
                                                                         onChanged:
                                                                             (val) =>
-                                                                                setState(() => _model.dropDownValue = val),
+                                                                                safeSetState(() => _model.dropDownValue = val),
                                                                         width:
                                                                             160.0,
                                                                         height:
@@ -491,7 +492,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                             1.0,
                                                                         borderRadius:
                                                                             8.0,
-                                                                        margin: const EdgeInsetsDirectional.fromSTEB(
+                                                                        margin: EdgeInsetsDirectional.fromSTEB(
                                                                             14.0,
                                                                             4.0,
                                                                             10.0,
@@ -532,7 +533,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                             'MyOrder');
                                                                       },
                                                                     ),
-                                                                  ].divide(const SizedBox(
+                                                                  ].divide(SizedBox(
                                                                       width:
                                                                           16.0)),
                                                                 ),
@@ -545,7 +546,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(24.0, 0.0,
                                                                 24.0, 0.0),
                                                     child: Wrap(
@@ -580,7 +581,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                         .max,
                                                                 children: [
                                                                   Padding(
-                                                                    padding: const EdgeInsetsDirectional
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             16.0,
                                                                             12.0,
@@ -594,7 +595,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                           BoxDecoration(
                                                                         color: Colors
                                                                             .white,
-                                                                        boxShadow: const [
+                                                                        boxShadow: [
                                                                           BoxShadow(
                                                                             blurRadius:
                                                                                 5.0,
@@ -613,7 +614,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                       child:
                                                                           Padding(
                                                                         padding:
-                                                                            const EdgeInsets.all(4.0),
+                                                                            EdgeInsets.all(4.0),
                                                                         child:
                                                                             Column(
                                                                           mainAxisSize:
@@ -622,12 +623,12 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                               CrossAxisAlignment.start,
                                                                           children: [
                                                                             Padding(
-                                                                              padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 0.0, 0.0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 0.0, 0.0),
                                                                               child: Text(
                                                                                 'PAA Roraima',
                                                                                 style: FlutterFlowTheme.of(context).titleLarge.override(
                                                                                       fontFamily: 'Outfit',
-                                                                                      color: const Color(0xFF14181B),
+                                                                                      color: Color(0xFF14181B),
                                                                                       fontSize: 22.0,
                                                                                       letterSpacing: 0.0,
                                                                                       fontWeight: FontWeight.w500,
@@ -635,7 +636,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                               ),
                                                                             ),
                                                                             Padding(
-                                                                              padding: const EdgeInsets.all(16.0),
+                                                                              padding: EdgeInsets.all(16.0),
                                                                               child: Row(
                                                                                 mainAxisSize: MainAxisSize.max,
                                                                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -645,20 +646,20 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       children: [
                                                                                         Padding(
-                                                                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 12.0),
+                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 12.0),
                                                                                           child: CircularPercentIndicator(
                                                                                             percent: 0.23,
                                                                                             radius: 45.0,
                                                                                             lineWidth: 12.0,
                                                                                             animation: true,
                                                                                             animateFromLastPercent: true,
-                                                                                            progressColor: const Color(0xFF4B39EF),
-                                                                                            backgroundColor: const Color(0xFFF1F4F8),
+                                                                                            progressColor: Color(0xFF4B39EF),
+                                                                                            backgroundColor: Color(0xFFF1F4F8),
                                                                                             center: Text(
                                                                                               '23%',
                                                                                               style: FlutterFlowTheme.of(context).headlineSmall.override(
                                                                                                     fontFamily: 'Outfit',
-                                                                                                    color: const Color(0xFF14181B),
+                                                                                                    color: Color(0xFF14181B),
                                                                                                     fontSize: 24.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -670,7 +671,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                           'ATIVOS',
                                                                                           style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                                 fontFamily: 'Plus Jakarta Sans',
-                                                                                                color: const Color(0xFF57636C),
+                                                                                                color: Color(0xFF57636C),
                                                                                                 fontSize: 14.0,
                                                                                                 letterSpacing: 0.0,
                                                                                                 fontWeight: FontWeight.w500,
@@ -684,20 +685,20 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       children: [
                                                                                         Padding(
-                                                                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 12.0),
+                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 12.0),
                                                                                           child: CircularPercentIndicator(
                                                                                             percent: 0.93,
                                                                                             radius: 45.0,
                                                                                             lineWidth: 12.0,
                                                                                             animation: true,
                                                                                             animateFromLastPercent: true,
-                                                                                            progressColor: const Color(0xFF39D2C0),
-                                                                                            backgroundColor: const Color(0xFFF1F4F8),
+                                                                                            progressColor: Color(0xFF39D2C0),
+                                                                                            backgroundColor: Color(0xFFF1F4F8),
                                                                                             center: Text(
                                                                                               '93k',
                                                                                               style: FlutterFlowTheme.of(context).headlineSmall.override(
                                                                                                     fontFamily: 'Outfit',
-                                                                                                    color: const Color(0xFF14181B),
+                                                                                                    color: Color(0xFF14181B),
                                                                                                     fontSize: 24.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -709,7 +710,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                           'TONELADAS',
                                                                                           style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                                 fontFamily: 'Plus Jakarta Sans',
-                                                                                                color: const Color(0xFF57636C),
+                                                                                                color: Color(0xFF57636C),
                                                                                                 fontSize: 14.0,
                                                                                                 letterSpacing: 0.0,
                                                                                                 fontWeight: FontWeight.w500,
@@ -759,7 +760,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                       border:
                                                                           Border
                                                                               .all(
-                                                                        color: const Color(
+                                                                        color: Color(
                                                                             0xFFE5E7EB),
                                                                         width:
                                                                             1.0,
@@ -767,7 +768,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                     ),
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           16.0,
                                                                           0.0,
                                                                           16.0,
@@ -777,7 +778,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                         mainAxisSize:
                                                                             MainAxisSize.max,
                                                                         children: [
-                                                                          const Padding(
+                                                                          Padding(
                                                                             padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 0.0,
                                                                                 0.0,
@@ -801,7 +802,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                   'PRODUZ RORAIMA',
                                                                                   style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                         fontFamily: 'Plus Jakarta Sans',
-                                                                                        color: const Color(0xFF606A85),
+                                                                                        color: Color(0xFF606A85),
                                                                                         fontSize: 14.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.w500,
@@ -811,12 +812,12 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                   mainAxisSize: MainAxisSize.max,
                                                                                   children: [
                                                                                     Padding(
-                                                                                      padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
                                                                                       child: Text(
                                                                                         '233 toneladas',
                                                                                         style: FlutterFlowTheme.of(context).displaySmall.override(
                                                                                               fontFamily: 'Outfit',
-                                                                                              color: const Color(0xFF15161E),
+                                                                                              color: Color(0xFF15161E),
                                                                                               fontSize: 26.0,
                                                                                               letterSpacing: 0.0,
                                                                                               fontWeight: FontWeight.w600,
@@ -840,13 +841,13 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                               lineWidth: 8.0,
                                                                               animation: true,
                                                                               animateFromLastPercent: true,
-                                                                              progressColor: const Color(0xFF6F61EF),
-                                                                              backgroundColor: const Color(0x4D9489F5),
+                                                                              progressColor: Color(0xFF6F61EF),
+                                                                              backgroundColor: Color(0x4D9489F5),
                                                                               center: Text(
                                                                                 '55%',
                                                                                 style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                                                       fontFamily: 'Outfit',
-                                                                                      color: const Color(0xFF15161E),
+                                                                                      color: Color(0xFF15161E),
                                                                                       fontSize: 24.0,
                                                                                       letterSpacing: 0.0,
                                                                                       fontWeight: FontWeight.w500,
@@ -890,7 +891,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                       border:
                                                                           Border
                                                                               .all(
-                                                                        color: const Color(
+                                                                        color: Color(
                                                                             0xFFE5E7EB),
                                                                         width:
                                                                             1.0,
@@ -898,7 +899,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                     ),
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           16.0,
                                                                           0.0,
                                                                           16.0,
@@ -908,7 +909,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                         mainAxisSize:
                                                                             MainAxisSize.max,
                                                                         children: [
-                                                                          const Padding(
+                                                                          Padding(
                                                                             padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 0.0,
                                                                                 0.0,
@@ -932,7 +933,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                   'LEITE RORAIMA',
                                                                                   style: FlutterFlowTheme.of(context).labelMedium.override(
                                                                                         fontFamily: 'Plus Jakarta Sans',
-                                                                                        color: const Color(0xFF606A85),
+                                                                                        color: Color(0xFF606A85),
                                                                                         fontSize: 14.0,
                                                                                         letterSpacing: 0.0,
                                                                                         fontWeight: FontWeight.w500,
@@ -942,12 +943,12 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                   mainAxisSize: MainAxisSize.max,
                                                                                   children: [
                                                                                     Padding(
-                                                                                      padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 4.0, 0.0),
                                                                                       child: Text(
                                                                                         '999 Litros',
                                                                                         style: FlutterFlowTheme.of(context).displaySmall.override(
                                                                                               fontFamily: 'Outfit',
-                                                                                              color: const Color(0xFF15161E),
+                                                                                              color: Color(0xFF15161E),
                                                                                               fontSize: 26.0,
                                                                                               letterSpacing: 0.0,
                                                                                               fontWeight: FontWeight.w600,
@@ -971,13 +972,13 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                               lineWidth: 8.0,
                                                                               animation: true,
                                                                               animateFromLastPercent: true,
-                                                                              progressColor: const Color(0xFF6F61EF),
-                                                                              backgroundColor: const Color(0x4D9489F5),
+                                                                              progressColor: Color(0xFF6F61EF),
+                                                                              backgroundColor: Color(0x4D9489F5),
                                                                               center: Text(
                                                                                 '90%',
                                                                                 style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                                                       fontFamily: 'Outfit',
-                                                                                      color: const Color(0xFF15161E),
+                                                                                      color: Color(0xFF15161E),
                                                                                       fontSize: 24.0,
                                                                                       letterSpacing: 0.0,
                                                                                       fontWeight: FontWeight.w500,
@@ -988,7 +989,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ].divide(const SizedBox(
+                                                                ].divide(SizedBox(
                                                                     height:
                                                                         16.0)),
                                                               ),
@@ -1003,7 +1004,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                               Expanded(
                                                                 flex: 12,
                                                                 child: Padding(
-                                                                  padding: const EdgeInsetsDirectional
+                                                                  padding: EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           0.0,
                                                                           0.0,
@@ -1014,7 +1015,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                     width: double
                                                                         .infinity,
                                                                     constraints:
-                                                                        const BoxConstraints(
+                                                                        BoxConstraints(
                                                                       maxWidth:
                                                                           1270.0,
                                                                     ),
@@ -1028,7 +1029,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                       border:
                                                                           Border
                                                                               .all(
-                                                                        color: const Color(
+                                                                        color: Color(
                                                                             0xFFE5E7EB),
                                                                         width:
                                                                             1.0,
@@ -1037,7 +1038,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                     child:
                                                                         Padding(
                                                                       padding:
-                                                                          const EdgeInsets.all(
+                                                                          EdgeInsets.all(
                                                                               16.0),
                                                                       child:
                                                                           Column(
@@ -1058,12 +1059,12 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                                                   children: [
                                                                                     Padding(
-                                                                                      padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 12.0, 0.0),
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 12.0, 0.0),
                                                                                       child: Text(
                                                                                         'Servidores',
                                                                                         style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                                                               fontFamily: 'Outfit',
-                                                                                              color: const Color(0xFF15161E),
+                                                                                              color: Color(0xFF15161E),
                                                                                               fontSize: 24.0,
                                                                                               letterSpacing: 0.0,
                                                                                               fontWeight: FontWeight.w500,
@@ -1078,16 +1079,16 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                   print('Button pressed ...');
                                                                                 },
                                                                                 text: 'GERENCIAR',
-                                                                                icon: const Icon(
+                                                                                icon: Icon(
                                                                                   Icons.add_rounded,
                                                                                   color: Colors.white,
                                                                                   size: 15.0,
                                                                                 ),
                                                                                 options: FFButtonOptions(
                                                                                   height: 40.0,
-                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                                                                                  iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                                                                  color: const Color(0xFF6F61EF),
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                                                                                  iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                                                                  color: Color(0xFF6F61EF),
                                                                                   textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                                                                                         fontFamily: 'Plus Jakarta Sans',
                                                                                         color: Colors.white,
@@ -1096,7 +1097,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                         fontWeight: FontWeight.w500,
                                                                                       ),
                                                                                   elevation: 2.0,
-                                                                                  borderSide: const BorderSide(
+                                                                                  borderSide: BorderSide(
                                                                                     color: Colors.transparent,
                                                                                     width: 1.0,
                                                                                   ),
@@ -1106,7 +1107,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                             ],
                                                                           ),
                                                                           Padding(
-                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 0.0,
                                                                                 16.0,
                                                                                 0.0,
@@ -1115,7 +1116,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                 Container(
                                                                               width: double.infinity,
                                                                               height: 40.0,
-                                                                              decoration: const BoxDecoration(
+                                                                              decoration: BoxDecoration(
                                                                                 color: Color(0xFFF1F4F8),
                                                                                 borderRadius: BorderRadius.only(
                                                                                   bottomLeft: Radius.circular(0.0),
@@ -1125,7 +1126,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                 ),
                                                                               ),
                                                                               child: Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                                                                 child: Row(
                                                                                   mainAxisSize: MainAxisSize.max,
                                                                                   children: [
@@ -1140,7 +1141,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                           'Cargo',
                                                                                           style: FlutterFlowTheme.of(context).labelSmall.override(
                                                                                                 fontFamily: 'Plus Jakarta Sans',
-                                                                                                color: const Color(0xFF606A85),
+                                                                                                color: Color(0xFF606A85),
                                                                                                 fontSize: 12.0,
                                                                                                 letterSpacing: 0.0,
                                                                                                 fontWeight: FontWeight.w500,
@@ -1153,7 +1154,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                         'Servidor',
                                                                                         style: FlutterFlowTheme.of(context).labelSmall.override(
                                                                                               fontFamily: 'Plus Jakarta Sans',
-                                                                                              color: const Color(0xFF606A85),
+                                                                                              color: Color(0xFF606A85),
                                                                                               fontSize: 12.0,
                                                                                               letterSpacing: 0.0,
                                                                                               fontWeight: FontWeight.w500,
@@ -1170,7 +1171,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                           'Aniversário',
                                                                                           style: FlutterFlowTheme.of(context).labelSmall.override(
                                                                                                 fontFamily: 'Plus Jakarta Sans',
-                                                                                                color: const Color(0xFF606A85),
+                                                                                                color: Color(0xFF606A85),
                                                                                                 fontSize: 12.0,
                                                                                                 letterSpacing: 0.0,
                                                                                                 fontWeight: FontWeight.w500,
@@ -1183,7 +1184,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                         'Status',
                                                                                         style: FlutterFlowTheme.of(context).labelSmall.override(
                                                                                               fontFamily: 'Plus Jakarta Sans',
-                                                                                              color: const Color(0xFF606A85),
+                                                                                              color: Color(0xFF606A85),
                                                                                               fontSize: 12.0,
                                                                                               letterSpacing: 0.0,
                                                                                               fontWeight: FontWeight.w500,
@@ -1197,7 +1198,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                         textAlign: TextAlign.end,
                                                                                         style: FlutterFlowTheme.of(context).labelSmall.override(
                                                                                               fontFamily: 'Plus Jakarta Sans',
-                                                                                              color: const Color(0xFF606A85),
+                                                                                              color: Color(0xFF606A85),
                                                                                               fontSize: 12.0,
                                                                                               letterSpacing: 0.0,
                                                                                               fontWeight: FontWeight.w500,
@@ -1218,10 +1219,10 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                 Axis.vertical,
                                                                             children: [
                                                                               Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
                                                                                 child: Container(
                                                                                   width: 100.0,
-                                                                                  decoration: const BoxDecoration(
+                                                                                  decoration: BoxDecoration(
                                                                                     color: Colors.white,
                                                                                     boxShadow: [
                                                                                       BoxShadow(
@@ -1235,7 +1236,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                     ],
                                                                                   ),
                                                                                   child: Padding(
-                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                                                                     child: Row(
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       children: [
@@ -1250,7 +1251,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               'Efetivo',
                                                                                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                     fontFamily: 'Plus Jakarta Sans',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 14.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -1260,12 +1261,12 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                         Expanded(
                                                                                           flex: 4,
                                                                                           child: Padding(
-                                                                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
                                                                                             child: Row(
                                                                                               mainAxisSize: MainAxisSize.max,
                                                                                               children: [
                                                                                                 Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
                                                                                                   child: ClipRRect(
                                                                                                     borderRadius: BorderRadius.circular(40.0),
                                                                                                     child: Image.network(
@@ -1278,7 +1279,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 ),
                                                                                                 Expanded(
                                                                                                   child: Padding(
-                                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
+                                                                                                    padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
                                                                                                     child: Column(
                                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -1288,19 +1289,19 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                           'Antonio  matos',
                                                                                                           style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                                 fontFamily: 'Plus Jakarta Sans',
-                                                                                                                color: const Color(0xFF15161E),
+                                                                                                                color: Color(0xFF15161E),
                                                                                                                 fontSize: 14.0,
                                                                                                                 letterSpacing: 0.0,
                                                                                                                 fontWeight: FontWeight.bold,
                                                                                                               ),
                                                                                                         ),
                                                                                                         Padding(
-                                                                                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                                           child: Text(
                                                                                                             'DISTRITO',
                                                                                                             style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                                                  color: const Color(0xFF6F61EF),
+                                                                                                                  color: Color(0xFF6F61EF),
                                                                                                                   fontSize: 12.0,
                                                                                                                   letterSpacing: 0.0,
                                                                                                                   fontWeight: FontWeight.w500,
@@ -1325,7 +1326,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               '12/05/85',
                                                                                               style: FlutterFlowTheme.of(context).titleLarge.override(
                                                                                                     fontFamily: 'Outfit',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 22.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -1340,20 +1341,20 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               Container(
                                                                                                 height: 32.0,
                                                                                                 decoration: BoxDecoration(
-                                                                                                  color: const Color(0x4C39D2C0),
+                                                                                                  color: Color(0x4C39D2C0),
                                                                                                   borderRadius: BorderRadius.circular(40.0),
                                                                                                   border: Border.all(
-                                                                                                    color: const Color(0xFF39D2C0),
+                                                                                                    color: Color(0xFF39D2C0),
                                                                                                   ),
                                                                                                 ),
-                                                                                                alignment: const AlignmentDirectional(0.0, 0.0),
+                                                                                                alignment: AlignmentDirectional(0.0, 0.0),
                                                                                                 child: Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
                                                                                                   child: Text(
                                                                                                     'FÉRIAS',
                                                                                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                                          color: const Color(0xFF15161E),
+                                                                                                          color: Color(0xFF15161E),
                                                                                                           fontSize: 14.0,
                                                                                                           letterSpacing: 0.0,
                                                                                                           fontWeight: FontWeight.w500,
@@ -1375,7 +1376,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 borderRadius: 30.0,
                                                                                                 borderWidth: 1.0,
                                                                                                 buttonSize: 44.0,
-                                                                                                icon: const Icon(
+                                                                                                icon: Icon(
                                                                                                   Icons.more_vert,
                                                                                                   color: Color(0xFF606A85),
                                                                                                   size: 20.0,
@@ -1393,10 +1394,10 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                 ),
                                                                               ),
                                                                               Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
                                                                                 child: Container(
                                                                                   width: 100.0,
-                                                                                  decoration: const BoxDecoration(
+                                                                                  decoration: BoxDecoration(
                                                                                     color: Colors.white,
                                                                                     boxShadow: [
                                                                                       BoxShadow(
@@ -1410,7 +1411,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                     ],
                                                                                   ),
                                                                                   child: Padding(
-                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                                                                     child: Row(
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       children: [
@@ -1425,7 +1426,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               'Efetivo',
                                                                                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                     fontFamily: 'Plus Jakarta Sans',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 14.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -1435,12 +1436,12 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                         Expanded(
                                                                                           flex: 4,
                                                                                           child: Padding(
-                                                                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
                                                                                             child: Row(
                                                                                               mainAxisSize: MainAxisSize.max,
                                                                                               children: [
                                                                                                 Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
                                                                                                   child: ClipRRect(
                                                                                                     borderRadius: BorderRadius.circular(40.0),
                                                                                                     child: Image.network(
@@ -1453,7 +1454,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 ),
                                                                                                 Expanded(
                                                                                                   child: Padding(
-                                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
+                                                                                                    padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
                                                                                                     child: Column(
                                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -1463,19 +1464,19 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                           'João  Peterson',
                                                                                                           style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                                 fontFamily: 'Plus Jakarta Sans',
-                                                                                                                color: const Color(0xFF15161E),
+                                                                                                                color: Color(0xFF15161E),
                                                                                                                 fontSize: 14.0,
                                                                                                                 letterSpacing: 0.0,
                                                                                                                 fontWeight: FontWeight.bold,
                                                                                                               ),
                                                                                                         ),
                                                                                                         Padding(
-                                                                                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                                           child: Text(
                                                                                                             'GABINETE',
                                                                                                             style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                                                  color: const Color(0xFF6F61EF),
+                                                                                                                  color: Color(0xFF6F61EF),
                                                                                                                   fontSize: 12.0,
                                                                                                                   letterSpacing: 0.0,
                                                                                                                   fontWeight: FontWeight.w500,
@@ -1500,7 +1501,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               '25/05/79',
                                                                                               style: FlutterFlowTheme.of(context).titleLarge.override(
                                                                                                     fontFamily: 'Outfit',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 22.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -1515,20 +1516,20 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               Container(
                                                                                                 height: 32.0,
                                                                                                 decoration: BoxDecoration(
-                                                                                                  color: const Color(0x4C39D2C0),
+                                                                                                  color: Color(0x4C39D2C0),
                                                                                                   borderRadius: BorderRadius.circular(40.0),
                                                                                                   border: Border.all(
-                                                                                                    color: const Color(0xFF39D2C0),
+                                                                                                    color: Color(0xFF39D2C0),
                                                                                                   ),
                                                                                                 ),
-                                                                                                alignment: const AlignmentDirectional(0.0, 0.0),
+                                                                                                alignment: AlignmentDirectional(0.0, 0.0),
                                                                                                 child: Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
                                                                                                   child: Text(
                                                                                                     'FÉRIAS',
                                                                                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                                          color: const Color(0xFF15161E),
+                                                                                                          color: Color(0xFF15161E),
                                                                                                           fontSize: 14.0,
                                                                                                           letterSpacing: 0.0,
                                                                                                           fontWeight: FontWeight.w500,
@@ -1550,7 +1551,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 borderRadius: 30.0,
                                                                                                 borderWidth: 1.0,
                                                                                                 buttonSize: 44.0,
-                                                                                                icon: const Icon(
+                                                                                                icon: Icon(
                                                                                                   Icons.more_vert,
                                                                                                   color: Color(0xFF606A85),
                                                                                                   size: 20.0,
@@ -1568,10 +1569,10 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                 ),
                                                                               ),
                                                                               Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
                                                                                 child: Container(
                                                                                   width: 100.0,
-                                                                                  decoration: const BoxDecoration(
+                                                                                  decoration: BoxDecoration(
                                                                                     color: Colors.white,
                                                                                     boxShadow: [
                                                                                       BoxShadow(
@@ -1585,7 +1586,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                     ],
                                                                                   ),
                                                                                   child: Padding(
-                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                                                                     child: Row(
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       children: [
@@ -1600,7 +1601,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               'Comissionado',
                                                                                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                     fontFamily: 'Plus Jakarta Sans',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 14.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -1610,12 +1611,12 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                         Expanded(
                                                                                           flex: 4,
                                                                                           child: Padding(
-                                                                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
                                                                                             child: Row(
                                                                                               mainAxisSize: MainAxisSize.max,
                                                                                               children: [
                                                                                                 Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
                                                                                                   child: ClipRRect(
                                                                                                     borderRadius: BorderRadius.circular(40.0),
                                                                                                     child: Image.network(
@@ -1628,7 +1629,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 ),
                                                                                                 Expanded(
                                                                                                   child: Padding(
-                                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
+                                                                                                    padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
                                                                                                     child: Column(
                                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -1638,19 +1639,19 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                           'Maria  Socorro',
                                                                                                           style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                                 fontFamily: 'Plus Jakarta Sans',
-                                                                                                                color: const Color(0xFF15161E),
+                                                                                                                color: Color(0xFF15161E),
                                                                                                                 fontSize: 14.0,
                                                                                                                 letterSpacing: 0.0,
                                                                                                                 fontWeight: FontWeight.bold,
                                                                                                               ),
                                                                                                         ),
                                                                                                         Padding(
-                                                                                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                                           child: Text(
                                                                                                             'ASCOM',
                                                                                                             style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                                                  color: const Color(0xFF6F61EF),
+                                                                                                                  color: Color(0xFF6F61EF),
                                                                                                                   fontSize: 12.0,
                                                                                                                   letterSpacing: 0.0,
                                                                                                                   fontWeight: FontWeight.w500,
@@ -1675,7 +1676,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               '13/06/89',
                                                                                               style: FlutterFlowTheme.of(context).titleLarge.override(
                                                                                                     fontFamily: 'Outfit',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 22.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -1690,20 +1691,20 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               Container(
                                                                                                 height: 32.0,
                                                                                                 decoration: BoxDecoration(
-                                                                                                  color: const Color(0x4C39D2C0),
+                                                                                                  color: Color(0x4C39D2C0),
                                                                                                   borderRadius: BorderRadius.circular(40.0),
                                                                                                   border: Border.all(
-                                                                                                    color: const Color(0xFF39D2C0),
+                                                                                                    color: Color(0xFF39D2C0),
                                                                                                   ),
                                                                                                 ),
-                                                                                                alignment: const AlignmentDirectional(0.0, 0.0),
+                                                                                                alignment: AlignmentDirectional(0.0, 0.0),
                                                                                                 child: Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
                                                                                                   child: Text(
                                                                                                     'FÉRIAS',
                                                                                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                                          color: const Color(0xFF15161E),
+                                                                                                          color: Color(0xFF15161E),
                                                                                                           fontSize: 14.0,
                                                                                                           letterSpacing: 0.0,
                                                                                                           fontWeight: FontWeight.w500,
@@ -1725,7 +1726,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 borderRadius: 30.0,
                                                                                                 borderWidth: 1.0,
                                                                                                 buttonSize: 44.0,
-                                                                                                icon: const Icon(
+                                                                                                icon: Icon(
                                                                                                   Icons.more_vert,
                                                                                                   color: Color(0xFF606A85),
                                                                                                   size: 20.0,
@@ -1743,10 +1744,10 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                 ),
                                                                               ),
                                                                               Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
                                                                                 child: Container(
                                                                                   width: 100.0,
-                                                                                  decoration: const BoxDecoration(
+                                                                                  decoration: BoxDecoration(
                                                                                     color: Colors.white,
                                                                                     boxShadow: [
                                                                                       BoxShadow(
@@ -1760,7 +1761,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                     ],
                                                                                   ),
                                                                                   child: Padding(
-                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                                                                     child: Row(
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       children: [
@@ -1775,7 +1776,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               'Efetivo',
                                                                                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                     fontFamily: 'Plus Jakarta Sans',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 14.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -1785,12 +1786,12 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                         Expanded(
                                                                                           flex: 4,
                                                                                           child: Padding(
-                                                                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
                                                                                             child: Row(
                                                                                               mainAxisSize: MainAxisSize.max,
                                                                                               children: [
                                                                                                 Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
                                                                                                   child: ClipRRect(
                                                                                                     borderRadius: BorderRadius.circular(40.0),
                                                                                                     child: Image.network(
@@ -1803,7 +1804,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 ),
                                                                                                 Expanded(
                                                                                                   child: Padding(
-                                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
+                                                                                                    padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
                                                                                                     child: Column(
                                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -1813,19 +1814,19 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                           'José pedro',
                                                                                                           style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                                 fontFamily: 'Plus Jakarta Sans',
-                                                                                                                color: const Color(0xFF15161E),
+                                                                                                                color: Color(0xFF15161E),
                                                                                                                 fontSize: 14.0,
                                                                                                                 letterSpacing: 0.0,
                                                                                                                 fontWeight: FontWeight.bold,
                                                                                                               ),
                                                                                                         ),
                                                                                                         Padding(
-                                                                                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                                           child: Text(
                                                                                                             'CCI',
                                                                                                             style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                                                  color: const Color(0xFF6F61EF),
+                                                                                                                  color: Color(0xFF6F61EF),
                                                                                                                   fontSize: 12.0,
                                                                                                                   letterSpacing: 0.0,
                                                                                                                   fontWeight: FontWeight.w500,
@@ -1850,7 +1851,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               '12/06/88',
                                                                                               style: FlutterFlowTheme.of(context).titleLarge.override(
                                                                                                     fontFamily: 'Outfit',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 22.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -1865,20 +1866,20 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               Container(
                                                                                                 height: 32.0,
                                                                                                 decoration: BoxDecoration(
-                                                                                                  color: const Color(0x4C39D2C0),
+                                                                                                  color: Color(0x4C39D2C0),
                                                                                                   borderRadius: BorderRadius.circular(40.0),
                                                                                                   border: Border.all(
-                                                                                                    color: const Color(0xFF39D2C0),
+                                                                                                    color: Color(0xFF39D2C0),
                                                                                                   ),
                                                                                                 ),
-                                                                                                alignment: const AlignmentDirectional(0.0, 0.0),
+                                                                                                alignment: AlignmentDirectional(0.0, 0.0),
                                                                                                 child: Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
                                                                                                   child: Text(
                                                                                                     'FÉRIAS',
                                                                                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                                          color: const Color(0xFF15161E),
+                                                                                                          color: Color(0xFF15161E),
                                                                                                           fontSize: 14.0,
                                                                                                           letterSpacing: 0.0,
                                                                                                           fontWeight: FontWeight.w500,
@@ -1900,7 +1901,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 borderRadius: 30.0,
                                                                                                 borderWidth: 1.0,
                                                                                                 buttonSize: 44.0,
-                                                                                                icon: const Icon(
+                                                                                                icon: Icon(
                                                                                                   Icons.more_vert,
                                                                                                   color: Color(0xFF606A85),
                                                                                                   size: 20.0,
@@ -1918,10 +1919,10 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                 ),
                                                                               ),
                                                                               Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
                                                                                 child: Container(
                                                                                   width: 100.0,
-                                                                                  decoration: const BoxDecoration(
+                                                                                  decoration: BoxDecoration(
                                                                                     color: Colors.white,
                                                                                     boxShadow: [
                                                                                       BoxShadow(
@@ -1935,7 +1936,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                     ],
                                                                                   ),
                                                                                   child: Padding(
-                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                                                                     child: Row(
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       children: [
@@ -1950,7 +1951,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               'Comissionado',
                                                                                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                     fontFamily: 'Plus Jakarta Sans',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 14.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -1960,12 +1961,12 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                         Expanded(
                                                                                           flex: 4,
                                                                                           child: Padding(
-                                                                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
                                                                                             child: Row(
                                                                                               mainAxisSize: MainAxisSize.max,
                                                                                               children: [
                                                                                                 Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
                                                                                                   child: ClipRRect(
                                                                                                     borderRadius: BorderRadius.circular(40.0),
                                                                                                     child: Image.network(
@@ -1978,7 +1979,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 ),
                                                                                                 Expanded(
                                                                                                   child: Padding(
-                                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
+                                                                                                    padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
                                                                                                     child: Column(
                                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -1988,19 +1989,19 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                           'João Pedro',
                                                                                                           style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                                 fontFamily: 'Plus Jakarta Sans',
-                                                                                                                color: const Color(0xFF15161E),
+                                                                                                                color: Color(0xFF15161E),
                                                                                                                 fontSize: 14.0,
                                                                                                                 letterSpacing: 0.0,
                                                                                                                 fontWeight: FontWeight.bold,
                                                                                                               ),
                                                                                                         ),
                                                                                                         Padding(
-                                                                                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                                           child: Text(
                                                                                                             'UAI',
                                                                                                             style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                                                  color: const Color(0xFF6F61EF),
+                                                                                                                  color: Color(0xFF6F61EF),
                                                                                                                   fontSize: 12.0,
                                                                                                                   letterSpacing: 0.0,
                                                                                                                   fontWeight: FontWeight.w500,
@@ -2025,7 +2026,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               '14/07/92',
                                                                                               style: FlutterFlowTheme.of(context).titleLarge.override(
                                                                                                     fontFamily: 'Outfit',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 22.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -2040,17 +2041,17 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               Container(
                                                                                                 height: 32.0,
                                                                                                 decoration: BoxDecoration(
-                                                                                                  color: const Color(0xFFF1F4F8),
+                                                                                                  color: Color(0xFFF1F4F8),
                                                                                                   borderRadius: BorderRadius.circular(40.0),
                                                                                                 ),
-                                                                                                alignment: const AlignmentDirectional(0.0, 0.0),
+                                                                                                alignment: AlignmentDirectional(0.0, 0.0),
                                                                                                 child: Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
                                                                                                   child: Text(
                                                                                                     'Atestado',
                                                                                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                                          color: const Color(0xFF15161E),
+                                                                                                          color: Color(0xFF15161E),
                                                                                                           fontSize: 14.0,
                                                                                                           letterSpacing: 0.0,
                                                                                                           fontWeight: FontWeight.w500,
@@ -2072,7 +2073,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 borderRadius: 30.0,
                                                                                                 borderWidth: 1.0,
                                                                                                 buttonSize: 44.0,
-                                                                                                icon: const Icon(
+                                                                                                icon: Icon(
                                                                                                   Icons.more_vert,
                                                                                                   color: Color(0xFF606A85),
                                                                                                   size: 20.0,
@@ -2090,10 +2091,10 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                 ),
                                                                               ),
                                                                               Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
                                                                                 child: Container(
                                                                                   width: 100.0,
-                                                                                  decoration: const BoxDecoration(
+                                                                                  decoration: BoxDecoration(
                                                                                     color: Colors.white,
                                                                                     boxShadow: [
                                                                                       BoxShadow(
@@ -2107,7 +2108,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                     ],
                                                                                   ),
                                                                                   child: Padding(
-                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                                                                     child: Row(
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       children: [
@@ -2122,7 +2123,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               'Efetivo',
                                                                                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                     fontFamily: 'Plus Jakarta Sans',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 14.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -2132,12 +2133,12 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                         Expanded(
                                                                                           flex: 4,
                                                                                           child: Padding(
-                                                                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
                                                                                             child: Row(
                                                                                               mainAxisSize: MainAxisSize.max,
                                                                                               children: [
                                                                                                 Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
                                                                                                   child: ClipRRect(
                                                                                                     borderRadius: BorderRadius.circular(40.0),
                                                                                                     child: Image.network(
@@ -2150,7 +2151,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 ),
                                                                                                 Expanded(
                                                                                                   child: Padding(
-                                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
+                                                                                                    padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
                                                                                                     child: Column(
                                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -2160,19 +2161,19 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                           'Maria Silva',
                                                                                                           style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                                 fontFamily: 'Plus Jakarta Sans',
-                                                                                                                color: const Color(0xFF15161E),
+                                                                                                                color: Color(0xFF15161E),
                                                                                                                 fontSize: 14.0,
                                                                                                                 letterSpacing: 0.0,
                                                                                                                 fontWeight: FontWeight.bold,
                                                                                                               ),
                                                                                                         ),
                                                                                                         Padding(
-                                                                                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                                           child: Text(
                                                                                                             'ZEE',
                                                                                                             style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                                                  color: const Color(0xFF6F61EF),
+                                                                                                                  color: Color(0xFF6F61EF),
                                                                                                                   fontSize: 12.0,
                                                                                                                   letterSpacing: 0.0,
                                                                                                                   fontWeight: FontWeight.w500,
@@ -2197,7 +2198,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               '15/07/95',
                                                                                               style: FlutterFlowTheme.of(context).titleLarge.override(
                                                                                                     fontFamily: 'Outfit',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 22.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -2212,17 +2213,17 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               Container(
                                                                                                 height: 32.0,
                                                                                                 decoration: BoxDecoration(
-                                                                                                  color: const Color(0xFFF1F4F8),
+                                                                                                  color: Color(0xFFF1F4F8),
                                                                                                   borderRadius: BorderRadius.circular(40.0),
                                                                                                 ),
-                                                                                                alignment: const AlignmentDirectional(0.0, 0.0),
+                                                                                                alignment: AlignmentDirectional(0.0, 0.0),
                                                                                                 child: Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
                                                                                                   child: Text(
                                                                                                     'Ativo',
                                                                                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                                          color: const Color(0xFF15161E),
+                                                                                                          color: Color(0xFF15161E),
                                                                                                           fontSize: 14.0,
                                                                                                           letterSpacing: 0.0,
                                                                                                           fontWeight: FontWeight.w500,
@@ -2244,7 +2245,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 borderRadius: 30.0,
                                                                                                 borderWidth: 1.0,
                                                                                                 buttonSize: 44.0,
-                                                                                                icon: const Icon(
+                                                                                                icon: Icon(
                                                                                                   Icons.more_vert,
                                                                                                   color: Color(0xFF606A85),
                                                                                                   size: 20.0,
@@ -2262,10 +2263,10 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                 ),
                                                                               ),
                                                                               Padding(
-                                                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
                                                                                 child: Container(
                                                                                   width: 100.0,
-                                                                                  decoration: const BoxDecoration(
+                                                                                  decoration: BoxDecoration(
                                                                                     color: Colors.white,
                                                                                     boxShadow: [
                                                                                       BoxShadow(
@@ -2279,7 +2280,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                     ],
                                                                                   ),
                                                                                   child: Padding(
-                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                                                                     child: Row(
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       children: [
@@ -2294,7 +2295,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               'Comissionado',
                                                                                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                     fontFamily: 'Plus Jakarta Sans',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 14.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -2304,12 +2305,12 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                         Expanded(
                                                                                           flex: 4,
                                                                                           child: Padding(
-                                                                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 12.0, 8.0),
                                                                                             child: Row(
                                                                                               mainAxisSize: MainAxisSize.max,
                                                                                               children: [
                                                                                                 Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
                                                                                                   child: ClipRRect(
                                                                                                     borderRadius: BorderRadius.circular(40.0),
                                                                                                     child: Image.network(
@@ -2322,7 +2323,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 ),
                                                                                                 Expanded(
                                                                                                   child: Padding(
-                                                                                                    padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
+                                                                                                    padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
                                                                                                     child: Column(
                                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -2332,19 +2333,19 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                           'Jobson Santos',
                                                                                                           style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                                 fontFamily: 'Plus Jakarta Sans',
-                                                                                                                color: const Color(0xFF15161E),
+                                                                                                                color: Color(0xFF15161E),
                                                                                                                 fontSize: 14.0,
                                                                                                                 letterSpacing: 0.0,
                                                                                                                 fontWeight: FontWeight.bold,
                                                                                                               ),
                                                                                                         ),
                                                                                                         Padding(
-                                                                                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                                                           child: Text(
                                                                                                             'CCI',
                                                                                                             style: FlutterFlowTheme.of(context).bodySmall.override(
                                                                                                                   fontFamily: 'Plus Jakarta Sans',
-                                                                                                                  color: const Color(0xFF6F61EF),
+                                                                                                                  color: Color(0xFF6F61EF),
                                                                                                                   fontSize: 12.0,
                                                                                                                   letterSpacing: 0.0,
                                                                                                                   fontWeight: FontWeight.w500,
@@ -2369,7 +2370,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               '18/07/95',
                                                                                               style: FlutterFlowTheme.of(context).titleLarge.override(
                                                                                                     fontFamily: 'Outfit',
-                                                                                                    color: const Color(0xFF15161E),
+                                                                                                    color: Color(0xFF15161E),
                                                                                                     fontSize: 22.0,
                                                                                                     letterSpacing: 0.0,
                                                                                                     fontWeight: FontWeight.w500,
@@ -2384,17 +2385,17 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                               Container(
                                                                                                 height: 32.0,
                                                                                                 decoration: BoxDecoration(
-                                                                                                  color: const Color(0xFFF1F4F8),
+                                                                                                  color: Color(0xFFF1F4F8),
                                                                                                   borderRadius: BorderRadius.circular(40.0),
                                                                                                 ),
-                                                                                                alignment: const AlignmentDirectional(0.0, 0.0),
+                                                                                                alignment: AlignmentDirectional(0.0, 0.0),
                                                                                                 child: Padding(
-                                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
                                                                                                   child: Text(
                                                                                                     'Ativo',
                                                                                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                                           fontFamily: 'Plus Jakarta Sans',
-                                                                                                          color: const Color(0xFF15161E),
+                                                                                                          color: Color(0xFF15161E),
                                                                                                           fontSize: 14.0,
                                                                                                           letterSpacing: 0.0,
                                                                                                           fontWeight: FontWeight.w500,
@@ -2416,7 +2417,7 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                                                 borderRadius: 30.0,
                                                                                                 borderWidth: 1.0,
                                                                                                 buttonSize: 44.0,
-                                                                                                icon: const Icon(
+                                                                                                icon: Icon(
                                                                                                   Icons.more_vert,
                                                                                                   color: Color(0xFF606A85),
                                                                                                   size: 20.0,
@@ -2442,10 +2443,10 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                                 ),
                                                               ),
                                                           ]
-                                                              .divide(const SizedBox(
+                                                              .divide(SizedBox(
                                                                   width: 16.0))
                                                               .addToStart(
-                                                                  const SizedBox(
+                                                                  SizedBox(
                                                                       width:
                                                                           16.0)),
                                                         ),
@@ -2454,18 +2455,18 @@ class _AbreWidgetState extends State<AbreWidget> with TickerProviderStateMixin {
                                                   ),
                                                 ]
                                                     .divide(
-                                                        const SizedBox(height: 24.0))
+                                                        SizedBox(height: 24.0))
                                                     .addToStart(
-                                                        const SizedBox(height: 24.0))
+                                                        SizedBox(height: 24.0))
                                                     .addToEnd(
-                                                        const SizedBox(height: 24.0)),
+                                                        SizedBox(height: 24.0)),
                                               ),
                                             ),
                                           ),
                                         ]
-                                            .divide(const SizedBox(height: 20.0))
-                                            .addToStart(const SizedBox(height: 20.0))
-                                            .addToEnd(const SizedBox(height: 20.0)),
+                                            .divide(SizedBox(height: 20.0))
+                                            .addToStart(SizedBox(height: 20.0))
+                                            .addToEnd(SizedBox(height: 20.0)),
                                       ),
                                     ),
                                   ),

@@ -23,8 +23,8 @@ class ContratosBuscaWidget extends StatefulWidget {
     super.key,
     bool? hasSubMenu,
     bool? subMenuExpanded,
-  })  : hasSubMenu = hasSubMenu ?? false,
-        subMenuExpanded = subMenuExpanded ?? false;
+  })  : this.hasSubMenu = hasSubMenu ?? false,
+        this.subMenuExpanded = subMenuExpanded ?? false;
 
   final bool hasSubMenu;
   final bool subMenuExpanded;
@@ -54,14 +54,14 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
       );
       _model.listResult =
           _model.queryResult!.toList().cast<ContratosSeadiRow>();
-      setState(() {});
+      safeSetState(() {});
       FFAppState().tipos = 'TODOS';
       FFAppState().update(() {});
     });
 
     _model.textController ??= TextEditingController();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -79,15 +79,16 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
         title: 'Contratos Busca',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             body: SafeArea(
               top: true,
-              child: SizedBox(
+              child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 child: Stack(
@@ -110,9 +111,9 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                       kBreakpointSmall)))
                             wrapWithModel(
                               model: _model.menuModel,
-                              updateCallback: () => setState(() {}),
+                              updateCallback: () => safeSetState(() {}),
                               updateOnChange: true,
-                              child: const MenuWidget(
+                              child: MenuWidget(
                                 activePageName: 'ContratoTipos',
                                 pageIsInSubMenu: false,
                               ),
@@ -123,9 +124,9 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                               children: [
                                 wrapWithModel(
                                   model: _model.headerModel,
-                                  updateCallback: () => setState(() {}),
+                                  updateCallback: () => safeSetState(() {}),
                                   updateOnChange: true,
-                                  child: const HeaderWidget(),
+                                  child: HeaderWidget(),
                                 ),
                                 Container(
                                   width: double.infinity,
@@ -144,13 +145,13 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                         children: [
                                           Expanded(
                                             child: Padding(
-                                              padding: const EdgeInsetsDirectional
+                                              padding: EdgeInsetsDirectional
                                                   .fromSTEB(
                                                       20.0, 0.0, 20.0, 0.0),
                                               child: wrapWithModel(
                                                 model: _model.subHeaderModel,
                                                 updateCallback: () =>
-                                                    setState(() {}),
+                                                    safeSetState(() {}),
                                                 child: SubHeaderWidget(
                                                   title:
                                                       'CONTRATOS - ${FFAppState().tipos}',
@@ -175,13 +176,13 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                         children: [
                                           Align(
                                             alignment:
-                                                const AlignmentDirectional(-1.0, 0.0),
+                                                AlignmentDirectional(-1.0, 0.0),
                                             child: wrapWithModel(
                                               model: _model.barracontratosModel,
                                               updateCallback: () =>
-                                                  setState(() {}),
+                                                  safeSetState(() {}),
                                               updateOnChange: true,
-                                              child: const BarracontratosWidget(
+                                              child: BarracontratosWidget(
                                                 pageName: 'ContratosTipos',
                                               ),
                                             ),
@@ -189,9 +190,9 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                         ],
                                       ),
                                     ]
-                                        .divide(const SizedBox(height: 24.0))
-                                        .addToStart(const SizedBox(height: 12.0))
-                                        .addToEnd(const SizedBox(height: 12.0)),
+                                        .divide(SizedBox(height: 24.0))
+                                        .addToStart(SizedBox(height: 12.0))
+                                        .addToEnd(SizedBox(height: 12.0)),
                                   ),
                                 ),
                                 Column(
@@ -233,13 +234,13 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                               }
                                             }(),
                                           ),
-                                          decoration: const BoxDecoration(),
+                                          decoration: BoxDecoration(),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               AlignedTooltip(
                                                 content: Padding(
-                                                  padding: const EdgeInsets.all(4.0),
+                                                  padding: EdgeInsets.all(4.0),
                                                   child: Text(
                                                     'Tipos de contratos',
                                                     style: FlutterFlowTheme.of(
@@ -264,8 +265,8 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                 tailBaseWidth: 24.0,
                                                 tailLength: 12.0,
                                                 waitDuration:
-                                                    const Duration(milliseconds: 100),
-                                                showDuration: const Duration(
+                                                    Duration(milliseconds: 100),
+                                                showDuration: Duration(
                                                     milliseconds: 1500),
                                                 triggerMode:
                                                     TooltipTriggerMode.tap,
@@ -302,14 +303,14 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                           .dropDownValueController ??=
                                                       FormFieldController<
                                                           String>(null),
-                                                  options: const [
+                                                  options: [
                                                     'FORMALIZAÇÃO 2024',
                                                     'PROCESSO ARQUIVADO',
                                                     'PROCESSOS CONTÍNUO',
                                                     'PROCESSOS EM EXECUÇÃO'
                                                   ],
-                                                  onChanged: (val) => setState(
-                                                      () => _model
+                                                  onChanged: (val) =>
+                                                      safeSetState(() => _model
                                                           .dropDownValue = val),
                                                   width: 160.0,
                                                   height: 40.0,
@@ -346,7 +347,7 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                           .neutral200,
                                                   borderWidth: 1.0,
                                                   borderRadius: 8.0,
-                                                  margin: const EdgeInsetsDirectional
+                                                  margin: EdgeInsetsDirectional
                                                       .fromSTEB(
                                                           14.0, 4.0, 10.0, 4.0),
                                                   hidesUnderline: true,
@@ -354,12 +355,12 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                   isMultiSelect: false,
                                                 ),
                                               ),
-                                            ].divide(const SizedBox(width: 12.0)),
+                                            ].divide(SizedBox(width: 12.0)),
                                           ),
                                         ),
                                         Padding(
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
+                                              EdgeInsetsDirectional.fromSTEB(
                                                   11.0, 0.0, 11.0, 0.0),
                                           child: Container(
                                             width: 400.0,
@@ -384,14 +385,14 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                 }
                                               }(),
                                             ),
-                                            decoration: const BoxDecoration(),
+                                            decoration: BoxDecoration(),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 Container(
                                                   width: 48.0,
                                                   height: 48.0,
-                                                  decoration: const BoxDecoration(),
+                                                  decoration: BoxDecoration(),
                                                   child: Icon(
                                                     Icons.search,
                                                     color: FlutterFlowTheme.of(
@@ -403,12 +404,12 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                 Expanded(
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(8.0, 0.0,
                                                                 8.0, 0.0),
                                                     child: Autocomplete<String>(
                                                       initialValue:
-                                                          const TextEditingValue(),
+                                                          TextEditingValue(),
                                                       optionsBuilder:
                                                           (textEditingValue) {
                                                         if (textEditingValue
@@ -456,7 +457,7 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                                         0.0,
                                                                   ),
                                                           textHighlightStyle:
-                                                              const TextStyle(),
+                                                              TextStyle(),
                                                           elevation: 4.0,
                                                           optionBackgroundColor:
                                                               FlutterFlowTheme.of(
@@ -471,7 +472,7 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                       },
                                                       onSelected:
                                                           (String selection) {
-                                                        setState(() => _model
+                                                        safeSetState(() => _model
                                                                 .textFieldSelectedOption =
                                                             selection);
                                                         FocusScope.of(context)
@@ -615,9 +616,9 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                         .width,
                                                     124.0),
                                           ),
-                                          decoration: const BoxDecoration(),
+                                          decoration: BoxDecoration(),
                                           alignment:
-                                              const AlignmentDirectional(0.0, 0.0),
+                                              AlignmentDirectional(0.0, 0.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
@@ -629,35 +630,36 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                     _model.tipoQuery =
                                                         await ContratosSeadiTable()
                                                             .queryRows(
-                                                      queryFn: (q) => q.eq(
+                                                      queryFn: (q) =>
+                                                          q.eqOrNull(
                                                         'tipo',
                                                         _model.dropDownValue,
                                                       ),
                                                     );
                                                     FFAppState().tipos =
                                                         _model.dropDownValue!;
-                                                    setState(() {});
+                                                    safeSetState(() {});
                                                     _model.listResult = _model
                                                         .tipoQuery!
                                                         .toList()
                                                         .cast<
                                                             ContratosSeadiRow>();
-                                                    setState(() {});
+                                                    safeSetState(() {});
 
-                                                    setState(() {});
+                                                    safeSetState(() {});
                                                   },
                                                   text: 'Buscar',
                                                   options: FFButtonOptions(
                                                     height: 40.0,
                                                     padding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(
                                                                 24.0,
                                                                 13.0,
                                                                 24.0,
                                                                 13.0),
                                                     iconPadding:
-                                                        const EdgeInsetsDirectional
+                                                        EdgeInsetsDirectional
                                                             .fromSTEB(0.0, 0.0,
                                                                 0.0, 0.0),
                                                     color: FlutterFlowTheme.of(
@@ -676,7 +678,7 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                           letterSpacing: 0.0,
                                                         ),
                                                     elevation: 0.0,
-                                                    borderSide: const BorderSide(
+                                                    borderSide: BorderSide(
                                                       color: Colors.transparent,
                                                       width: 1.0,
                                                     ),
@@ -686,7 +688,7 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                   ),
                                                 ),
                                               ),
-                                            ].divide(const SizedBox(width: 12.0)),
+                                            ].divide(SizedBox(width: 12.0)),
                                           ),
                                         ),
                                       ],
@@ -695,10 +697,10 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                 ),
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.all(22.0),
+                                    padding: EdgeInsets.all(22.0),
                                     child: Container(
                                       height: 888.0,
-                                      decoration: const BoxDecoration(),
+                                      decoration: BoxDecoration(),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         mainAxisAlignment:
@@ -917,7 +919,8 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                               .objeto,
                                                           '0',
                                                         ).maybeHandleOverflow(
-                                                            maxChars: 222),
+                                                          maxChars: 222,
+                                                        ),
                                                         maxLines: 1,
                                                         style: FlutterFlowTheme
                                                                 .of(context)
@@ -936,7 +939,8 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                               .empresas,
                                                           '0',
                                                         ).maybeHandleOverflow(
-                                                            maxChars: 222),
+                                                          maxChars: 222,
+                                                        ),
                                                         maxLines: 1,
                                                         style: FlutterFlowTheme
                                                                 .of(context)
@@ -1003,11 +1007,11 @@ class _ContratosBuscaWidgetState extends State<ContratosBuscaWidget> {
                                                   checkboxSelectedFillColor:
                                                       Colors.transparent,
                                                   checkboxCheckColor:
-                                                      const Color(0x8A000000),
+                                                      Color(0x8A000000),
                                                   checkboxUnselectedBorderColor:
-                                                      const Color(0x8A000000),
+                                                      Color(0x8A000000),
                                                   checkboxSelectedBorderColor:
-                                                      const Color(0x8A000000),
+                                                      Color(0x8A000000),
                                                 );
                                               },
                                             ),

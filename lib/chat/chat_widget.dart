@@ -22,7 +22,7 @@ class _ChatWidgetState extends State<ChatWidget> {
     super.initState();
     _model = createModel(context, () => ChatModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -38,9 +38,10 @@ class _ChatWidgetState extends State<ChatWidget> {
         title: 'chat',
         color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
         child: GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -56,7 +57,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                       letterSpacing: 0.0,
                     ),
               ),
-              actions: const [],
+              actions: [],
               centerTitle: false,
               elevation: 2.0,
             ),
@@ -68,7 +69,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                   children: [
                     wrapWithModel(
                       model: _model.messageItemModel1,
-                      updateCallback: () => setState(() {}),
+                      updateCallback: () => safeSetState(() {}),
                       child: MessageItemWidget(
                         sender: true,
                         messasge: 'hi i am sender. sender checked\n',
@@ -80,7 +81,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                     ),
                     wrapWithModel(
                       model: _model.messageItemModel2,
-                      updateCallback: () => setState(() {}),
+                      updateCallback: () => safeSetState(() {}),
                       child: MessageItemWidget(
                         sender: false,
                         messasge: 'hi i am reciver. sender is not cheched',
@@ -92,7 +93,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                     ),
                     wrapWithModel(
                       model: _model.messageItemModel3,
-                      updateCallback: () => setState(() {}),
+                      updateCallback: () => safeSetState(() {}),
                       child: MessageItemWidget(
                         sender: false,
                         messasge: 'hi i am reciver. sender is not cheched',
@@ -102,7 +103,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                         hasAttachment: true,
                       ),
                     ),
-                  ].divide(const SizedBox(height: 10.0)),
+                  ].divide(SizedBox(height: 10.0)),
                 ),
               ),
             ),
